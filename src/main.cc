@@ -21,8 +21,8 @@ int main(int, char**) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    auto window = glfwCreateWindow(WIDTH, HEIGHT, TITLE.c_str(),
-                                   nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, TITLE.c_str(),
+                                          nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -42,7 +42,7 @@ int main(int, char**) {
         return -1;
     }
 
-    std::cout << "GL3W loader support for OpenGL 3.3 (core profile) was found!" << std::endl;
+    std::cerr << "GL3W loader support for OpenGL 3.3 (core profile) was found!" << std::endl;
     std::cerr << "OpenGL vendor: " << glGetString(GL_VENDOR) << std::endl;
     std::cerr << "OpenGL renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cerr << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
