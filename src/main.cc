@@ -16,8 +16,8 @@ int main(int, char**) {
 
     glfwWindowHint(GLFW_SAMPLES, 8);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -36,13 +36,13 @@ int main(int, char**) {
         return -1;
     }
 
-    if (!gl3wIsSupported(3, 3)) {
+    if (!gl3wIsSupported(4, 1)) {
         glfwDestroyWindow(window);
         glfwTerminate();
         return -1;
     }
 
-    std::cerr << "GL3W loader support for OpenGL 3.3 (core profile) was found!" << std::endl;
+    std::cerr << "GL3W loader support for OpenGL 4.1 (core profile) was found!" << std::endl;
     std::cerr << "OpenGL vendor: " << glGetString(GL_VENDOR) << std::endl;
     std::cerr << "OpenGL renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cerr << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
