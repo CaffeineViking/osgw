@@ -16,7 +16,7 @@ namespace lwss {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, context_config.minor_version);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, context_config.forward_compatible);
         int profile_flag { context_config.core_profile ? GLFW_OPENGL_CORE_PROFILE
-                                                       : GLFW_OPENGL_COMPAT_PROFILE };
+                                                       : GLFW_OPENGL_ANY_PROFILE };
         glfwWindowHint(GLFW_OPENGL_PROFILE, profile_flag);
 
         GLFWmonitor* monitor { glfwGetPrimaryMonitor() };
