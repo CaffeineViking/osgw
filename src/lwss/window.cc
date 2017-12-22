@@ -43,9 +43,9 @@ namespace lwss {
 
         request_context();
 
-        if (gl3wInit()) throw std::runtime_error { "Failed to load GL3W!" };
-        if (!gl3wIsSupported(context_config.major_version, context_config.minor_version))
-            throw std::runtime_error { "No support for the requested OpenGL version!" };
+        glewExperimental = GL_TRUE; // Actually provides support for "modern" OpenGL...
+        if (glewInit() != GLEW_OK) throw std::runtime_error { "Failed to load GLEW!" };
+        std::cerr << "GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
 
         std::cerr << "OpenGL vendor: " << glGetString(GL_VENDOR) << std::endl;
         std::cerr << "OpenGL renderer: " << glGetString(GL_RENDERER) << std::endl;
@@ -57,7 +57,9 @@ namespace lwss {
         glGetIntegerv(GL_NUM_EXTENSIONS, &extensions);
         for (int i { 0 }; i < extensions - 1; ++i)
             std::cerr << glGetStringi(GL_EXTENSIONS, i) << ", ";
-        std::cerr << glGetStringi(GL_EXTENSIONS, extensions - 1) << std::endl;;
+        if (extensions != 0) std::cerr << glGetStringi(GL_EXTENSIONS, extensions - 1)
+                                       << std::endl;
+        else std::cerr << "'none'" << std::endl;
 
         glfwSwapInterval(vertical_sync);
         double elapsed_time { glfwGetTime() };

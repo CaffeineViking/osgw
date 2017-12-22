@@ -1,7 +1,7 @@
 #ifndef LWSS_WINDOW_HH
 #define LWSS_WINDOW_HH
 
-#include <GL/gl3w.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <string>
@@ -11,10 +11,10 @@ namespace lwss {
     class Window final {
     public:
         struct ContextConfig final {
-            int major_version { 4 },
+            int major_version { 2 },
                 minor_version { 1 };
-            bool forward_compatible { true },
-                 core_profile { true };
+            bool forward_compatible { false },
+                 core_profile { false };
             int msaa_samples { 4 };
         };
 
