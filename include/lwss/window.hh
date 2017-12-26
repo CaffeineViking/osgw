@@ -37,6 +37,8 @@ namespace lwss {
 
         int width() const;
         int height() const;
+        double vertical_dpi() const;
+        double horizontal_dpi() const;
         double aspect_ratio() const;
         void resize(std::size_t width, std::size_t height);
 

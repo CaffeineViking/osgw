@@ -25,8 +25,13 @@ project (name)
     includedirs {"include"}
 
     filter {"system:windows"}
+        links {"FreeType"}
+        links {"ALURE32", "OpenAL32"}
         links {"glew32", "glfw3dll", "opengl32"}
         buildoptions {"-static -static-libgcc -static-libstdc++",
                       "-mwindows", "-mconsole"}
     filter {"system:linux or bsd or macosx"}
+        buildoptions {"`freetype-config --cflags`"}
         links {"GLEW", "glfw", "GL"}
+        links {"alure", "openal"}
+        links {"freetype"}

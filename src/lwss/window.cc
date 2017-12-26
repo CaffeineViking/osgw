@@ -21,6 +21,7 @@ namespace lwss {
 
         GLFWmonitor* monitor { glfwGetPrimaryMonitor() };
         const GLFWvidmode* mode { glfwGetVideoMode(monitor) };
+
         glfwWindowHint(GLFW_RED_BITS, mode->redBits);
         glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
         glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
@@ -37,6 +38,7 @@ namespace lwss {
         windowed_width = width;
         windowed_x = fullscreen_width  / 2 - width  / 2;
         windowed_y = fullscreen_height / 2 - height / 2;
+
         glfwSetWindowPos(handle, windowed_x, windowed_y);
         if (fullscreen) toggle_fullscreen();
         glfwShowWindow(handle);
@@ -52,14 +54,18 @@ namespace lwss {
         std::cerr << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
         std::cerr << "OpenGL GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
-        int extensions;
         std::cerr << "OpenGL extensions: ";
-        glGetIntegerv(GL_NUM_EXTENSIONS, &extensions);
-        for (int i { 0 }; i < extensions - 1; ++i)
-            std::cerr << glGetStringi(GL_EXTENSIONS, i) << ", ";
-        if (extensions != 0) std::cerr << glGetStringi(GL_EXTENSIONS, extensions - 1)
-                                       << std::endl;
-        else std::cerr << "'none'" << std::endl;
+
+        // Notes: glGetString(GL_EXTENSIONS) is
+        // deprecated in later versions of OGL,
+        // below we handle the cast for this...
+        if (context_config.major_version > 2) {
+        int extensions;
+            glGetIntegerv(GL_NUM_EXTENSIONS, &extensions);
+            for (int i { 0 }; i < extensions; ++i)
+                std::cerr << glGetStringi(GL_EXTENSIONS, i) << " ";
+        } else std::cerr << glGetString(GL_EXTENSIONS);
+        std::cerr << std::endl; // FIXME: checks above.
 
         glfwSwapInterval(vertical_sync);
         double elapsed_time { glfwGetTime() };
@@ -119,6 +125,22 @@ namespace lwss {
         int value;
         glfwGetWindowSize(handle, nullptr, &value);
         return value;
+    }
+
+    double Window::vertical_dpi() const {
+        int height_in_mm;
+        double inch_to_mm { 25.4 };
+        glfwGetMonitorPhysicalSize(glfwGetPrimaryMonitor(),
+                                   nullptr, &height_in_mm);
+        return fullscreen_width / (height_in_mm/inch_to_mm);
+    }
+
+    double Window::horizontal_dpi() const {
+        int width_in_mm;
+        double inch_to_mm { 25.4 };
+        glfwGetMonitorPhysicalSize(glfwGetPrimaryMonitor(),
+                                   &width_in_mm, nullptr);
+        return fullscreen_width / (width_in_mm/inch_to_mm);
     }
 
     double Window::aspect_ratio() const {
