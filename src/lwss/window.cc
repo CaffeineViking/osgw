@@ -58,7 +58,7 @@ namespace lwss {
 
         // Notes: glGetString(GL_EXTENSIONS) is
         // deprecated in later versions of OGL,
-        // below we handle the cast for this...
+        // below we handle the case for this...
         if (context_config.major_version > 2) {
         int extensions;
             glGetIntegerv(GL_NUM_EXTENSIONS, &extensions);

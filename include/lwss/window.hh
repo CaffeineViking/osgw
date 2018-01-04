@@ -11,10 +11,10 @@ namespace lwss {
     class Window final {
     public:
         struct ContextConfig final {
-            int major_version { 2 },
+            int major_version { 4 },
                 minor_version { 1 };
-            bool forward_compatible { false },
-                 core_profile { false };
+            bool forward_compatible { true },
+                 core_profile { true };
             int msaa_samples { 4 };
         };
 
