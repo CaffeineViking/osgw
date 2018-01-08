@@ -10,7 +10,7 @@
 namespace lwss {
     class Window final {
     public:
-        struct ContextConfig final {
+        struct Context final {
             int major_version { 4 },
                 minor_version { 1 };
             bool forward_compatible { true },
@@ -20,12 +20,14 @@ namespace lwss {
 
         Window(std::size_t width, std::size_t height, const std::string& title,
                bool fullscreen, bool vertical_sync,
-               const ContextConfig& context_config);
+               const Context& context_config);
         Window(std::size_t width, std::size_t height, const std::string& title,
                bool fullscreen = false, bool vertical_sync = true)
                : Window { width, height, title, fullscreen, vertical_sync,
-                          ContextConfig { /* Default values. */ } } {  }
+                          Context { /* Just use default value. */ } } {  }
         ~Window() noexcept;
+
+        GLFWwindow* get_handle() const;
 
         void request_context();
         bool has_context() const;

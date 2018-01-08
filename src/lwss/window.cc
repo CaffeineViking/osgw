@@ -5,7 +5,7 @@
 
 namespace lwss {
     Window::Window(std::size_t width, std::size_t height, const std::string& title,
-                   bool fullscreen, bool vertical_sync, const ContextConfig& context_config)
+                   bool fullscreen, bool vertical_sync, const Context& context_config)
                    : title { title }, current_title { title } {
         if (!glfwInit()) throw std::runtime_error { "Failed to start GLFW!" };
         std::cerr << "GLFW version: " << glfwGetVersionString() << std::endl;
@@ -75,6 +75,10 @@ namespace lwss {
     Window::~Window() noexcept {
         glfwDestroyWindow(handle);
         handle = nullptr;
+    }
+
+    GLFWwindow* Window::get_handle() const {
+        return handle;
     }
 
     void Window::request_context() {
