@@ -26,4 +26,12 @@ namespace lwss {
     void ShaderProgram::use() const {
         glUseProgram(handle);
     }
+
+    GLint ShaderProgram::umap(const std::string& id) {
+        auto uniform = uniforms.find(id);
+        if (uniform == uniforms.end())
+            uniforms[id] = glGetUniformLocation(handle,
+                                                id.c_str());
+        return uniforms[id];
+    }
 }

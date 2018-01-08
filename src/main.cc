@@ -27,11 +27,11 @@ int main(int, char**) {
 
     shader_program.use();
 
-    lwss::Buffer vertex_position_buffer { vertex_positions, lwss::Buffer::Type::Array },
-                 vertex_index_buffer { vertex_indices, lwss::Buffer::Type::ElementArray };
+    lwss::Buffer position_buffer { vertex_positions, lwss::Buffer::Type::Array },
+                 element_buffer { vertex_indices, lwss::Buffer::Type::ElementArray };
 
-    lwss::VertexArray vertex_array { shader_program, vertex_index_buffer, {
-        { vertex_position_buffer, "position", 3, lwss::VertexArray::Attribute::Type::Float }
+    lwss::VertexArray vertex_array { shader_program, element_buffer, {
+        { position_buffer, "position", 3, lwss::VertexArray::Attribute::Type::Float },
     } };
 
     vertex_array.bind();

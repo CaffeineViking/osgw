@@ -21,7 +21,7 @@ namespace lwss {
             glEnableVertexAttribArray(attribute_location);
             glVertexAttribPointer(attribute_location, attribute.components,
                                   static_cast<GLenum>(attribute.type),
-                                  attribute.normalize, attribute.stride,
+                                  false, attribute.stride,
                                   attribute.offset);
         }
     }

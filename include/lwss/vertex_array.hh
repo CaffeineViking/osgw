@@ -28,7 +28,6 @@ namespace lwss {
             std::string name;
             GLint components;
             Type type;
-            bool normalize { false };
             GLsizei stride { 0 };
             const void* offset { 0 };
         };
