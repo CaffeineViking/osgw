@@ -27,6 +27,11 @@ namespace lwss {
         glUseProgram(handle);
     }
 
+    void ShaderProgram::sampler(const std::string& id, const Texture& texture) {
+        GLint sampler_location { umap(id) };
+        glUniform1i(sampler_location, texture.active_unit());
+    }
+
     GLint ShaderProgram::umap(const std::string& id) {
         auto uniform = uniforms.find(id);
         if (uniform == uniforms.end())
@@ -34,4 +39,5 @@ namespace lwss {
                                                 id.c_str());
         return uniforms[id];
     }
+
 }

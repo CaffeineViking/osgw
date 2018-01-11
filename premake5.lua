@@ -25,6 +25,7 @@ project (name)
     includedirs {"include"}
 
     filter {"system:windows"}
+        links {"png"}
         links {"FreeType"}
         links {"ALURE32", "OpenAL32"}
         links {"glew32", "glfw3dll", "opengl32"}
@@ -35,3 +36,4 @@ project (name)
         links {"GLEW", "glfw", "GL"}
         links {"alure", "openal"}
         links {"freetype"}
+        links {"png"}
