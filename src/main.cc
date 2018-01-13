@@ -3,10 +3,14 @@
 #include <lwss/shader.hh>
 #include <lwss/shader_program.hh>
 
-#include <lwss/image.hh>
-#include <lwss/texture.hh>
 #include <lwss/vertex_array.hh>
 #include <lwss/buffer.hh>
+
+#include <lwss/image.hh>
+#include <lwss/texture.hh>
+
+#include <lwss/camera.hh>
+#include <lwss/light.hh>
 
 #include <vector>
 #include <iostream>
@@ -51,18 +55,19 @@ int main(int, char**) {
 
     shader_program.sampler("sampler", image_texture);
 
-    glEnable(GL_BLEND);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);
-    glCullFace(GL_BACK);
 
-    glClearColor(0.00f, 0.00f, 0.00f, 1.00f);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     while (window.is_open()) {
         shader_program.uniform("time", glfwGetTime());
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        glViewport(0, 0, window.width() / 2.0, window.height());
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+        glViewport(window.width() / 2.0, 0, window.width() / 2.0, window.height());
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
         window.display();
     }
