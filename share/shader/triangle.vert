@@ -4,13 +4,17 @@ in vec3 position;
 in vec2 mapping;
 
 uniform float time;
+uniform mat4 model;
+uniform mat4 perspective_view;
 
-out vec2 texmaps;
+out vec2 pass_mapping;
+out vec3 pass_position;
 
 void main() {
-    texmaps = mapping;
-    vec3 new_position = position;
-    new_position.x *= cos(time);
-    new_position.y *= abs(cos(time));
-    gl_Position = vec4(new_position, 1.0);
+    pass_mapping = mapping;
+    vec4 homogenous = vec4(position, 1.0);
+    mat4 pvm = perspective_view*model;
+    vec4 final_pos = pvm*homogenous;
+    pass_position = final_pos.xyz;
+    gl_Position = final_pos;
 }

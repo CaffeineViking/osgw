@@ -67,6 +67,10 @@ namespace lwss {
         } else std::cerr << glGetString(GL_EXTENSIONS);
         std::cerr << std::endl; // FIXME: checks above.
 
+        if (context_config.msaa_samples > 0)
+            glEnable(GL_MULTISAMPLE);
+        else glDisable(GL_MULTISAMPLE);
+
         glfwSwapInterval(vertical_sync);
         double elapsed_time { glfwGetTime() };
         last_time = fps_timer = elapsed_time;
@@ -131,7 +135,7 @@ namespace lwss {
         return value;
     }
 
-    double Window::vertical_dpi() const {
+    float Window::vertical_dpi() const {
         int height_in_mm;
         double inch_to_mm { 25.4 };
         glfwGetMonitorPhysicalSize(glfwGetPrimaryMonitor(),
@@ -139,7 +143,7 @@ namespace lwss {
         return fullscreen_width / (height_in_mm/inch_to_mm);
     }
 
-    double Window::horizontal_dpi() const {
+    float Window::horizontal_dpi() const {
         int width_in_mm;
         double inch_to_mm { 25.4 };
         glfwGetMonitorPhysicalSize(glfwGetPrimaryMonitor(),
@@ -147,8 +151,8 @@ namespace lwss {
         return fullscreen_width / (width_in_mm/inch_to_mm);
     }
 
-    double Window::aspect_ratio() const {
-        return width() / static_cast<double>(height());
+    float Window::aspect_ratio() const {
+        return width() / static_cast<float>(height());
     }
 
     void Window::resize(std::size_t width, std::size_t height) {

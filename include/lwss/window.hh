@@ -39,9 +39,9 @@ namespace lwss {
 
         int width() const;
         int height() const;
-        double vertical_dpi() const;
-        double horizontal_dpi() const;
-        double aspect_ratio() const;
+        float vertical_dpi() const;
+        float horizontal_dpi() const;
+        float aspect_ratio() const;
         void resize(std::size_t width, std::size_t height);
 
         bool is_fullscreen() const;
