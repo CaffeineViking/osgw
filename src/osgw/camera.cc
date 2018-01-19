@@ -1,8 +1,8 @@
-#include <lwss/camera.hh>
+#include <osgw/camera.hh>
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace lwss {
+namespace osgw {
     Camera::Camera(float aspect_ratio, float field_of_view, float near_plane, float far_plane)
                   : aspect_ratio { aspect_ratio }, field_of_view { field_of_view },
                     near_plane { near_plane}, far_plane { far_plane } {

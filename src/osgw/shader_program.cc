@@ -1,6 +1,6 @@
-#include <lwss/shader_program.hh>
+#include <osgw/shader_program.hh>
 
-namespace lwss {
+namespace osgw {
     ShaderProgram::ShaderProgram(std::initializer_list<std::reference_wrapper<Shader>> shaders) {
         handle = glCreateProgram();
         for (const Shader& shader : shaders)

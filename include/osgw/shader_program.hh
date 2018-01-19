@@ -1,8 +1,8 @@
-#ifndef LWSS_SHADER_PROGRAM_HH
-#define LWSS_SHADER_PROGRAM_HH
+#ifndef OSGW_SHADER_PROGRAM_HH
+#define OSGW_SHADER_PROGRAM_HH
 
-#include <lwss/shader.hh>
-#include <lwss/texture.hh>
+#include <osgw/shader.hh>
+#include <osgw/texture.hh>
 
 #include <GL/glew.h>
 
@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <functional>
 
-namespace lwss {
+namespace osgw {
     class ShaderProgram final {
     public:
         ShaderProgram(std::initializer_list<std::reference_wrapper<Shader>> shaders);

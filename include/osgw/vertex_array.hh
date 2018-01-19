@@ -1,14 +1,14 @@
-#ifndef LWSS_VERTEX_ARRAY_HH
-#define LWSS_VERTEX_ARRAY_HH
+#ifndef OSGW_VERTEX_ARRAY_HH
+#define OSGW_VERTEX_ARRAY_HH
 
-#include <lwss/buffer.hh>
-#include <lwss/shader_program.hh>
+#include <osgw/buffer.hh>
+#include <osgw/shader_program.hh>
 
 #include <GL/glew.h>
 
 #include <string>
 
-namespace lwss {
+namespace osgw {
     class VertexArray final {
     public:
         struct Attribute final {

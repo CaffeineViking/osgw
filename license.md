@@ -1,7 +1,7 @@
 The MIT License (MIT)
 =====================
 
-Copyright © 2017 Erik S. Vasconcelos Jansson
+Copyright © 2018 Erik S. Vasconcelos Jansson
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation

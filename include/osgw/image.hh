@@ -1,9 +1,9 @@
-#ifndef LWSS_IMAGE_HH
-#define LWSS_IMAGE_HH
+#ifndef OSGW_IMAGE_HH
+#define OSGW_IMAGE_HH
 
 #include <string>
 
-namespace lwss {
+namespace osgw {
     class Image final {
     public:
         Image(const std::string& path);

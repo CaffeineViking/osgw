@@ -1,12 +1,12 @@
-#ifndef LWSS_SHADER_HH
-#define LWSS_SHADER_HH
+#ifndef OSGW_SHADER_HH
+#define OSGW_SHADER_HH
 
 #include <GL/glew.h>
 
 #include <string>
 #include <unordered_set>
 
-namespace lwss {
+namespace osgw {
     class Shader final {
     public:
         enum class Type : GLenum {

@@ -1,4 +1,4 @@
-#include <lwss/image.hh>
+#include <osgw/image.hh>
 
 #include <png.h>
 
@@ -8,7 +8,7 @@
 #include <cstring>
 #include <stdexcept>
 
-namespace lwss {
+namespace osgw {
     Image::Image(const std::string& path) {
         png_size_t row_bytes;
         png_bytepp row_pointers;

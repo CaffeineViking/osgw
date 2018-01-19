@@ -1,9 +1,9 @@
-#ifndef LWSS_CAMERA_HH
-#define LWSS_CAMERA_HH
+#ifndef OSGW_CAMERA_HH
+#define OSGW_CAMERA_HH
 
 #include <glm/glm.hpp>
 
-namespace lwss {
+namespace osgw {
     class Camera final {
     public:
         Camera(float aspect_ratio, float field_of_view, float near_plane = 0.08, float far_plane = 800.0);

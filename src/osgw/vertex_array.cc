@@ -1,6 +1,6 @@
-#include <lwss/vertex_array.hh>
+#include <osgw/vertex_array.hh>
 
-namespace lwss {
+namespace osgw {
     VertexArray::VertexArray(const ShaderProgram& shader_program, const Buffer& element_buffer,
                              const std::vector<Attribute>& vertex_attributes) {
         glGenVertexArrays(1, &handle);

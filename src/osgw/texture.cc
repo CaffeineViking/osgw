@@ -1,6 +1,6 @@
-#include <lwss/texture.hh>
+#include <osgw/texture.hh>
 
-namespace lwss {
+namespace osgw {
     Texture::Texture(const Image& image, const Parameters& parameters, GLuint texture_unit) {
         glGenTextures(1, &handle);
         glBindTexture(GL_TEXTURE_2D, handle);

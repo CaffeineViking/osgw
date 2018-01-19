@@ -1,16 +1,16 @@
-#include <lwss/window.hh>
+#include <osgw/window.hh>
 
-#include <lwss/shader.hh>
-#include <lwss/shader_program.hh>
+#include <osgw/shader.hh>
+#include <osgw/shader_program.hh>
 
-#include <lwss/vertex_array.hh>
-#include <lwss/buffer.hh>
+#include <osgw/vertex_array.hh>
+#include <osgw/buffer.hh>
 
-#include <lwss/image.hh>
-#include <lwss/texture.hh>
+#include <osgw/image.hh>
+#include <osgw/texture.hh>
 
-#include <lwss/camera.hh>
-#include <lwss/light.hh>
+#include <osgw/camera.hh>
+#include <osgw/light.hh>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -24,7 +24,7 @@
 #define PATH(X) SHARE_PATH X
 
 int main(int, char**) {
-    lwss::Window window { 1280, 720, "LWSS" };
+    osgw::Window window { 1280, 720, "osgw" };
 
     std::vector<int> indices { 0, 3, 2,
                                0, 2, 1 };
@@ -37,29 +37,29 @@ int main(int, char**) {
                                   1.0, 0.0,
                                   0.0, 0.0 };
 
-    lwss::Shader vertex_shader { PATH("shader/triangle.vert"), lwss::Shader::Type::Vertex },
-                 fragment_shader { PATH("shader/triangle.frag"), lwss::Shader::Type::Fragment };
-    lwss::ShaderProgram shader_program { vertex_shader, fragment_shader };
+    osgw::Shader vertex_shader   { PATH("shader/triangle.vert"), osgw::Shader::Type::Vertex },
+                 fragment_shader { PATH("shader/triangle.frag"), osgw::Shader::Type::Fragment };
+    osgw::ShaderProgram shader_program { vertex_shader, fragment_shader };
 
     shader_program.use();
 
-    lwss::Buffer position_buffer { positions, lwss::Buffer::Type::Array },
-                 mapping_buffer { mappings, lwss::Buffer::Type::Array },
-                 index_buffer { indices, lwss::Buffer::Type::ElementArray };
+    osgw::Buffer position_buffer { positions, osgw::Buffer::Type::Array },
+                 mapping_buffer  { mappings, osgw::Buffer::Type::Array },
+                 index_buffer    { indices, osgw::Buffer::Type::ElementArray };
 
-    lwss::VertexArray::Attribute position_attribute { position_buffer, "position", 3, lwss::VertexArray::Attribute::Type::Float },
-                                 mapping_attribute { mapping_buffer, "mapping", 2, lwss::VertexArray::Attribute::Type::Float };
-    lwss::VertexArray vertex_array { shader_program, index_buffer, { position_attribute, mapping_attribute } };
+    osgw::VertexArray::Attribute position_attribute { position_buffer, "position", 3, osgw::VertexArray::Attribute::Type::Float },
+                                 mapping_attribute  { mapping_buffer,  "mapping",  2, osgw::VertexArray::Attribute::Type::Float };
+    osgw::VertexArray vertex_array { shader_program, index_buffer, { position_attribute, mapping_attribute } };
 
     vertex_array.bind();
 
-    lwss::Image image { PATH("images/megumin.png") };
-    lwss::Texture image_texture { image, 0 };
+    osgw::Image image { PATH("images/megumin.png") };
+    osgw::Texture image_texture { image, 0 };
 
     shader_program.sampler("sampler", image_texture);
 
     glViewport(0,  0,  window.width(), window.height());
-    lwss::Camera camera { window.aspect_ratio(), 27.0 };
+    osgw::Camera camera { window.aspect_ratio(), 27.0 };
 
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);

@@ -1,4 +1,4 @@
-#include <lwss/shader.hh>
+#include <osgw/shader.hh>
 
 #include <regex>
 #include <fstream>
@@ -7,7 +7,7 @@
 #include <iterator>
 #include <stdexcept>
 
-namespace lwss {
+namespace osgw {
     Shader::Shader(const std::string& path, Type type)
                    : type { type } {
         std::string source;

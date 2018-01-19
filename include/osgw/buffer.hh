@@ -1,11 +1,11 @@
-#ifndef LWSS_BUFFER_HH
-#define LWSS_BUFFER_HH
+#ifndef OSGW_BUFFER_HH
+#define OSGW_BUFFER_HH
 
 #include <GL/glew.h>
 
 #include <vector>
 
-namespace lwss {
+namespace osgw {
     class Buffer final {
     public:
         enum class Type : GLenum {

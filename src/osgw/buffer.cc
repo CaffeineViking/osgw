@@ -1,6 +1,6 @@
-#include <lwss/buffer.hh>
+#include <osgw/buffer.hh>
 
-namespace lwss {
+namespace osgw {
     Buffer::Buffer(const void* data, std::size_t bytes, Type type, Usage usage)
                   : type { type } {
         glGenBuffers(1, &handle);

@@ -1,11 +1,11 @@
-#ifndef LWSS_TEXTURE_HH
-#define LWSS_TEXTURE_HH
+#ifndef OSGW_TEXTURE_HH
+#define OSGW_TEXTURE_HH
 
-#include <lwss/image.hh>
+#include <osgw/image.hh>
 
 #include <GL/glew.h>
 
-namespace lwss {
+namespace osgw {
     class Texture final {
     public:
         enum class WrapMode {

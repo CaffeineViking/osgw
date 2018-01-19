@@ -5,14 +5,14 @@ all: FORCE
 	make -j8 -C build config=${config}
 run: FORCE
 	premake5 gmake
-	make -j8 -C build lwss config=${config}
-	bin/lwss ${args}
+	make -j8 -C build osgw config=${config}
+	bin/osgw ${args}
 
 docs: FORCE
 	make -C docs
 tags: FORCE
-	ctags -R src/lwss include/lwss
-	cscope -Rb -s src/lwss -s include/lwss
+	ctags -R src/osgw include/osgw
+	cscope -Rb -s src/osgw -s include/osgw
 
 clean: FORCE
 	rm -rf build

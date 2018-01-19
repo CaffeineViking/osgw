@@ -1,5 +1,5 @@
-A Layer-Based Water Surface Shader
-==================================
+Real-Time Ocean Simulation with Gerstner Waves
+==============================================
 
 Compiling and Installation
 --------------------------
@@ -9,7 +9,7 @@ Compiling and Installation
 3. Thereafter, execute `premake5 gmake` if building on Make.
 4. Finally, issue the command `make -j8 -C build` and wait.
 5. When complete, either `bin` or `lib` have been built.
-6. **Shortcuts:** use `make run` and `make install`.
+6. **Shortcuts:** `make run` to build and run the demo.
 
 Usage and Documents
 -------------------

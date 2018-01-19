@@ -1,9 +1,9 @@
-#include <lwss/window.hh>
+#include <osgw/window.hh>
 
 #include <iostream>
 #include <stdexcept>
 
-namespace lwss {
+namespace osgw {
     Window::Window(std::size_t width, std::size_t height, const std::string& title,
                    bool fullscreen, bool vertical_sync, const Context& context_config)
                    : title { title }, current_title { title } {

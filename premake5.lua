@@ -1,4 +1,4 @@
-name = "lwss"
+name = "osgw"
 workspace (name)
     language "C++"
     location "build"

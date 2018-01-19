@@ -1,5 +1,5 @@
-#ifndef LWSS_WINDOW_HH
-#define LWSS_WINDOW_HH
+#ifndef OSGW_WINDOW_HH
+#define OSGW_WINDOW_HH
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -7,7 +7,7 @@
 #include <string>
 #include <cstddef>
 
-namespace lwss {
+namespace osgw {
     class Window final {
     public:
         struct Context final {
