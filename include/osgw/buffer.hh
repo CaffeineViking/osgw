@@ -42,9 +42,11 @@ namespace osgw {
         ~Buffer() noexcept;
 
         void bind() const;
+        std::size_t size() const;
 
     private:
         friend class VertexArray;
+        std::size_t size_in_bytes;
         Type type;
         GLuint handle;
     };

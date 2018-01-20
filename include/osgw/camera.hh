@@ -21,7 +21,7 @@ namespace osgw {
 
         const glm::mat4& get_projection_matrix() const;
         const glm::mat4& get_view_matrix() const;
-        const glm::mat4& get_matrix();
+        const glm::mat4& get_matrix() const;
 
         float get_aspect_ratio() const;
         float get_field_of_view() const;
@@ -40,7 +40,7 @@ namespace osgw {
 
         glm::mat4 view;
         glm::mat4 projection;
-        glm::mat4 projection_view;
+        mutable glm::mat4 projection_view;
     };
 }
 

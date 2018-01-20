@@ -32,11 +32,6 @@ namespace osgw {
         glUniform1i(sampler_location, texture.active_unit());
     }
 
-    void ShaderProgram::sampler(const std::string& id, const CubeTexture& texture) {
-        GLint sampler_location { umap(id) };
-        glUniform1i(sampler_location, texture.active_unit());
-    }
-
     GLint ShaderProgram::umap(const std::string& id) {
         auto uniform = uniforms.find(id);
         if (uniform == uniforms.end())

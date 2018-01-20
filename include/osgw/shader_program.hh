@@ -21,7 +21,6 @@ namespace osgw {
         void use() const;
 
         void sampler(const std::string& id, const Texture& texture);
-        void sampler(const std::string& id, const CubeTexture& texture);
         void uniform(const std::string& id, float x) { glUniform1f(umap(id), x); }
         void uniform(const std::string& id, float x, float y) { glUniform2f(umap(id), x, y); }
         void uniform2x2(const std::string& id, const glm::mat2& M) { glUniformMatrix2fv(umap(id), 1, false,

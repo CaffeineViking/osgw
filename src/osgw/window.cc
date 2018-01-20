@@ -93,6 +93,10 @@ namespace osgw {
         return handle == glfwGetCurrentContext();
     }
 
+    double Window::time() const {
+        return glfwGetTime();
+    }
+
     double Window::delta_time() const {
         return frame_time;
     }

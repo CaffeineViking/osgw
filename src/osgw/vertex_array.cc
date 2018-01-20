@@ -2,7 +2,10 @@
 
 namespace osgw {
     VertexArray::VertexArray(const ShaderProgram& shader_program, const Buffer& element_buffer,
-                             const std::vector<Attribute>& vertex_attributes) {
+                             const std::vector<Attribute>& vertex_attributes)
+                            : attributes { vertex_attributes },
+                              shader_program { shader_program },
+                              element_buffer { element_buffer } {
         glGenVertexArrays(1, &handle);
         glBindVertexArray(handle);
 

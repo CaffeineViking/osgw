@@ -60,7 +60,7 @@ namespace osgw {
         return view;
     }
 
-    const glm::mat4& Camera::get_matrix() {
+    const glm::mat4& Camera::get_matrix() const {
         projection_view = projection*view;
         return projection_view;
     }

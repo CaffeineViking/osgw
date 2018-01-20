@@ -1,20 +1,19 @@
 #version 410
 
 in vec3 position;
-in vec2 mapping;
+in vec2 texture_coordinate;
 
-uniform float time;
 uniform mat4 model;
-uniform mat4 perspective_view;
+uniform mat4 projection_view;
 
-out vec2 pass_mapping;
-out vec3 pass_position;
+out vec3 interpolated_position;
+out vec2 interpolated_texture_coordinate;
 
 void main() {
-    pass_mapping = mapping;
-    vec4 homogenous = vec4(position, 1.0);
-    mat4 pvm = perspective_view*model;
-    vec4 final_pos = pvm*homogenous;
-    pass_position = final_pos.xyz;
-    gl_Position = final_pos;
+    mat4 pvm = projection_view*model;
+    interpolated_texture_coordinate = texture_coordinate;
+    vec4 homogenous_position = vec4(position, 1.0);
+    vec4 final_position = pvm*homogenous_position;
+    interpolated_position = final_position.xyz;
+    gl_Position = final_position;
 }

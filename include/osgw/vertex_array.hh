@@ -36,9 +36,17 @@ namespace osgw {
                     const std::vector<Attribute>& vertex_attributes);
         ~VertexArray() noexcept;
 
+        std::size_t size() const { return element_buffer.size() / sizeof(GLuint); }
+        const std::vector<Attribute>& get_attributes() const { return attributes; }
+        const ShaderProgram& get_shader_program() const { return shader_program; }
+        const Buffer& get_element_buffer() const { return element_buffer; }
+
         void bind() const;
 
     private:
+        const std::vector<Attribute>& attributes;
+        const ShaderProgram& shader_program;
+        const Buffer& element_buffer;
         GLuint handle;
     };
 }
