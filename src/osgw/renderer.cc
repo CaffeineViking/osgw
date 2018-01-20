@@ -104,6 +104,7 @@ namespace osgw {
     void Renderer::draw(VertexArray& vertex_array, ShaderProgram& shader_program,
                         std::vector<Texture::Sampler>& texture_samplers) {
         set_shader_program(shader_program);
+        shader_program.uniform("time", window.time());
         for (Texture::Sampler& texture_sampler : texture_samplers) {
             std::size_t texture_unit { assign_texture_unit(&texture_sampler.texture) };
             if (texture_unit != texture_sampler.texture.active_unit())
@@ -118,12 +119,33 @@ namespace osgw {
                         std::vector<Texture::Sampler>& texture_samplers,
                         const Camera& camera, const glm::mat4& model_matrix) {
         set_shader_program(shader_program);
+        shader_program.uniform("time", window.time());
         for (Texture::Sampler& texture_sampler : texture_samplers) {
             std::size_t texture_unit { assign_texture_unit(&texture_sampler.texture) };
             if (texture_unit != texture_sampler.texture.active_unit())
                 texture_sampler.texture.active_unit(texture_unit);
             shader_program.sampler(texture_sampler.name, texture_sampler.texture);
         }
+
+        shader_program.uniform4x4("projection_view", camera.get_matrix());
+        shader_program.uniform4x4("model", model_matrix);
+        draw(vertex_array);
+    }
+
+    void Renderer::draw(VertexArray& vertex_array, ShaderProgram& shader_program,
+                        std::vector<Texture::Sampler>& texture_samplers,
+                        const Camera& camera, const glm::mat4& model_matrix,
+                        const std::vector<Light>& lights, const AmbientLight& ambient_light) {
+        set_shader_program(shader_program);
+        shader_program.uniform("time", window.time());
+        for (Texture::Sampler& texture_sampler : texture_samplers) {
+            std::size_t texture_unit { assign_texture_unit(&texture_sampler.texture) };
+            if (texture_unit != texture_sampler.texture.active_unit())
+                texture_sampler.texture.active_unit(texture_unit);
+            shader_program.sampler(texture_sampler.name, texture_sampler.texture);
+        }
+
+        // Upload light and ambient light via uniforms to the shader prog.
 
         shader_program.uniform4x4("projection_view", camera.get_matrix());
         shader_program.uniform4x4("model", model_matrix);

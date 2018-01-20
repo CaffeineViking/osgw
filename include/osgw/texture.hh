@@ -8,6 +8,11 @@
 namespace osgw {
     class Texture final {
     public:
+        enum class Type {
+            Texture2d = GL_TEXTURE_2D,
+            TextureCubeMap = GL_TEXTURE_CUBE_MAP
+        };
+
         enum class WrapMode {
             ClampToBorder = GL_CLAMP_TO_BORDER,
             ClampToEdge = GL_CLAMP_TO_EDGE,
@@ -37,6 +42,7 @@ namespace osgw {
         struct Parameters final {
             WrapMode wrap_s { WrapMode::Repeat };
             WrapMode wrap_t { WrapMode::Repeat };
+            WrapMode wrap_r { WrapMode::Repeat };
             float border_color[4] { 0.0, 0.0, 0.0, 1.0 };
             MinFilter min_filter { MinFilter::SmoothMipmap };
             MagFilter mag_filter { MagFilter::Linear };
@@ -44,6 +50,14 @@ namespace osgw {
 
         Texture(const Image& image, const Parameters& parameters);
         Texture(const Image& image) : Texture { image, Parameters {  } } {  }
+
+        Texture(const Image& nx, const Image& px, const Image& ny,
+                const Image& py, const Image& nz, const Image& pz,
+                const Parameters& parameters);
+        Texture(const Image& nx, const Image& px, const Image& ny,
+                const Image& py, const Image& nz, const Image& pz)
+                : Texture { nx, px, ny, py, nz, pz, Parameters {  } } {  }
+
         ~Texture() noexcept;
 
         void bind() const;
@@ -51,6 +65,7 @@ namespace osgw {
         void active_unit(GLuint unit);
 
     private:
+        Type type;
         GLuint unit { 16 };
         GLuint handle;
     };

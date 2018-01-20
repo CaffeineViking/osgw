@@ -39,5 +39,4 @@ namespace osgw {
                                                 id.c_str());
         return uniforms[id];
     }
-
 }

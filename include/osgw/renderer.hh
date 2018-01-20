@@ -6,6 +6,7 @@
 #include <osgw/vertex_array.hh>
 #include <osgw/shader_program.hh>
 #include <osgw/texture.hh>
+#include <osgw/light.hh>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -45,6 +46,9 @@ namespace osgw {
         void draw(VertexArray&, ShaderProgram&, std::vector<Texture::Sampler>&);
         void draw(VertexArray&, ShaderProgram&, std::vector<Texture::Sampler>&,
                   const Camera&, const glm::mat4&);
+        void draw(VertexArray&, ShaderProgram&, std::vector<Texture::Sampler>&,
+                  const Camera&, const glm::mat4&,
+                  const std::vector<Light>&, const AmbientLight&);
 
     private:
         const VertexArray* current_vertex_array { nullptr };

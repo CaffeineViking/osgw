@@ -5,6 +5,7 @@ namespace osgw {
         glGenTextures(1, &handle);
         glBindTexture(GL_TEXTURE_2D, handle);
         glEnable(GL_TEXTURE_2D); // AMD fix?
+        type = Type::Texture2d;
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         GLint format { image.has_alpha() ? GL_RGBA : GL_RGB };
@@ -22,11 +23,52 @@ namespace osgw {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, static_cast<GLenum>(parameters.wrap_s));
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, static_cast<GLenum>(parameters.wrap_t));
         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, parameters.border_color);
-        glActiveTexture(GL_TEXTURE0 + unit);
+    }
+
+    Texture::Texture(const Image& nx, const Image& px, const Image& ny,
+                     const Image& py, const Image& nz, const Image& pz,
+                     const Parameters& parameters) {
+        glGenTextures(1, &handle);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, handle);
+        glEnable(GL_TEXTURE_2D); // AMD fix?
+        type = Type::TextureCubeMap;
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X,  0, nx.has_alpha() ? GL_RGBA : GL_RGB,
+                     nx.get_width(), nx.get_height(), 0, nx.has_alpha() ? GL_RGBA : GL_RGB,
+                     GL_UNSIGNED_BYTE, nx.get_data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X,  0, px.has_alpha() ? GL_RGBA : GL_RGB,
+                     px.get_width(), px.get_height(), 0, px.has_alpha() ? GL_RGBA : GL_RGB,
+                     GL_UNSIGNED_BYTE, px.get_data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,  0, ny.has_alpha() ? GL_RGBA : GL_RGB,
+                     ny.get_width(), ny.get_height(), 0, ny.has_alpha() ? GL_RGBA : GL_RGB,
+                     GL_UNSIGNED_BYTE, ny.get_data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y,  0, py.has_alpha() ? GL_RGBA : GL_RGB,
+                     py.get_width(), py.get_height(), 0, py.has_alpha() ? GL_RGBA : GL_RGB,
+                     GL_UNSIGNED_BYTE, py.get_data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,  0, nz.has_alpha() ? GL_RGBA : GL_RGB,
+                     nz.get_width(), nz.get_height(), 0, nz.has_alpha() ? GL_RGBA : GL_RGB,
+                     GL_UNSIGNED_BYTE, nz.get_data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z,  0, pz.has_alpha() ? GL_RGBA : GL_RGB,
+                     pz.get_width(), pz.get_height(), 0, pz.has_alpha() ? GL_RGBA : GL_RGB,
+                     GL_UNSIGNED_BYTE, pz.get_data());
+
+        // Maybe it's the Gallium implementation but...
+        // IDK, Mesa's mipmapping implementation is really shit.
+        if (parameters.min_filter == MinFilter::NearestMipmap ||
+            parameters.min_filter == MinFilter::LinearMipmap ||
+            parameters.min_filter == MinFilter::SmoothMipmap) glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, static_cast<GLenum>(parameters.mag_filter));
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, static_cast<GLenum>(parameters.min_filter));
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, static_cast<GLenum>(parameters.wrap_s));
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, static_cast<GLenum>(parameters.wrap_t));
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, static_cast<GLenum>(parameters.wrap_r));
+        glTexParameterfv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BORDER_COLOR, parameters.border_color);
     }
 
     void Texture::bind() const {
-        glBindTexture(GL_TEXTURE_2D, handle);
+        glBindTexture(static_cast<GLenum>(type), handle);
     }
 
     GLuint Texture::active_unit() const {
@@ -34,8 +76,8 @@ namespace osgw {
     }
 
     void Texture::active_unit(GLuint texture_unit) {
-        glBindTexture(GL_TEXTURE_2D, handle);
         glActiveTexture(GL_TEXTURE0 + texture_unit);
+        glBindTexture(static_cast<GLenum>(type), handle);
         unit = texture_unit;
     }
 

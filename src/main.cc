@@ -15,7 +15,6 @@
 
 #include <cmath>
 #include <vector>
-#include <iostream>
 
 #ifndef SHARE_PATH
 #define SHARE_PATH "share/"
@@ -28,16 +27,18 @@ int main(int, char**) {
 
     std::vector<int> indices { 0, 3, 2,
                                0, 2, 1 };
-    std::vector<float> positions { -1.00, +1.00, 0.0,
-                                   +1.00, +1.00, 0.0,
-                                   +1.00, -1.00, 0.0,
-                                   -1.00, -1.00, 0.0 };
+    std::vector<float> positions { -1.0, +1.0, 0.0,
+                                   +1.0, +1.0, 0.0,
+                                   +1.0, -1.0, 0.0,
+                                   -1.0, -1.0, 0.0 };
     std::vector<float> texture_coordinates { 0.0, 1.0,
                                              1.0, 1.0,
                                              1.0, 0.0,
                                              0.0, 0.0 };
 
     osgw::Shader vertex_shader { PATH("shader/triangle.vert"), osgw::Shader::Type::Vertex },
+                 tesselation_control_shader { PATH("shader/triangle.tesc"), osgw::Shader::Type::TessControl },
+                 tesselation_evaluation_shader { PATH("shader/triangle.tese"), osgw::Shader::Type::TessEvaluation },
                  fragment_shader { PATH("shader/triangle.frag"), osgw::Shader::Type::Fragment };
     osgw::ShaderProgram shader_program { vertex_shader, fragment_shader };
 
@@ -45,14 +46,16 @@ int main(int, char**) {
                  texture_coordinate_buffer { texture_coordinates, osgw::Buffer::Type::Array },
                  index_buffer { indices, osgw::Buffer::Type::ElementArray };
 
-    osgw::VertexArray::Attribute position_attribute { position_buffer, "position", 3, osgw::VertexArray::Attribute::Type::Float },
-                                 texture_coordinate_attribute { texture_coordinate_buffer, "texture_coordinate",  2, osgw::VertexArray::Attribute::Type::Float };
-    osgw::VertexArray vertex_array { shader_program, index_buffer, { position_attribute, texture_coordinate_attribute } };
+    std::vector<osgw::VertexArray::Attribute> vertex_attributes {
+        { position_buffer, "position", 3, osgw::VertexArray::Attribute::Type::Float },
+        { texture_coordinate_buffer, "texture_coordinate",  2, osgw::VertexArray::Attribute::Type::Float }
+    };
+    osgw::VertexArray vertex_array { shader_program, index_buffer, vertex_attributes };
 
-    osgw::Image image { PATH("images/megumin.png") };
-    osgw::Texture image_texture { image };
+    osgw::Image megumin_image { PATH("images/megumin.png") };
+    osgw::Texture megumin_texture { megumin_image };
     std::vector<osgw::Texture::Sampler> texture_samplers {
-        { image_texture, "texture_sampler" }
+        { megumin_texture, "megumin_texture" }
     };
 
     glViewport(0, 0, window.width(), window.height());
@@ -63,8 +66,9 @@ int main(int, char**) {
         renderer.clear(0.0, 0.0, 0.0);
 
         camera.rotate({ 0.0, 0.0, 1.0 }, 0.01);
-        renderer.draw(vertex_array, shader_program, texture_samplers, camera,
-                      glm::scale(glm::mat4 {  }, glm::vec3 { std::cos(time) }));
+        glm::mat4 model_matrix { glm::scale({}, glm::vec3 { std::cos(time) }) };
+        renderer.draw(vertex_array, shader_program, texture_samplers,
+                      camera, model_matrix);
 
         window.display();
     }
