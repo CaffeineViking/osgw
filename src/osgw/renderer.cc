@@ -146,6 +146,8 @@ namespace osgw {
         }
 
         // Upload light and ambient light via uniforms to the shader prog.
+        // TODO: abstract away the common parts of all draw functions, and
+        // allow some ways to disable drawing temporarily to add uniforms.
 
         shader_program.uniform4x4("projection_view", camera.get_matrix());
         shader_program.uniform4x4("model", model_matrix);
