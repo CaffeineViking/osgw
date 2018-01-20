@@ -40,7 +40,9 @@ int main(int, char**) {
                  tesselation_control_shader { PATH("shader/triangle.tesc"), osgw::Shader::Type::TessControl },
                  tesselation_evaluation_shader { PATH("shader/triangle.tese"), osgw::Shader::Type::TessEvaluation },
                  fragment_shader { PATH("shader/triangle.frag"), osgw::Shader::Type::Fragment };
-    osgw::ShaderProgram shader_program { vertex_shader, fragment_shader };
+    osgw::ShaderProgram shader_program { vertex_shader,
+                                         tesselation_control_shader, tesselation_evaluation_shader,
+                                         fragment_shader };
 
     osgw::Buffer position_buffer { positions, osgw::Buffer::Type::Array },
                  texture_coordinate_buffer { texture_coordinates, osgw::Buffer::Type::Array },

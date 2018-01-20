@@ -21,7 +21,7 @@ namespace osgw {
             bool face_culling { true };
             bool depth_test { true };
             bool multisample { true };
-            bool wireframe { false };
+            bool wireframe { true };
             bool stencil_test { false };
             bool seamless_cubemap { true };
         };
@@ -42,7 +42,6 @@ namespace osgw {
 
         void clear(float r, float g, float b);
 
-        void draw(VertexArray&);
         void draw(VertexArray&, ShaderProgram&, std::vector<Texture::Sampler>&);
         void draw(VertexArray&, ShaderProgram&, std::vector<Texture::Sampler>&,
                   const Camera&, const glm::mat4&);

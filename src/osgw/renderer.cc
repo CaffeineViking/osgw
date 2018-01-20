@@ -47,6 +47,7 @@ namespace osgw {
         if (new_parameters.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+        glPatchParameteri(GL_PATCH_VERTICES, 3);
         parameters = new_parameters;
     }
 
@@ -96,11 +97,6 @@ namespace osgw {
         return current_texture_unit;
     }
 
-    void Renderer::draw(VertexArray& vertex_array) {
-        set_vertex_array(vertex_array);
-        glDrawElements(GL_TRIANGLES, vertex_array.size(), GL_UNSIGNED_INT, nullptr);
-    }
-
     void Renderer::draw(VertexArray& vertex_array, ShaderProgram& shader_program,
                         std::vector<Texture::Sampler>& texture_samplers) {
         set_shader_program(shader_program);
@@ -112,7 +108,12 @@ namespace osgw {
             shader_program.sampler(texture_sampler.name, texture_sampler.texture);
         }
 
-        draw(vertex_array);
+        set_vertex_array(vertex_array);
+        if (!shader_program.has_tess_eval_shader()) {
+            glDrawElements(GL_TRIANGLES, vertex_array.size(),
+                           GL_UNSIGNED_INT, nullptr);
+        } else glDrawElements(GL_PATCHES, vertex_array.size(),
+                              GL_UNSIGNED_INT, nullptr);
     }
 
     void Renderer::draw(VertexArray& vertex_array, ShaderProgram& shader_program,
@@ -129,7 +130,13 @@ namespace osgw {
 
         shader_program.uniform4x4("projection_view", camera.get_matrix());
         shader_program.uniform4x4("model", model_matrix);
-        draw(vertex_array);
+
+        set_vertex_array(vertex_array);
+        if (!shader_program.has_tess_eval_shader()) {
+            glDrawElements(GL_TRIANGLES, vertex_array.size(),
+                           GL_UNSIGNED_INT, nullptr);
+        } else glDrawElements(GL_PATCHES, vertex_array.size(),
+                              GL_UNSIGNED_INT, nullptr);
     }
 
     void Renderer::draw(VertexArray& vertex_array, ShaderProgram& shader_program,
@@ -151,6 +158,12 @@ namespace osgw {
 
         shader_program.uniform4x4("projection_view", camera.get_matrix());
         shader_program.uniform4x4("model", model_matrix);
-        draw(vertex_array);
+
+        set_vertex_array(vertex_array);
+        if (!shader_program.has_tess_eval_shader()) {
+            glDrawElements(GL_TRIANGLES, vertex_array.size(),
+                           GL_UNSIGNED_INT, nullptr);
+        } else glDrawElements(GL_PATCHES, vertex_array.size(),
+                              GL_UNSIGNED_INT, nullptr);
     }
 }

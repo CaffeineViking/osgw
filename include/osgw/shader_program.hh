@@ -20,6 +20,12 @@ namespace osgw {
 
         void use() const;
 
+        bool has_vertex_shader() const { return shader_stages[0]; }
+        bool has_tess_control_shader() const { return shader_stages[1]; }
+        bool has_tess_eval_shader() const { return shader_stages[2]; }
+        bool has_geometry_shader() const { return shader_stages[3]; }
+        bool has_fragment_shader() const { return shader_stages[4]; }
+
         void sampler(const std::string& id, const Texture& texture);
         void uniform(const std::string& id, float x) { glUniform1f(umap(id), x); }
         void uniform(const std::string& id, float x, float y) { glUniform2f(umap(id), x, y); }
@@ -37,6 +43,7 @@ namespace osgw {
     private:
         friend class VertexArray;
         GLint umap(const std::string&);
+        std::array<bool, 5> shader_stages {  };
         std::unordered_map<std::string, GLint> uniforms;
         GLuint handle;
     };

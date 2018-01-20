@@ -16,8 +16,8 @@ void main() {
     tc_out[gl_InvocationID].texture_coordinate = tc_in[gl_InvocationID].texture_coordinate;
     tc_out[gl_InvocationID].position = tc_in[gl_InvocationID].position;
 
-    gl_TessLevelInner[0] = 1;
-    gl_TessLevelOuter[0] = 1;
-    gl_TessLevelOuter[1] = 1;
-    gl_TessLevelOuter[2] = 1;
+    gl_TessLevelInner[0] = 128;
+    gl_TessLevelOuter[0] = 128;
+    gl_TessLevelOuter[1] = 128;
+    gl_TessLevelOuter[2] = 128;
 }
