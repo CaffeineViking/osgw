@@ -37,7 +37,7 @@ int main(int, char**) {
                                              1.0, 0.0,
                                              0.0, 0.0 };
 
-    osgw::Shader vertex_shader   { PATH("shader/triangle.vert"), osgw::Shader::Type::Vertex },
+    osgw::Shader vertex_shader { PATH("shader/triangle.vert"), osgw::Shader::Type::Vertex },
                  fragment_shader { PATH("shader/triangle.frag"), osgw::Shader::Type::Fragment };
     osgw::ShaderProgram shader_program { vertex_shader, fragment_shader };
 
@@ -55,11 +55,11 @@ int main(int, char**) {
         { image_texture, "texture_sampler" }
     };
 
-    glViewport(0,  0,  window.width(), window.height());
+    glViewport(0, 0, window.width(), window.height());
     osgw::Camera camera { window.aspect_ratio(), 27.0 };
 
     while (window.is_open()) {
-        float time = glfwGetTime();
+        float time = window.time();
         renderer.clear(0.0, 0.0, 0.0);
 
         camera.rotate({ 0.0, 0.0, 1.0 }, 0.01);
