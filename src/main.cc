@@ -60,15 +60,20 @@ int main(int, char**) {
     };
     osgw::VertexArray vertex_array { shader_program, index_buffer, vertex_attributes };
 
-    osgw::Image megumin_image { PATH("images/megumin.png") };
-    osgw::Texture megumin_texture { megumin_image };
+    osgw::Image diffuse_map_image { PATH("images/megumin.png") },
+                opacity_map_image { PATH("images/squares.png") };
+
+    osgw::Texture diffuse_map { diffuse_map_image },
+                  opacity_map { opacity_map_image };
     std::vector<osgw::Texture::Sampler> texture_samplers {
-        { megumin_texture, "megumin_texture" }
+        { diffuse_map, "diffuse_map" },
+        { opacity_map, "opacity_map" }
     };
 
     glViewport(0, 0, window.width(), window.height());
     osgw::Camera camera { window.aspect_ratio(), 27.0 };
 
+    window.reset_time();
     while (window.is_open()) {
         float time = window.time();
         renderer.clear(0.0, 0.0, 0.0);

@@ -8,7 +8,7 @@ in PipelineData {
     vec2 texture_coordinate;
 } te_in[];
 
-uniform mat4 projection_view;
+#pragma include("matrices.glsl")
 
 out PipelineData {
     vec3 position;

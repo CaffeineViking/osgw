@@ -4,8 +4,7 @@ in vec3 position;
 in vec3 normal;
 in vec2 texture_coordinate;
 
-uniform mat4 model;
-uniform mat4 projection_view;
+#pragma include("matrices.glsl")
 
 out PipelineData {
     vec3 position;

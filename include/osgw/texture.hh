@@ -58,6 +58,11 @@ namespace osgw {
                 const Image& py, const Image& nz, const Image& pz)
                 : Texture { nx, px, ny, py, nz, pz, Parameters {  } } {  }
 
+        Texture(const Image* images, const Parameters& parameters)
+               : Texture { images[0], images[1], images[2],
+                           images[3], images[4], images[5], parameters } {  }
+        Texture(const Image* images) : Texture { images, Parameters {} } {  }
+
         ~Texture() noexcept;
 
         void bind() const;

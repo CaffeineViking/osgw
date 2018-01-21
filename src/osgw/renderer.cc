@@ -121,6 +121,30 @@ namespace osgw {
 
     void Renderer::setup_light_sources(ShaderProgram& shader_program, const std::vector<Light>& lights,
                                        const AmbientLight& ambient_light) {
+        shader_program.uniform("ambient_light_color", ambient_light.get_color());
+        unsigned int current_directional_light { 0 },
+                     current_point_light { 0 };
+        for (const Light& light : lights) {
+            if (light.get_type() == Light::Type::Directional) {
+                std::string target_array { "directional_lights[" };
+                auto index = std::to_string(current_directional_light);
+                std::string target_struct { target_array + index + "]." };
+                shader_program.uniform(target_struct + "color", light.get_color());
+                shader_program.uniform(target_struct + "direction", light.get_direction());
+                ++current_directional_light;
+            } else if (light.get_type() == Light::Type::Point) {
+                std::string target_array { "point_lights[" };
+                auto index = std::to_string(current_directional_light);
+                std::string target_struct { target_array + index + "]." };
+                shader_program.uniform(target_struct + "color", light.get_color());
+                shader_program.uniform(target_struct + "position", light.get_location());
+                shader_program.uniform(target_struct + "falloff", light.get_falloff());
+                ++current_point_light;
+            }
+        }
+
+        shader_program.uniform("point_lights_size", current_point_light);
+        shader_program.uniform("directional_lights_size", current_directional_light);
     }
 
     void Renderer::draw_triangles(VertexArray& vertex_array) {

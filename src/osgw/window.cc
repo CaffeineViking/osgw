@@ -93,7 +93,11 @@ namespace osgw {
         return handle == glfwGetCurrentContext();
     }
 
-    double Window::time() const {
+    void Window::reset_time() {
+        glfwSetTime(0.0);
+    }
+
+    float Window::time() const {
         return glfwGetTime();
     }
 

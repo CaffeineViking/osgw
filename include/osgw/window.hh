@@ -32,7 +32,8 @@ namespace osgw {
         void request_context();
         bool has_context() const;
 
-        double time() const;
+        void reset_time();
+        float time() const;
         double delta_time() const;
         bool is_open() const;
         void close();

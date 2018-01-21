@@ -8,7 +8,7 @@ in PipelineData {
     vec2 texture_coordinate;
 } tc_in[];
 
-uniform float time;
+#pragma include("matrices.glsl")
 
 out PipelineData {
     vec3 position;
