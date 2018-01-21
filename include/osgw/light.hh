@@ -7,6 +7,8 @@ namespace osgw {
     class AmbientLight final {
     public:
         AmbientLight(const glm::vec3& color) : color { color } {  }
+        AmbientLight(float r, float g, float b)
+                    : AmbientLight { { r, g, b } } {  }
         void set_color(const glm::vec3& value) { color = value; }
         const glm::vec3& get_color() const { return color; }
 
@@ -21,8 +23,8 @@ namespace osgw {
             Point
         };
 
-        Light(const glm::vec3& location, const glm::vec3& color, float falloff, Type type)
-             : location { location }, color { color }, falloff { falloff }, type { type } {  }
+        Light(const glm::vec3& location, const glm::vec3& color, Type type, float falloff = 1.0)
+             : location { location }, color { color },  type { type }, falloff { falloff } {  }
 
         void scale(const glm::vec3& intensity);
         void translate(const glm::vec3& offset);
@@ -43,8 +45,8 @@ namespace osgw {
     private:
         glm::vec3 location;
         glm::vec3 color;
-        float falloff;
         Type type;
+        float falloff;
     };
 }
 

@@ -1,5 +1,7 @@
 #include <osgw/shader_program.hh>
 
+#include <iostream>
+
 namespace osgw {
     ShaderProgram::ShaderProgram(std::initializer_list<std::reference_wrapper<Shader>> shaders) {
         handle = glCreateProgram();
@@ -35,6 +37,13 @@ namespace osgw {
 
     void ShaderProgram::use() const {
         glUseProgram(handle);
+    }
+
+    void ShaderProgram::print_uniform_map() const {
+        for (const auto& uniform_pair : uniforms) {
+            std::cerr << uniform_pair.first << ": "
+                      << uniform_pair.second << std::endl;
+        }
     }
 
     void ShaderProgram::sampler(const std::string& id, const Texture& texture) {

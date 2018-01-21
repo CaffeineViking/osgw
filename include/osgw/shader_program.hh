@@ -20,6 +20,7 @@ namespace osgw {
 
         void use() const;
 
+        void print_uniform_map() const;
         bool has_vertex_shader() const { return shader_stages[0]; }
         bool has_tess_control_shader() const { return shader_stages[1]; }
         bool has_tess_eval_shader() const { return shader_stages[2]; }
@@ -42,6 +43,7 @@ namespace osgw {
         void uniform(const std::string& id, float x, float y, float z, float w) {
             glUniform4f(umap(id), x, y, z, w);
         }
+
 
     private:
         friend class VertexArray;

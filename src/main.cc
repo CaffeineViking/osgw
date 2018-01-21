@@ -73,6 +73,12 @@ int main(int, char**) {
     glViewport(0, 0, window.width(), window.height());
     osgw::Camera camera { window.aspect_ratio(), 27.0 };
 
+    osgw::AmbientLight ambient_light { 1.0, 1.0, 1.0 };
+    std::vector<osgw::Light> lights {
+        { { 0.0, 0.0, -1.0 }, { 1.0, 1.0, 1.0 }, osgw::Light::Type::Directional },
+        { { 0.0, 0.0, +1.0 }, { 1.0, 1.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
+    };
+
     window.reset_time();
     while (window.is_open()) {
         float time = window.time();
@@ -82,7 +88,7 @@ int main(int, char**) {
         glm::mat4 model_matrix { glm::scale({},
                                  glm::vec3 { std::cos(time) }) };
         renderer.draw(vertex_array, shader_program, texture_samplers,
-                      camera, model_matrix);
+                      camera, model_matrix, lights, ambient_light);
 
         window.display();
     }
