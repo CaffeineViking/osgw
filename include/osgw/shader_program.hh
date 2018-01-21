@@ -29,8 +29,10 @@ namespace osgw {
         void sampler(const std::string& id, const Texture& texture);
         void uniform(const std::string& id, float x) { glUniform1f(umap(id), x); }
         void uniform(const std::string& id, float x, float y) { glUniform2f(umap(id), x, y); }
+        void uniform(const std::string& id, const glm::vec2& v) { glUniform2f(umap(id), v.x, v.y); }
         void uniform2x2(const std::string& id, const glm::mat2& M) { glUniformMatrix2fv(umap(id), 1, false,
                                                                                         glm::value_ptr(M)); }
+        void uniform(const std::string& id, const glm::vec3& v) { glUniform3f(umap(id), v.x, v.y, v.z); }
         void uniform(const std::string& id, float x, float y, float z) { glUniform3f(umap(id), x, y, z); }
         void uniform3x3(const std::string& id, const glm::mat3& M) { glUniformMatrix3fv(umap(id), 1, false,
                                                                                         glm::value_ptr(M)); }

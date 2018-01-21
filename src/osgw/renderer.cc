@@ -97,73 +97,71 @@ namespace osgw {
         return current_texture_unit;
     }
 
-    void Renderer::draw(VertexArray& vertex_array, ShaderProgram& shader_program,
-                        std::vector<Texture::Sampler>& texture_samplers) {
+    void Renderer::setup_shader_program(ShaderProgram& shader_program) {
         set_shader_program(shader_program);
         shader_program.uniform("time", window.time());
-        for (Texture::Sampler& texture_sampler : texture_samplers) {
-            std::size_t texture_unit { assign_texture_unit(&texture_sampler.texture) };
-            if (texture_unit != texture_sampler.texture.active_unit())
-                texture_sampler.texture.active_unit(texture_unit);
-            shader_program.sampler(texture_sampler.name, texture_sampler.texture);
-        }
+    }
 
+    void Renderer::setup_texture_samplers(ShaderProgram& shader_program, std::vector<Texture::Sampler>& samplers) {
+        for (Texture::Sampler& sampler : samplers) {
+            std::size_t texture_unit { assign_texture_unit(&sampler.texture) };
+            if (texture_unit != sampler.texture.active_unit())
+                sampler.texture.active_unit(texture_unit);
+            shader_program.sampler(sampler.name, sampler.texture);
+        }
+    }
+
+    void Renderer::setup_transformation_matrices(ShaderProgram& shader_program, const Camera& camera,
+                                                 const glm::mat4& model_matrix) {
+
+        shader_program.uniform("eye_position", camera.get_position());
+        shader_program.uniform4x4("projection_view", camera.get_matrix());
+        shader_program.uniform4x4("model", model_matrix);
+    }
+
+    void Renderer::setup_light_sources(ShaderProgram& shader_program, const std::vector<Light>& lights,
+                                       const AmbientLight& ambient_light) {
+    }
+
+    void Renderer::draw_triangles(VertexArray& vertex_array) {
         set_vertex_array(vertex_array);
-        if (!shader_program.has_tess_eval_shader()) {
-            glDrawElements(GL_TRIANGLES, vertex_array.size(),
-                           GL_UNSIGNED_INT, nullptr);
-        } else glDrawElements(GL_PATCHES, vertex_array.size(),
-                              GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, vertex_array.size(),
+                       GL_UNSIGNED_INT, nullptr);
+    }
+
+    void Renderer::draw_patches(VertexArray& vertex_array) {
+        set_vertex_array(vertex_array);
+        glDrawElements(GL_PATCHES, vertex_array.size(),
+                       GL_UNSIGNED_INT, nullptr);
+    }
+
+    void Renderer::draw(VertexArray& vertex_array, ShaderProgram& shader_program,
+                        std::vector<Texture::Sampler>& texture_samplers) {
+        setup_shader_program(shader_program);
+        setup_texture_samplers(shader_program, texture_samplers);
+        if (!shader_program.has_tess_eval_shader()) draw_triangles(vertex_array);
+        else draw_patches(vertex_array); // Checks if we'll use the tessellators.
     }
 
     void Renderer::draw(VertexArray& vertex_array, ShaderProgram& shader_program,
                         std::vector<Texture::Sampler>& texture_samplers,
                         const Camera& camera, const glm::mat4& model_matrix) {
-        set_shader_program(shader_program);
-        shader_program.uniform("time", window.time());
-        for (Texture::Sampler& texture_sampler : texture_samplers) {
-            std::size_t texture_unit { assign_texture_unit(&texture_sampler.texture) };
-            if (texture_unit != texture_sampler.texture.active_unit())
-                texture_sampler.texture.active_unit(texture_unit);
-            shader_program.sampler(texture_sampler.name, texture_sampler.texture);
-        }
-
-        shader_program.uniform4x4("projection_view", camera.get_matrix());
-        shader_program.uniform4x4("model", model_matrix);
-
-        set_vertex_array(vertex_array);
-        if (!shader_program.has_tess_eval_shader()) {
-            glDrawElements(GL_TRIANGLES, vertex_array.size(),
-                           GL_UNSIGNED_INT, nullptr);
-        } else glDrawElements(GL_PATCHES, vertex_array.size(),
-                              GL_UNSIGNED_INT, nullptr);
+        setup_shader_program(shader_program);
+        setup_texture_samplers(shader_program, texture_samplers);
+        setup_transformation_matrices(shader_program, camera, model_matrix);
+        if (!shader_program.has_tess_eval_shader()) draw_triangles(vertex_array);
+        else draw_patches(vertex_array); // Checks if we'll use the tessellators.
     }
 
     void Renderer::draw(VertexArray& vertex_array, ShaderProgram& shader_program,
                         std::vector<Texture::Sampler>& texture_samplers,
                         const Camera& camera, const glm::mat4& model_matrix,
                         const std::vector<Light>& lights, const AmbientLight& ambient_light) {
-        set_shader_program(shader_program);
-        shader_program.uniform("time", window.time());
-        for (Texture::Sampler& texture_sampler : texture_samplers) {
-            std::size_t texture_unit { assign_texture_unit(&texture_sampler.texture) };
-            if (texture_unit != texture_sampler.texture.active_unit())
-                texture_sampler.texture.active_unit(texture_unit);
-            shader_program.sampler(texture_sampler.name, texture_sampler.texture);
-        }
-
-        // Upload light and ambient light via uniforms to the shader prog.
-        // TODO: abstract away the common parts of all draw functions, and
-        // allow some ways to disable drawing temporarily to add uniforms.
-
-        shader_program.uniform4x4("projection_view", camera.get_matrix());
-        shader_program.uniform4x4("model", model_matrix);
-
-        set_vertex_array(vertex_array);
-        if (!shader_program.has_tess_eval_shader()) {
-            glDrawElements(GL_TRIANGLES, vertex_array.size(),
-                           GL_UNSIGNED_INT, nullptr);
-        } else glDrawElements(GL_PATCHES, vertex_array.size(),
-                              GL_UNSIGNED_INT, nullptr);
+        setup_shader_program(shader_program);
+        setup_texture_samplers(shader_program, texture_samplers);
+        setup_light_sources(shader_program, lights, ambient_light);
+        setup_transformation_matrices(shader_program, camera, model_matrix);
+        if (!shader_program.has_tess_eval_shader()) draw_triangles(vertex_array);
+        else draw_patches(vertex_array); // Checks if we'll use the tessellators.
     }
 }

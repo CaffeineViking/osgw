@@ -11,17 +11,15 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-#include <functional>
-
 namespace osgw {
     class Renderer final {
     public:
         struct Parameters final {
-            bool blending { true };
+            bool blending { false };
             bool face_culling { true };
             bool depth_test { true };
             bool multisample { true };
-            bool wireframe { true };
+            bool wireframe { false };
             bool stencil_test { false };
             bool seamless_cubemap { true };
         };
@@ -41,6 +39,13 @@ namespace osgw {
         std::size_t next_texture_unit() const;
 
         void clear(float r, float g, float b);
+
+        void draw_patches(VertexArray&);
+        void draw_triangles(VertexArray&);
+        void setup_shader_program(ShaderProgram&);
+        void setup_texture_samplers(ShaderProgram&, std::vector<Texture::Sampler>&);
+        void setup_transformation_matrices(ShaderProgram&, const Camera&, const glm::mat4&);
+        void setup_light_sources(ShaderProgram&, const std::vector<Light>&, const AmbientLight&);
 
         void draw(VertexArray&, ShaderProgram&, std::vector<Texture::Sampler>&);
         void draw(VertexArray&, ShaderProgram&, std::vector<Texture::Sampler>&,

@@ -25,12 +25,16 @@ int main(int, char**) {
     osgw::Window window { 1280, 720, "osgw" };
     osgw::Renderer renderer { window };
 
-    std::vector<int> indices { 0, 3, 2,
+    std::vector<int> indices { 2, 0, 3,
                                0, 2, 1 };
     std::vector<float> positions { -1.0, +1.0, 0.0,
                                    +1.0, +1.0, 0.0,
                                    +1.0, -1.0, 0.0,
                                    -1.0, -1.0, 0.0 };
+    std::vector<float> normals { 0.0, 0.0, 1.0,
+                                 0.0, 0.0, 1.0,
+                                 0.0, 0.0, 1.0,
+                                 0.0, 0.0, 1.0 };
     std::vector<float> texture_coordinates { 0.0, 1.0,
                                              1.0, 1.0,
                                              1.0, 0.0,
@@ -45,11 +49,13 @@ int main(int, char**) {
                                          fragment_shader };
 
     osgw::Buffer position_buffer { positions, osgw::Buffer::Type::Array },
+                 normal_buffer { normals, osgw::Buffer::Type::Array },
                  texture_coordinate_buffer { texture_coordinates, osgw::Buffer::Type::Array },
                  index_buffer { indices, osgw::Buffer::Type::ElementArray };
 
     std::vector<osgw::VertexArray::Attribute> vertex_attributes {
         { position_buffer, "position", 3, osgw::VertexArray::Attribute::Type::Float },
+        { normal_buffer, "normal", 3, osgw::VertexArray::Attribute::Type::Float },
         { texture_coordinate_buffer, "texture_coordinate",  2, osgw::VertexArray::Attribute::Type::Float }
     };
     osgw::VertexArray vertex_array { shader_program, index_buffer, vertex_attributes };
@@ -68,7 +74,8 @@ int main(int, char**) {
         renderer.clear(0.0, 0.0, 0.0);
 
         camera.rotate({ 0.0, 0.0, 1.0 }, 0.01);
-        glm::mat4 model_matrix { glm::scale({}, glm::vec3 { std::cos(time) }) };
+        glm::mat4 model_matrix { glm::scale({},
+                                 glm::vec3 { std::cos(time) }) };
         renderer.draw(vertex_array, shader_program, texture_samplers,
                       camera, model_matrix);
 

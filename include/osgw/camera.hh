@@ -15,9 +15,9 @@ namespace osgw {
         void change_projection(float aspect_ratio, float field_of_view,
                                float near_plane = 0.08, float far_plane = 800.0);
 
-        const glm::vec4& get_position() const;
-        const glm::vec4& get_direction() const;
-        const glm::vec4& get_up_direction() const;
+        const glm::vec3& get_position() const;
+        const glm::vec3& get_direction() const;
+        const glm::vec3& get_up_direction() const;
 
         const glm::mat4& get_projection_matrix() const;
         const glm::mat4& get_view_matrix() const;
@@ -34,9 +34,9 @@ namespace osgw {
         float near_plane;
         float far_plane;
 
-        glm::vec4 position;
-        glm::vec4 direction;
-        glm::vec4 up_direction;
+        glm::vec3 position;
+        glm::vec3 direction;
+        glm::vec3 up_direction;
 
         glm::mat4 view;
         glm::mat4 projection;

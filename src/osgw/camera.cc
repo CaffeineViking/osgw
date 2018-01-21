@@ -13,21 +13,26 @@ namespace osgw {
     void Camera::translate(const glm::vec3& offset) {
         glm::mat4 translation { glm::translate(glm::mat4 {  }, -offset) };
         view = glm::translate(view, -offset);
-        position = translation*position;
+        position = position + offset;
     }
 
     void Camera::rotate(const glm::vec3& axis, float radians) {
         glm::mat4 rotation { glm::rotate(glm::mat4 {  }, -radians, axis) };
         view = glm::rotate(view, -radians, axis);
-        up_direction = rotation*up_direction;
-        direction = rotation*direction;
+
+        glm::mat4 irot { glm::rotate(glm::mat4 {  }, radians, axis) };
+        glm::vec4 up { irot * glm::vec4 { up_direction, 0.0 } };
+        glm::vec4 dir { irot * glm::vec4 { direction, 0.0 } };
+
+        direction = glm::vec3 { dir.x, dir.y, dir.z };
+        up_direction = glm::vec3 { up.x, up.y, up.z };
     }
 
     void Camera::look_at(const glm::vec3& eye, const glm::vec3& point, const glm::vec3& up) {
         view = glm::lookAt(eye, point, up);
-        position = glm::vec4 { eye, 1.0 };
-        up_direction = glm::vec4 { up, 0.0 };
-        direction = glm::vec4 { glm::normalize(point - eye), 0.0 };
+        position = eye;
+        up_direction = up;
+        direction = glm::normalize(point - eye);
     }
 
     void Camera::change_projection(float aspect_ratio, float field_of_view,
@@ -40,15 +45,15 @@ namespace osgw {
         this->far_plane = far_plane;
     }
 
-    const glm::vec4& Camera::get_position() const {
+    const glm::vec3& Camera::get_position() const {
         return position;
     }
 
-    const glm::vec4& Camera::get_direction() const {
+    const glm::vec3& Camera::get_direction() const {
         return direction;
     }
 
-    const glm::vec4& Camera::get_up_direction() const {
+    const glm::vec3& Camera::get_up_direction() const {
         return up_direction;
     }
 

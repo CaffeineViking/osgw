@@ -1,22 +1,27 @@
 #version 410
 
 in vec3 position;
+in vec3 normal;
 in vec2 texture_coordinate;
 
-uniform float time;
 uniform mat4 model;
 uniform mat4 projection_view;
 
 out PipelineData {
-    vec4 position;
+    vec3 position;
+    vec3 normal;
     vec2 texture_coordinate;
 } vs_out;
 
 void main() {
     mat4 pvm = projection_view * model;
-    vs_out.texture_coordinate = texture_coordinate;
+    vec4 rotate_normal = model * vec4(normal, 0.0);
     vec4 homogenous_position = vec4(position, 1.0);
-    vs_out.position = pvm * homogenous_position;
+    vec4 world_pos = model * homogenous_position;
 
-    gl_Position = vs_out.position;
+    vs_out.position = world_pos.xyz;
+    vs_out.normal = rotate_normal.xyz;
+    vs_out.texture_coordinate = texture_coordinate;
+
+    gl_Position = pvm * homogenous_position;
 }
