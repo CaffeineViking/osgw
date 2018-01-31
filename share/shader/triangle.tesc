@@ -1,6 +1,6 @@
 #version 410
 
-layout(vertices = 3) out;
+layout(vertices = 4) out;
 
 in PipelineData {
     vec3 position;
@@ -21,6 +21,8 @@ void main() {
     tc_out[gl_InvocationID].texture_coordinate = tc_in[gl_InvocationID].texture_coordinate;
     tc_out[gl_InvocationID].position = tc_in[gl_InvocationID].position;
 
-    gl_TessLevelInner[0] = 1; gl_TessLevelOuter[0] = 1;
-    gl_TessLevelOuter[1] = 1; gl_TessLevelOuter[2] = 1;
+    float tess = 32.0*abs(sin(time)) + 1.0;
+    gl_TessLevelInner[0] = tess; gl_TessLevelInner[1] = tess;
+    gl_TessLevelOuter[0] = tess; gl_TessLevelOuter[1] = tess;
+    gl_TessLevelOuter[2] = tess; gl_TessLevelOuter[3] = tess;
 }

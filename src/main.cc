@@ -25,8 +25,7 @@ int main(int, char**) {
     osgw::Window window { 1280, 720, "osgw" };
     osgw::Renderer renderer { window };
 
-    std::vector<int> indices { 2, 0, 3,
-                               0, 2, 1 };
+    std::vector<int> indices { 0, 3, 2, 1 };
     std::vector<float> positions { -1.0, +1.0, 0.0,
                                    +1.0, +1.0, 0.0,
                                    +1.0, -1.0, 0.0,

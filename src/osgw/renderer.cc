@@ -47,7 +47,7 @@ namespace osgw {
         if (new_parameters.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-        glPatchParameteri(GL_PATCH_VERTICES, 3);
+        glPatchParameteri(GL_PATCH_VERTICES, 4);
         parameters = new_parameters;
     }
 
