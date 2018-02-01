@@ -21,8 +21,7 @@ void main() {
     tc_out[gl_InvocationID].texture_coordinate = tc_in[gl_InvocationID].texture_coordinate;
     tc_out[gl_InvocationID].position = tc_in[gl_InvocationID].position;
 
-    float tess = 32.0*abs(sin(time)) + 1.0;
-    gl_TessLevelInner[0] = tess; gl_TessLevelInner[1] = tess;
-    gl_TessLevelOuter[0] = tess; gl_TessLevelOuter[1] = tess;
-    gl_TessLevelOuter[2] = tess; gl_TessLevelOuter[3] = tess;
+    gl_TessLevelInner[0] = 1; gl_TessLevelInner[1] = 1;
+    gl_TessLevelOuter[0] = 1; gl_TessLevelOuter[1] = 1;
+    gl_TessLevelOuter[2] = 1; gl_TessLevelOuter[3] = 1;
 }

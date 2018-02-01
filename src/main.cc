@@ -11,8 +11,6 @@
 #include <osgw/camera.hh>
 #include <osgw/light.hh>
 
-#include <glm/gtc/matrix_transform.hpp>
-
 #include <cmath>
 #include <vector>
 
@@ -23,6 +21,7 @@
 
 int main(int, char**) {
     osgw::Window window { 1280, 720, "osgw" };
+    osgw::InputMapper input_mapper { window };
     osgw::Renderer renderer { window };
 
     std::vector<int> indices { 0, 3, 2, 1 };
@@ -59,33 +58,43 @@ int main(int, char**) {
     };
     osgw::VertexArray vertex_array { shader_program, index_buffer, vertex_attributes };
 
-    osgw::Image diffuse_map_image { PATH("images/megumin.png") },
-                opacity_map_image { PATH("images/squares.png") };
-
-    osgw::Texture diffuse_map { diffuse_map_image },
-                  opacity_map { opacity_map_image };
+    osgw::Image diffuse_map_image { PATH("images/megumin.png") };
+    osgw::Texture diffuse_map { diffuse_map_image };
     std::vector<osgw::Texture::Sampler> texture_samplers {
-        { diffuse_map, "diffuse_map" },
-        { opacity_map, "opacity_map" }
+        { diffuse_map, "diffuse_map" }
     };
 
     glViewport(0, 0, window.width(), window.height());
     osgw::Camera camera { window.aspect_ratio(), 27.0 };
 
-    osgw::AmbientLight ambient_light { 1.0, 1.0, 1.0 };
+    osgw::AmbientLight ambient_light { 0.3, 0.3, 0.3 };
     std::vector<osgw::Light> lights {
-        { { 0.0, 0.0, -1.0 }, { 1.0, 1.0, 1.0 }, osgw::Light::Type::Directional },
-        { { 0.0, 0.0, +1.0 }, { 1.0, 1.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
+        { { 0.0, 0.0, -1.0 }, { 0.0, 1.0, 0.0 }, osgw::Light::Type::Directional },
+        { { +1.0, 1.0, 0.0 }, { 1.0, 0.0, 0.0 }, osgw::Light::Type::Point, 1.00 },
+        { { -1.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
     };
+
+    // Mouse mappings for the camera-centered viewport navigation.
+    input_mapper.map("zoom", osgw::InputMapper::Mouse::RightButton);
+    input_mapper.map("rotate", osgw::InputMapper::Mouse::LeftButton);
+    input_mapper.map("pan", osgw::InputMapper::Mouse::MiddleButton);
+
+    // Keyboard mappings for the FPS-style viewport movement.
+    input_mapper.map("fullscreen", osgw::InputMapper::Key::F);
+    input_mapper.map("quit", { osgw::InputMapper::Key::Q, osgw::InputMapper::Key::Escape });
+    input_mapper.map("forward", { osgw::InputMapper::Key::W, osgw::InputMapper::Key::Up });
+    input_mapper.map("backward", { osgw::InputMapper::Key::S, osgw::InputMapper::Key::Down });
+    input_mapper.map("left", { osgw::InputMapper::Key::A, osgw::InputMapper::Key::Left });
+    input_mapper.map("right", { osgw::InputMapper::Key::D, osgw::InputMapper::Key::Right });
+    input_mapper.map("down", { osgw::InputMapper::Key::Z, osgw::InputMapper::Key::PageDown });
+    input_mapper.map("up", { osgw::InputMapper::Key::Q, osgw::InputMapper::Key::PageUp });
 
     window.reset_time();
     while (window.is_open()) {
         float time = window.time();
-        renderer.clear(0.0, 0.0, 0.0);
+        renderer.clear(0.3, 0.3, 0.3);
 
-        camera.rotate({ 0.0, 0.0, 1.0 }, 0.01);
-        glm::mat4 model_matrix { glm::scale({},
-                                 glm::vec3 { std::cos(time) }) };
+        glm::mat4 model_matrix { 1.0 };
         renderer.draw(vertex_array, shader_program, texture_samplers,
                       camera, model_matrix, lights, ambient_light);
 
