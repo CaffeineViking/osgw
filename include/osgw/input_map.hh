@@ -1,5 +1,5 @@
-#ifndef OSGW_INPUT_HH
-#define OSGW_INPUT_HH
+#ifndef OSGW_INPUT_MAP_HH
+#define OSGW_INPUT_MAP_HH
 
 #include <GLFW/glfw3.h>
 #include <unordered_map>

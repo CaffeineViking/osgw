@@ -1,4 +1,5 @@
 #include <osgw/window.hh>
+#include <osgw/input_map.hh>
 #include <osgw/renderer.hh>
 
 #include <osgw/shader.hh>

@@ -1,1 +1,0 @@
-#include <osgw/input.hh>
