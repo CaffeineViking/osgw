@@ -1,4 +1,5 @@
 #include <osgw/window.hh>
+#include <osgw/input.hh>
 #include <osgw/input_map.hh>
 #include <osgw/renderer.hh>
 
@@ -75,20 +76,20 @@ int main(int, char**) {
         { { -1.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
     };
 
-    // Mouse mappings for the camera-centered viewport navigation.
-    input_mapper.map("zoom", osgw::InputMapper::Mouse::RightButton);
-    input_mapper.map("rotate", osgw::InputMapper::Mouse::LeftButton);
-    input_mapper.map("pan", osgw::InputMapper::Mouse::MiddleButton);
+    // Mouse mappings for the camera-centered (?) navigation.
+    input_mapper.map("zoom", osgw::Input::MouseButton::Right);
+    input_mapper.map("rotate", osgw::Input::MouseButton::Left);
+    input_mapper.map("pan", osgw::Input::MouseButton::Middle);
 
     // Keyboard mappings for the FPS-style viewport movement.
-    input_mapper.map("fullscreen", osgw::InputMapper::Key::F);
-    input_mapper.map("quit", { osgw::InputMapper::Key::Q, osgw::InputMapper::Key::Escape });
-    input_mapper.map("forward", { osgw::InputMapper::Key::W, osgw::InputMapper::Key::Up });
-    input_mapper.map("backward", { osgw::InputMapper::Key::S, osgw::InputMapper::Key::Down });
-    input_mapper.map("left", { osgw::InputMapper::Key::A, osgw::InputMapper::Key::Left });
-    input_mapper.map("right", { osgw::InputMapper::Key::D, osgw::InputMapper::Key::Right });
-    input_mapper.map("down", { osgw::InputMapper::Key::Z, osgw::InputMapper::Key::PageDown });
-    input_mapper.map("up", { osgw::InputMapper::Key::Q, osgw::InputMapper::Key::PageUp });
+    input_mapper.map("fullscreen", osgw::Input::Key::F);
+    input_mapper.map("quit", { osgw::Input::Key::Q, osgw::Input::Key::Escape });
+    input_mapper.map("forward", { osgw::Input::Key::W, osgw::Input::Key::Up });
+    input_mapper.map("backward", { osgw::Input::Key::S, osgw::Input::Key::Down });
+    input_mapper.map("left", { osgw::Input::Key::A, osgw::Input::Key::Left });
+    input_mapper.map("right", { osgw::Input::Key::D, osgw::Input::Key::Right });
+    input_mapper.map("down", { osgw::Input::Key::Z, osgw::Input::Key::PageDown });
+    input_mapper.map("up", { osgw::Input::Key::Q, osgw::Input::Key::PageUp });
 
     window.reset_time();
     while (window.is_open()) {
