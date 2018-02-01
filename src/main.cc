@@ -76,14 +76,12 @@ int main(int, char**) {
         { { -1.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
     };
 
-    // Mouse mappings for the camera-centered (?) navigation.
+
+    input_mapper.map("quit", { osgw::Input::Key::Q, osgw::Input::Key::Escape });
+    input_mapper.map("fullscreen", osgw::Input::Key::F);
     input_mapper.map("zoom", osgw::Input::MouseButton::Right);
     input_mapper.map("rotate", osgw::Input::MouseButton::Left);
     input_mapper.map("pan", osgw::Input::MouseButton::Middle);
-
-    // Keyboard mappings for the FPS-style viewport movement.
-    input_mapper.map("fullscreen", osgw::Input::Key::F);
-    input_mapper.map("quit", { osgw::Input::Key::Q, osgw::Input::Key::Escape });
     input_mapper.map("forward", { osgw::Input::Key::W, osgw::Input::Key::Up });
     input_mapper.map("backward", { osgw::Input::Key::S, osgw::Input::Key::Down });
     input_mapper.map("left", { osgw::Input::Key::A, osgw::Input::Key::Left });
@@ -96,9 +94,15 @@ int main(int, char**) {
         float time = window.time();
         renderer.clear(0.3, 0.3, 0.3);
 
+        if (input_mapper.pressed("quit")) window.close();
+        if (input_mapper.just_pressed("fullscreen"))
+            window.toggle_fullscreen();
+
+
         glm::mat4 model_matrix { 1.0 };
         renderer.draw(vertex_array, shader_program, texture_samplers,
                       camera, model_matrix, lights, ambient_light);
+
 
         window.display();
     }
