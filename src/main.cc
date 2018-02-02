@@ -13,6 +13,8 @@
 #include <osgw/camera.hh>
 #include <osgw/light.hh>
 
+#include <glm/gtx/transform.hpp>
+
 #include <cmath>
 #include <vector>
 
@@ -76,9 +78,8 @@ int main(int, char**) {
         { { -1.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
     };
 
-
+    input_mapper.map("fullscreen", { osgw::Input::Key::F, osgw::Input::Key::F11});
     input_mapper.map("quit", { osgw::Input::Key::Q, osgw::Input::Key::Escape });
-    input_mapper.map("fullscreen", osgw::Input::Key::F);
     input_mapper.map("zoom", osgw::Input::MouseButton::Right);
     input_mapper.map("rotate", osgw::Input::MouseButton::Left);
     input_mapper.map("pan", osgw::Input::MouseButton::Middle);
@@ -95,14 +96,17 @@ int main(int, char**) {
         renderer.clear(0.3, 0.3, 0.3);
 
         if (input_mapper.pressed("quit")) window.close();
-        if (input_mapper.just_pressed("fullscreen"))
+        if (input_mapper.just_pressed("fullscreen")) {
             window.toggle_fullscreen();
-
+            glViewport(0, 0, window.width(),
+                             window.height());
+        }
 
         glm::mat4 model_matrix { 1.0 };
+        model_matrix *= glm::scale(glm::vec3 { std::cos(time) });
+        model_matrix *= glm::rotate(std::sin(time), glm::vec3 { 0, 0, 1 });
         renderer.draw(vertex_array, shader_program, texture_samplers,
                       camera, model_matrix, lights, ambient_light);
-
 
         window.display();
     }

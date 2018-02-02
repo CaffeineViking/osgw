@@ -8,7 +8,8 @@ namespace osgw {
         enum class State {
             Pressed = GLFW_PRESS,
             Released = GLFW_RELEASE,
-            JustPressed = -1
+            Repeat = GLFW_REPEAT,
+            JustPressed
         };
 
         enum class Key {

@@ -132,15 +132,13 @@ namespace osgw {
     }
 
     int Window::width() const {
-        int value;
-        glfwGetWindowSize(handle, &value, nullptr);
-        return value;
+        if (is_fullscreen()) return fullscreen_width;
+        else return windowed_width; // No resizing...
     }
 
     int Window::height() const {
-        int value;
-        glfwGetWindowSize(handle, nullptr, &value);
-        return value;
+        if (is_fullscreen()) return fullscreen_height;
+        else return windowed_height; // No resizing...
     }
 
     float Window::vertical_dpi() const {
@@ -185,12 +183,15 @@ namespace osgw {
             x = 0; y = 0;
             width = fullscreen_width;
             height = fullscreen_height;
-            glfwGetWindowPos(handle, &windowed_x, &windowed_y);
+            glfwGetWindowPos(handle, &windowed_x,
+                                     &windowed_y);
         } else monitor = nullptr;
 
+        glfwSetWindowSize(handle, width, height);
         glfwSetWindowMonitor(handle, monitor,
                              x, y, width, height,
                              refresh_rate);
+
         fullscreen = !fullscreen;
     }
 }
