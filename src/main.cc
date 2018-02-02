@@ -80,9 +80,11 @@ int main(int, char**) {
 
     input_mapper.map("fullscreen", { osgw::Input::Key::F, osgw::Input::Key::F11});
     input_mapper.map("quit", { osgw::Input::Key::Q, osgw::Input::Key::Escape });
+
     input_mapper.map("zoom", osgw::Input::MouseButton::Right);
     input_mapper.map("rotate", osgw::Input::MouseButton::Left);
     input_mapper.map("pan", osgw::Input::MouseButton::Middle);
+
     input_mapper.map("forward", { osgw::Input::Key::W, osgw::Input::Key::Up });
     input_mapper.map("backward", { osgw::Input::Key::S, osgw::Input::Key::Down });
     input_mapper.map("left", { osgw::Input::Key::A, osgw::Input::Key::Left });
