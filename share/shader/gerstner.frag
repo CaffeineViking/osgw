@@ -14,9 +14,9 @@ out vec4 color;
 
 void main() {
     vec4 diffuse_texel = texture(diffuse_map, fs_in.texture_coordinate);
-    if (diffuse_texel.r < 0.3 &&
-        diffuse_texel.g < 0.3 &&
-        diffuse_texel.b < 0.3) discard;
+    /* if (diffuse_texel.r < 0.3 && */
+    /*     diffuse_texel.g < 0.3 && */
+    /*     diffuse_texel.b < 0.3) discard; */
 
     color = diffuse_texel;
 }
