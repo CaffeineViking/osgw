@@ -14,9 +14,12 @@
 #include <osgw/light.hh>
 
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/constants.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include <cmath>
 #include <vector>
+#include <iostream>
 
 #ifndef SHARE_PATH
 #define SHARE_PATH "share/"
@@ -29,23 +32,23 @@ int main(int, char**) {
     osgw::Renderer renderer { window };
 
     std::vector<int> indices { 0, 3, 2, 1 };
-    std::vector<float> positions { -1.0, +1.0, 0.0,
-                                   +1.0, +1.0, 0.0,
-                                   +1.0, -1.0, 0.0,
-                                   -1.0, -1.0, 0.0 };
-    std::vector<float> normals { 0.0, 0.0, 1.0,
-                                 0.0, 0.0, 1.0,
-                                 0.0, 0.0, 1.0,
-                                 0.0, 0.0, 1.0 };
+    std::vector<float> positions { -1.0, 0.0, -1.0,
+                                   +1.0, 0.0, -1.0,
+                                   +1.0, 0.0, +1.0,
+                                   -1.0, 0.0, +1.0 };
+    std::vector<float> normals { 0.0, 1.0, 0.0,
+                                 0.0, 1.0, 0.0,
+                                 0.0, 1.0, 0.0,
+                                 0.0, 1.0, 0.0 };
     std::vector<float> texture_coordinates { 0.0, 1.0,
                                              1.0, 1.0,
                                              1.0, 0.0,
                                              0.0, 0.0 };
 
-    osgw::Shader vertex_shader { PATH("shader/triangle.vert"), osgw::Shader::Type::Vertex },
-                 tesselation_control_shader { PATH("shader/triangle.tesc"), osgw::Shader::Type::TessControl },
-                 tesselation_evaluation_shader { PATH("shader/triangle.tese"), osgw::Shader::Type::TessEvaluation },
-                 fragment_shader { PATH("shader/triangle.frag"), osgw::Shader::Type::Fragment };
+    osgw::Shader vertex_shader { PATH("shader/gerstner.vert"), osgw::Shader::Type::Vertex },
+                 tesselation_control_shader { PATH("shader/gerstner.tesc"), osgw::Shader::Type::TessControl },
+                 tesselation_evaluation_shader { PATH("shader/gerstner.tese"), osgw::Shader::Type::TessEvaluation },
+                 fragment_shader { PATH("shader/gerstner.frag"), osgw::Shader::Type::Fragment };
     osgw::ShaderProgram shader_program { vertex_shader,
                                          tesselation_control_shader, tesselation_evaluation_shader,
                                          fragment_shader };
@@ -62,7 +65,7 @@ int main(int, char**) {
     };
     osgw::VertexArray vertex_array { shader_program, index_buffer, vertex_attributes };
 
-    osgw::Image diffuse_map_image { PATH("images/megumin.png") };
+    osgw::Image diffuse_map_image { PATH("images/checker.png") };
     osgw::Texture diffuse_map { diffuse_map_image };
     std::vector<osgw::Texture::Sampler> texture_samplers {
         { diffuse_map, "diffuse_map" }
@@ -78,19 +81,23 @@ int main(int, char**) {
         { { -1.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
     };
 
-    input_mapper.map("fullscreen", { osgw::Input::Key::F, osgw::Input::Key::F11});
     input_mapper.map("quit", { osgw::Input::Key::Q, osgw::Input::Key::Escape });
+    input_mapper.map("fullscreen", osgw::Input::Key::F);
 
     input_mapper.map("zoom", osgw::Input::MouseButton::Right);
     input_mapper.map("rotate", osgw::Input::MouseButton::Left);
     input_mapper.map("pan", osgw::Input::MouseButton::Middle);
 
-    input_mapper.map("forward", { osgw::Input::Key::W, osgw::Input::Key::Up });
-    input_mapper.map("backward", { osgw::Input::Key::S, osgw::Input::Key::Down });
-    input_mapper.map("left", { osgw::Input::Key::A, osgw::Input::Key::Left });
-    input_mapper.map("right", { osgw::Input::Key::D, osgw::Input::Key::Right });
-    input_mapper.map("down", { osgw::Input::Key::Z, osgw::Input::Key::PageDown });
-    input_mapper.map("up", { osgw::Input::Key::Q, osgw::Input::Key::PageUp });
+    float camera_zoom { 1.0f };
+    glm::vec3 camera_panning_position { 0.0, 0.0, 0.0 };
+    float camera_inclination { glm::quarter_pi<float>() },
+          camera_azimuth { 0.0 };
+
+    float relative_zoom { 0.0 };
+    glm::vec2 relative_mouse { 0.0 };
+    float relative_inclination { 0.0 },
+          relative_azimuth { 0.0 };
+    glm::vec3 relative_pan { 0.0 };
 
     window.reset_time();
     while (window.is_open()) {
@@ -104,9 +111,42 @@ int main(int, char**) {
                              window.height());
         }
 
-        glm::mat4 model_matrix { 1.0 };
-        model_matrix *= glm::scale(glm::vec3 { std::cos(time) });
-        model_matrix *= glm::rotate(std::sin(time), glm::vec3 { 0, 0, 1 });
+        glm::vec2 mouse { input_mapper.mouse_position() };
+        if (input_mapper.just_pressed("zoom") ||
+            input_mapper.just_pressed("rotate") ||
+            input_mapper.just_pressed("pan"))
+            relative_mouse = mouse;
+        glm::vec2 mouse_offset { mouse - relative_mouse };
+
+        if (input_mapper.pressed("zoom")) {
+        } else if (input_mapper.pressed("rotate")) {
+        } else if (input_mapper.pressed("pan")) {
+        } else {
+            camera_zoom += relative_zoom;
+            camera_panning_position += relative_pan;
+            camera_inclination += relative_inclination;
+            camera_azimuth += relative_azimuth;
+
+            relative_zoom = 0.0;
+            relative_azimuth = 0.0;
+            relative_pan = glm::vec3 { 0.0 };
+            relative_inclination = 0.0;
+            relative_mouse = mouse;
+        }
+
+        float zoom { camera_zoom + relative_zoom };
+        float azimuth { camera_azimuth + relative_azimuth };
+        float inclination { camera_inclination + relative_inclination };
+
+        camera_panning_position += relative_pan;
+        glm::vec3 camera_eye_position { 0.0, 0.0, 1.0 };
+        camera_eye_position.y = std::sin(inclination);
+        camera_eye_position.z = std::sin(azimuth);
+        camera_eye_position.x = std::cos(azimuth);
+        camera_eye_position *= zoom;
+
+        camera.look_at(camera_eye_position, camera_panning_position);
+        glm::mat4 model_matrix { 1.0 }; // Don't do anything for now.
         renderer.draw(vertex_array, shader_program, texture_samplers,
                       camera, model_matrix, lights, ambient_light);
 

@@ -10,7 +10,8 @@ namespace osgw {
 
         void translate(const glm::vec3& translation);
         void rotate(const glm::vec3& axis, float radians);
-        void look_at(const glm::vec3& eye, const glm::vec3& point, const glm::vec3& up);
+        void look_at(const glm::vec3& eye, const glm::vec3& point,
+                     const glm::vec3& up = { 0.0, 1.0, 0.0 });
 
         void change_projection(float aspect_ratio, float field_of_view,
                                float near_plane = 0.08, float far_plane = 800.0);
