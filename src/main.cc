@@ -15,7 +15,6 @@
 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
-#include <glm/gtx/rotate_vector.hpp>
 
 #include <cmath>
 #include <vector>
