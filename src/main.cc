@@ -88,7 +88,7 @@ int main(int, char**) {
     input_mapper.map("rotate", osgw::Input::MouseButton::Left);
     input_mapper.map("pan", osgw::Input::MouseButton::Middle);
 
-    float camera_zoom { 1.0f };
+    float camera_zoom { 6.0f };
     glm::vec3 camera_panning_position { 0.0, 0.0, 0.0 };
     float camera_inclination { glm::quarter_pi<float>() },
           camera_azimuth { 0.0 };
@@ -160,9 +160,17 @@ int main(int, char**) {
 
         camera.look_at(camera_eye_position, pan);
 
-        glm::mat4 model_matrix { 1.0 }; // Don't do anything for now.
-        renderer.draw(vertex_array, shader_program, texture_samplers,
-                      camera, model_matrix, lights, ambient_light);
+        glm::mat4 model_matrix { 1.0 };
+        for (int z { -12 }; z <= 12; ++z) {
+            for (int x { -12 }; x <= 12; ++x) {
+                model_matrix = glm::translate(glm::mat4 { 1.0 },
+                               glm::vec3 { 2.0*x, 0.0, 2.0*z });
+                renderer.draw(vertex_array, shader_program,
+                              texture_samplers, camera,
+                              model_matrix, lights,
+                              ambient_light);
+            }
+        }
 
         window.display();
     }

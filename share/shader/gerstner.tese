@@ -1,6 +1,6 @@
 #version 410
 
-layout(quads, fractional_odd_spacing) in;
+layout(quads, fractional_even_spacing) in;
 
 in PipelineData {
     vec3 position;
