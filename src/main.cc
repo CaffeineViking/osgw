@@ -14,6 +14,7 @@
 #include <osgw/light.hh>
 
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtc/constants.hpp>
 
 #include <cmath>
@@ -115,15 +116,25 @@ int main(int, char**) {
             input_mapper.just_pressed("rotate") ||
             input_mapper.just_pressed("pan"))
             relative_mouse = mouse;
+
         glm::vec2 mouse_offset { mouse - relative_mouse };
+        mouse_offset.y /= window.height();
+        mouse_offset.x /= window.width();
 
         if (input_mapper.pressed("zoom")) {
+            relative_zoom = mouse_offset.y;
         } else if (input_mapper.pressed("rotate")) {
+            relative_azimuth = -mouse_offset.x;
+            relative_inclination = mouse_offset.y;
         } else if (input_mapper.pressed("pan")) {
+            relative_pan.x = -mouse_offset.x;
+            relative_pan.z = -mouse_offset.y;
         } else {
             camera_zoom += relative_zoom;
             camera_panning_position += relative_pan;
             camera_inclination += relative_inclination;
+            camera_inclination = glm::clamp(camera_inclination,
+                                 0.0f, glm::half_pi<float>());
             camera_azimuth += relative_azimuth;
 
             relative_zoom = 0.0;
@@ -135,16 +146,20 @@ int main(int, char**) {
 
         float zoom { camera_zoom + relative_zoom };
         float azimuth { camera_azimuth + relative_azimuth };
-        float inclination { camera_inclination + relative_inclination };
+        float inclination { glm::clamp(camera_inclination + relative_inclination,
+                                       0.0f, glm::half_pi<float>()) };
+        glm::vec3 pan { camera_panning_position + relative_pan };
+        pan = glm::rotateY(pan, azimuth);
 
-        camera_panning_position += relative_pan;
-        glm::vec3 camera_eye_position { 0.0, 0.0, 1.0 };
+        glm::vec3 camera_eye_position;
         camera_eye_position.y = std::sin(inclination);
-        camera_eye_position.z = std::sin(azimuth);
-        camera_eye_position.x = std::cos(azimuth);
+        camera_eye_position.z = std::cos(azimuth);
+        camera_eye_position.x = std::sin(azimuth);
         camera_eye_position *= zoom;
+        camera_eye_position += pan;
 
-        camera.look_at(camera_eye_position, camera_panning_position);
+        camera.look_at(camera_eye_position, pan);
+
         glm::mat4 model_matrix { 1.0 }; // Don't do anything for now.
         renderer.draw(vertex_array, shader_program, texture_samplers,
                       camera, model_matrix, lights, ambient_light);
