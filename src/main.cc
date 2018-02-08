@@ -121,18 +121,21 @@ int main(int, char**) {
         mouse_offset.y /= window.height();
         mouse_offset.x /= window.width();
 
+
+        float Z { camera_zoom + relative_zoom };
         if (input_mapper.pressed("zoom")) {
-            relative_zoom = mouse_offset.y;
+            relative_zoom = 0.5f*Z*mouse_offset.y;
         } else if (input_mapper.pressed("rotate")) {
             relative_azimuth = -mouse_offset.x;
             relative_inclination = mouse_offset.y;
         } else if (input_mapper.pressed("pan")) {
-            relative_pan.x = -mouse_offset.x;
-            relative_pan.z = -mouse_offset.y;
+            relative_pan.x = -Z*mouse_offset.x;
+            relative_pan.z = -Z*mouse_offset.y;
         } else {
             camera_zoom += relative_zoom;
             camera_panning_position += relative_pan;
             camera_inclination += relative_inclination;
+            camera_zoom = glm::clamp(camera_zoom, 1.0f, 24.0f);
             camera_inclination = glm::clamp(camera_inclination,
                                  0.0f, glm::half_pi<float>());
             camera_azimuth += relative_azimuth;
@@ -144,8 +147,8 @@ int main(int, char**) {
             relative_mouse = mouse;
         }
 
-        float zoom { camera_zoom + relative_zoom };
         float azimuth { camera_azimuth + relative_azimuth };
+        float zoom { glm::clamp(camera_zoom + relative_zoom, 1.0f, 24.0f) };
         float inclination { glm::clamp(camera_inclination + relative_inclination,
                                        0.0f, glm::half_pi<float>()) };
         glm::vec3 pan { camera_panning_position + relative_pan };

@@ -25,7 +25,7 @@ void main() {
     tc_out[gl_InvocationID].texture_coordinate = tc_in[gl_InvocationID].texture_coordinate;
 
     float distance_to_eye = distance(tc_in[gl_InvocationID].position, eye_position);
-    float tessellation_level = max_tessel * (1.0 / clamp(distance_to_eye, 1, 15)) + min_tessel;
+    float tessellation_level = max_tessel * (1.0 / clamp(distance_to_eye, 1, 24)) + min_tessel;
 
     gl_TessLevelInner[0] = tessellation_level;
     gl_TessLevelInner[1] = tessellation_level;
