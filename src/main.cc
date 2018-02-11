@@ -6,6 +6,7 @@
 #include <osgw/shader.hh>
 #include <osgw/shader_program.hh>
 #include <osgw/vertex_array.hh>
+#include <osgw/primitives.hh>
 #include <osgw/buffer.hh>
 
 #include <osgw/image.hh>
@@ -18,8 +19,8 @@
 #include <glm/gtc/constants.hpp>
 
 #include <cmath>
-#include <vector>
 #include <iostream>
+#include <vector>
 
 #ifndef SHARE_PATH
 #define SHARE_PATH "share/"
@@ -27,43 +28,39 @@
 #define PATH(X) SHARE_PATH X
 
 int main(int, char**) {
-    osgw::Window window { 1280, 720, "osgw" };
+    osgw::Window window { 1280, 720, "osgw", false, true};
     osgw::InputMapper input_mapper { window };
     osgw::Renderer renderer { window };
 
-    std::vector<int> indices { 0, 3, 2, 1 };
-    std::vector<float> positions { -1.0, 0.0, -1.0,
-                                   +1.0, 0.0, -1.0,
-                                   +1.0, 0.0, +1.0,
-                                   -1.0, 0.0, +1.0 };
-    std::vector<float> normals { 0.0, 1.0, 0.0,
-                                 0.0, 1.0, 0.0,
-                                 0.0, 1.0, 0.0,
-                                 0.0, 1.0, 0.0 };
-    std::vector<float> texture_coordinates { 0.0, 1.0,
-                                             1.0, 1.0,
-                                             1.0, 0.0,
-                                             0.0, 0.0 };
+    // This shader program tessellates the target geometry proportional to the eye distance,
+    // adds the fractal Gerstner wave function in the normal direction according to the x, z
+    // position of the geometry in world coordinates. And then, it shades using Blinn-Phong.
 
     osgw::Shader vertex_shader { PATH("shader/gerstner.vert"), osgw::Shader::Type::Vertex },
                  tesselation_control_shader { PATH("shader/gerstner.tesc"), osgw::Shader::Type::TessControl },
                  tesselation_evaluation_shader { PATH("shader/gerstner.tese"), osgw::Shader::Type::TessEvaluation },
                  fragment_shader { PATH("shader/gerstner.frag"), osgw::Shader::Type::Fragment };
+
     osgw::ShaderProgram shader_program { vertex_shader,
                                          tesselation_control_shader, tesselation_evaluation_shader,
                                          fragment_shader };
 
-    osgw::Buffer position_buffer { positions, osgw::Buffer::Type::Array },
-                 normal_buffer { normals, osgw::Buffer::Type::Array },
-                 texture_coordinate_buffer { texture_coordinates, osgw::Buffer::Type::Array },
-                 index_buffer { indices, osgw::Buffer::Type::ElementArray };
+    // Basically, we use an quad as the target primitive to tessellate our ocean with.
+    // However the shader program above should work with basically any other geometry.
+
+    osgw::Buffer position_buffer { osgw::Quad::positions, osgw::Buffer::Type::Array },
+                 normal_buffer { osgw::Quad::normals, osgw::Buffer::Type::Array },
+                 texture_coordinate_buffer { osgw::Quad::texture_coordinates, osgw::Buffer::Type::Array },
+                 index_buffer { osgw::Quad::indices, osgw::Buffer::Type::ElementArray };
 
     std::vector<osgw::VertexArray::Attribute> vertex_attributes {
         { position_buffer, "position", 3, osgw::VertexArray::Attribute::Type::Float },
         { normal_buffer, "normal", 3, osgw::VertexArray::Attribute::Type::Float },
         { texture_coordinate_buffer, "texture_coordinate",  2, osgw::VertexArray::Attribute::Type::Float }
-    };
-    osgw::VertexArray vertex_array { shader_program, index_buffer, vertex_attributes };
+    }; osgw::VertexArray vertex_array { shader_program, index_buffer, vertex_attributes };
+
+    // Below we setup other necessary things like textures and an
+    // camera, plus any necessary lighting information for scene.
 
     osgw::Image diffuse_map_image { PATH("images/checker.png") };
     osgw::Texture diffuse_map { diffuse_map_image };
@@ -80,6 +77,8 @@ int main(int, char**) {
         { { +1.0, 1.0, 0.0 }, { 1.0, 0.0, 0.0 }, osgw::Light::Type::Point, 1.00 },
         { { -1.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
     };
+
+    // Specify input -> action mapping, camera uses only the mouse for movement.
 
     input_mapper.map("quit", { osgw::Input::Key::Q, osgw::Input::Key::Escape });
     input_mapper.map("fullscreen", osgw::Input::Key::F);
@@ -110,6 +109,11 @@ int main(int, char**) {
             glViewport(0, 0, window.width(),
                              window.height());
         }
+
+        // Handle the camera movement, essentially, we are
+        // using the lookAt-function, and mouse coordiante
+        // X-Y to control the azimuth and inclination, and
+        // displace the target position by panning in X-Z.
 
         glm::vec2 mouse { input_mapper.mouse_position() };
         if (input_mapper.just_pressed("zoom") ||
@@ -169,6 +173,11 @@ int main(int, char**) {
             ocean_z_max { ocean_z + ocean_radius };
         int ocean_x_min { ocean_x - ocean_radius },
             ocean_x_max { ocean_x + ocean_radius };
+
+        // Finally, render the ocean. We use a 12x12 grid of the planes
+        // we have instantiated, and wraps them around the viewer. This
+        // creates the illusion of having an infinite ocean, while what
+        // we actually do is hide the popin by using a fog-like effect.
 
         glm::mat4 model_matrix { 1.0 };
         for (int z { ocean_z_min }; z <= ocean_z_max; ++z) {

@@ -28,7 +28,7 @@ void main() {
     vec3 x_up_position_mix = mix(te_in[0].position, te_in[3].position, gl_TessCoord.x);
     vec3 x_down_position_mix = mix(te_in[1].position, te_in[2].position, gl_TessCoord.x);
     te_out.position = mix(x_down_position_mix, x_up_position_mix, gl_TessCoord.y);
-    te_out.position.y += sin(te_out.position.x + time);
+    te_out.position += te_out.normal * sin(te_out.position.x + time);
     vec4 world_position = vec4(te_out.position, 1.0);
 
     gl_Position = projection_view * world_position;
