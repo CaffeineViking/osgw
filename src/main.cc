@@ -28,7 +28,7 @@
 #define PATH(X) SHARE_PATH X
 
 int main(int, char**) {
-    osgw::Window window { 1280, 720, "osgw", false, true};
+    osgw::Window window { 1280, 720, "osgw" };
     osgw::InputMapper input_mapper { window };
     osgw::Renderer renderer { window };
 
@@ -174,7 +174,7 @@ int main(int, char**) {
         int ocean_x_min { ocean_x - ocean_radius },
             ocean_x_max { ocean_x + ocean_radius };
 
-        // Finally, render the ocean. We use a 12x12 grid of the planes
+        // Finally, render the ocean. We use a 24x24 grid of the planes
         // we have instantiated, and wraps them around the viewer. This
         // creates the illusion of having an infinite ocean, while what
         // we actually do is hide the popin by using a fog-like effect.
