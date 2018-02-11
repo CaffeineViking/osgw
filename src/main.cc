@@ -102,7 +102,7 @@ int main(int, char**) {
     window.reset_time();
     while (window.is_open()) {
         float time = window.time();
-        renderer.clear(0.3, 0.3, 0.3);
+        renderer.clear(1.0, 1.0, 1.0);
 
         if (input_mapper.pressed("quit")) window.close();
         if (input_mapper.just_pressed("fullscreen")) {
@@ -120,7 +120,6 @@ int main(int, char**) {
         glm::vec2 mouse_offset { mouse - relative_mouse };
         mouse_offset.y /= window.height();
         mouse_offset.x /= window.width();
-
 
         float Z { camera_zoom + relative_zoom };
         if (input_mapper.pressed("zoom")) {
@@ -163,11 +162,19 @@ int main(int, char**) {
 
         camera.look_at(camera_eye_position, pan);
 
+        int ocean_radius { 12 }; float grid_size { 2.0 };
+        int ocean_x = std::round(camera_eye_position.x / grid_size),
+            ocean_z = std::round(camera_eye_position.z / grid_size);
+        int ocean_z_min { ocean_z - ocean_radius },
+            ocean_z_max { ocean_z + ocean_radius };
+        int ocean_x_min { ocean_x - ocean_radius },
+            ocean_x_max { ocean_x + ocean_radius };
+
         glm::mat4 model_matrix { 1.0 };
-        for (int z { -12 }; z <= 12; ++z) {
-            for (int x { -12 }; x <= 12; ++x) {
-                model_matrix = glm::translate(glm::mat4 { 1.0 },
-                               glm::vec3 { 2.0*x, 0.0, 2.0*z });
+        for (int z { ocean_z_min }; z <= ocean_z_max; ++z) {
+            for (int x { ocean_x_min }; x <= ocean_x_max; ++x) {
+                glm::vec3 grid { grid_size*x, 0, grid_size*z };
+                model_matrix = glm::translate(glm::mat4 { 1.0 }, grid);
                 renderer.draw(vertex_array, shader_program,
                               texture_samplers, camera,
                               model_matrix, lights,

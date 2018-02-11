@@ -14,9 +14,7 @@ out vec4 color;
 
 void main() {
     vec4 diffuse_texel = texture(diffuse_map, fs_in.texture_coordinate);
-    /* if (diffuse_texel.r < 0.3 && */
-    /*     diffuse_texel.g < 0.3 && */
-    /*     diffuse_texel.b < 0.3) discard; */
-
-    color = diffuse_texel;
+    float distance_to_eye = distance(fs_in.position, eye_position);
+    float fog_ratio = smoothstep(12.0, 24.0, distance_to_eye);
+    color = mix(diffuse_texel, fog_diffuse, fog_ratio);
 }

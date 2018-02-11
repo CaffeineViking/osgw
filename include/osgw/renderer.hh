@@ -15,7 +15,7 @@ namespace osgw {
     class Renderer final {
     public:
         struct Parameters final {
-            bool blending { false };
+            bool blending { true };
             bool face_culling { true };
             bool depth_test { true };
             bool multisample { true };
@@ -62,6 +62,7 @@ namespace osgw {
 
         Window& window;
         Parameters parameters;
+        glm::vec4 fog { 1.0 };
     };
 }
 

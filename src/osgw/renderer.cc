@@ -15,6 +15,7 @@ namespace osgw {
         if (parameters.stencil_test)
             bitfield |= GL_STENCIL_BUFFER_BIT;
 
+        fog.r = r; fog.g = g; fog.b = b;
         glClearColor(r, g, b, 1.0);
         glClear(bitfield);
     }
@@ -99,6 +100,7 @@ namespace osgw {
 
     void Renderer::setup_shader_program(ShaderProgram& shader_program) {
         set_shader_program(shader_program);
+        shader_program.uniform("fog_diffuse", fog);
         shader_program.uniform("time", window.time());
     }
 
