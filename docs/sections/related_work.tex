@@ -1,0 +1,50 @@
+\begin{equation} \label{eq:sum_of_sine_waves}
+    H(\mathbf{p},t) = \sum{
+        A_i \sin \, (
+            (\mathbf{p} \cdot \mathbf{d}_i) w_i
+            + t \varphi_i
+        )
+    }
+\end{equation}
+
+\begin{equation} \label{eq:sum_of_sine_waves_position}
+    \mathbf{H}(x,z,t) = \begin{bmatrix}
+        x&
+        H(\mathbf{p},t)&
+        z
+    \end{bmatrix}\;\,,\;\,
+    \mathbf{p} = \begin{bmatrix}
+        x&z
+    \end{bmatrix}
+\end{equation}
+
+\begin{equation} \label{eq:sum_of_sine_waves_normal}
+    \mathbf{\hat{H}}(x,z,t) = \begin{bmatrix}
+        -\frac{\partial}{\partial x} H(\mathbf{p},t)&
+        1&
+        -\frac{\partial}{\partial z} H(\mathbf{p},t)
+    \end{bmatrix}
+\end{equation}
+
+\begin{equation} \label{eq:gerstner_wave}
+    G_j(\mathbf{p},t) = \sum{
+        d_{i,j} Q_iA_i \cos \, (
+        (\mathbf{p} \cdot \mathbf{d}_i) w_i
+        + t \varphi_i
+        )
+    }
+\end{equation}
+
+\begin{equation} \label{eq:gerstner_wave_position}
+    \mathbf{G}(x,z,t) = \begin{bmatrix}
+        x + G_x(\mathbf{p},t)\\
+        H(\mathbf{p},t)\\
+        z + G_z(\mathbf{p},t)
+    \end{bmatrix}\;\;\,,\;\;\,
+    \mathbf{p} = \begin{bmatrix}
+        x&z
+    \end{bmatrix}
+\end{equation}
+
+\begin{equation} \label{eq:gerstner_wave_normal}
+\end{equation}
