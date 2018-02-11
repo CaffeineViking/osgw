@@ -34,7 +34,7 @@ int main(int, char**) {
 
     // This shader program tessellates the target geometry proportional to the eye distance,
     // adds the fractal Gerstner wave function in the normal direction according to the x, z
-    // position of the geometry in world coordinates. And then, it shades using Blinn-Phong.
+    // position of the vertex in world coordinates. And then shades it by using Blinn-Phong.
 
     osgw::Shader vertex_shader { PATH("shader/gerstner.vert"), osgw::Shader::Type::Vertex },
                  tesselation_control_shader { PATH("shader/gerstner.tesc"), osgw::Shader::Type::TessControl },

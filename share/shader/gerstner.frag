@@ -1,5 +1,7 @@
 #version 410
 
+// Fragment shader:
+
 in PipelineData {
     vec3 position;
     vec3 normal;

@@ -1,5 +1,9 @@
 #version 410
 
+// Vertex shader: here we basically just apply the MVP-matrix and forward the coordinates
+// to the next shader pipeline (either a geometry, tessellation or fragment shader). Here
+// we also assume the geometry is simple, because we are going to be tessellating it too.
+
 in vec3 position;
 in vec3 normal;
 in vec2 texture_coordinate;
@@ -22,5 +26,6 @@ void main() {
     vs_out.normal = rotate_normal.xyz;
     vs_out.texture_coordinate = texture_coordinate;
 
+    // This will get overwritten by the TES.
     gl_Position = pvm * homogenous_position;
 }

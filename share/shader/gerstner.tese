@@ -1,5 +1,13 @@
 #version 410
 
+// Tessellation evaluation shader: after tessellation has been done, new vertices have
+// been generated. The tess. evaluation shaders purpose is to decide on where to place
+// these new vertices. In our case, all of the vertex properties (position and normal)
+// are interpolated bilinearly (for a quad) to find the new vertex properties. And, we
+// also displace the new vertex according to the Gerstner wave, to produce a realistic
+// ocean surface animation (varying by using the vertices X-Z coordinate and the time).
+// We also do world --> projection transformation here, since we couldn't do it before.
+
 layout(quads, fractional_even_spacing) in;
 
 in PipelineData {
@@ -9,6 +17,7 @@ in PipelineData {
 } te_in[];
 
 #pragma include("matrices.glsl")
+#pragma include("gerstner.glsl")
 
 out PipelineData {
     vec3 position;
@@ -28,7 +37,14 @@ void main() {
     vec3 x_up_position_mix = mix(te_in[0].position, te_in[3].position, gl_TessCoord.x);
     vec3 x_down_position_mix = mix(te_in[1].position, te_in[2].position, gl_TessCoord.x);
     te_out.position = mix(x_down_position_mix, x_up_position_mix, gl_TessCoord.y);
-    te_out.position += te_out.normal * sin(te_out.position.x + time);
+
+    // Displace the tessellated geometry in the normal direction,
+    // we use a Gerstner wave to decide how tall a wave should be.
+    // TODO: use texture coordinates as wave positions instead for
+    // the solution to become truly portable accross any geometry.
+    te_out.position += te_out.normal * gerstner(te_out.position.x,
+                                                te_out.position.z,
+                                                time);
     vec4 world_position = vec4(te_out.position, 1.0);
 
     gl_Position = projection_view * world_position;

@@ -1,5 +1,7 @@
 #version 410
 
+// Blinn-Phong lighting:
+
 uniform vec3 ambient_light_color;
 uniform struct DirectionalLight {
     vec3 direction;
