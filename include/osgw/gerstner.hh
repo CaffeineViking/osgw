@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 
 namespace osgw {
-    float gerstner_wave(const glm::vec2& position, float time);
+    glm::vec3 gerstner_wave(const glm::vec2& position, float time, glm::vec3& normal);
 }
 
 #endif

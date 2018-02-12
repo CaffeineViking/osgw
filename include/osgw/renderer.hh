@@ -30,6 +30,8 @@ namespace osgw {
         void set_parameters(const Parameters& new_parameters);
         const Parameters& get_parameters() const;
 
+        void toggle_wireframe();
+
         void set_vertex_array(const VertexArray& vertex_array);
         void set_shader_program(const ShaderProgram& shader_program);
         bool is_current_vertex_array(const VertexArray* vertex_array) const;

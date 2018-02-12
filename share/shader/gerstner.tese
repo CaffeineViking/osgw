@@ -26,6 +26,8 @@ out PipelineData {
 } te_out;
 
 void main() {
+    // Below we just interpolate the position, normal, and texture coordinates by
+    // using the weights of the new vertices produced from the tessellation unit.
     vec3 x_up_normal_mix = mix(te_in[0].normal, te_in[3].normal, gl_TessCoord.x);
     vec3 x_down_normal_mix = mix(te_in[1].normal, te_in[2].normal, gl_TessCoord.x);
     te_out.normal = mix(x_down_normal_mix, x_up_normal_mix, gl_TessCoord.y);
@@ -38,13 +40,12 @@ void main() {
     vec3 x_down_position_mix = mix(te_in[1].position, te_in[2].position, gl_TessCoord.x);
     te_out.position = mix(x_down_position_mix, x_up_position_mix, gl_TessCoord.y);
 
-    // Displace the tessellated geometry in the normal's direction, thus
-    // we use a Gerstner wave to decide how tall the wave should be. The
-    // function is general, but how we are currently using it is not, as
-    // the position won't work with non-plane geometry. Just use the te-
-    // xture points instead, and it'll work for e.g. spheres and models.
-    te_out.position += te_out.normal * gerstner_wave(te_out.position.xz,
-                                                     time); // seconds
+    // Displace the tessellated geometry in the direction of the normal by u-
+    // sing a Gerstner wave. Another effect of the wave is that it will accu-
+    // mulate vertices at the tallest peak of the wave, making it extra deta-
+    // iled. The incoming normal will also be overwritten with the re-calcua-
+    // ted normal after the Gerstner wave displacement. Time is in seconds...
+    te_out.position = gerstner_wave(te_out.position.xz, time, te_out.normal);
     vec4 world_position = vec4(te_out.position, 1.0);
 
     gl_Position = projection_view * world_position;

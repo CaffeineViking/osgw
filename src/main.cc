@@ -78,14 +78,17 @@ int main(int, char**) {
         { { -1.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
     };
 
-    // Specify input -> action mapping, camera uses only the mouse for movement.
+    // Specify list of input --> action mappings.
 
-    input_mapper.map("quit", { osgw::Input::Key::Q, osgw::Input::Key::Escape });
+    input_mapper.map("quit", osgw::Input::Key::Q);
+    input_mapper.map("wireframe", osgw::Input::Key::W);
     input_mapper.map("fullscreen", osgw::Input::Key::F);
 
     input_mapper.map("zoom", osgw::Input::MouseButton::Right);
     input_mapper.map("rotate", osgw::Input::MouseButton::Left);
     input_mapper.map("pan", osgw::Input::MouseButton::Middle);
+
+    // Setup the camera states.
 
     float camera_zoom { 6.0f };
     glm::vec3 camera_panning_position { 0.0, 0.0, 0.0 };
@@ -104,6 +107,8 @@ int main(int, char**) {
         renderer.clear(1.0, 1.0, 1.0);
 
         if (input_mapper.pressed("quit")) window.close();
+        if (input_mapper.just_pressed("wireframe"))
+            renderer.toggle_wireframe();
         if (input_mapper.just_pressed("fullscreen")) {
             window.toggle_fullscreen();
             glViewport(0, 0, window.width(),

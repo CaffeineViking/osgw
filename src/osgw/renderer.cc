@@ -52,6 +52,13 @@ namespace osgw {
         parameters = new_parameters;
     }
 
+    void Renderer::toggle_wireframe() {
+        parameters.wireframe = !parameters.wireframe;
+        if (parameters.wireframe)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
     void Renderer::set_vertex_array(const VertexArray& vertex_array) {
         if (!is_current_vertex_array(&vertex_array))
             vertex_array.bind();
