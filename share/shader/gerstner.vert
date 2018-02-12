@@ -17,7 +17,6 @@ out PipelineData {
 } vs_out;
 
 void main() {
-    mat4 pvm = projection_view * model;
     vec4 rotate_normal = model * vec4(normal, 0.0);
     vec4 homogenous_position = vec4(position, 1.0);
     vec4 world_pos = model * homogenous_position;
@@ -25,7 +24,4 @@ void main() {
     vs_out.position = world_pos.xyz;
     vs_out.normal = rotate_normal.xyz;
     vs_out.texture_coordinate = texture_coordinate;
-
-    // This will get overwritten by the TES.
-    gl_Position = pvm * homogenous_position;
 }
