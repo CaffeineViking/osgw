@@ -40,12 +40,12 @@ void main() {
     vec3 x_down_position_mix = mix(te_in[1].position, te_in[2].position, gl_TessCoord.x);
     te_out.position = mix(x_down_position_mix, x_up_position_mix, gl_TessCoord.y);
 
-    // Displace the tessellated geometry in the direction of the normal by u-
-    // sing a Gerstner wave. Another effect of the wave is that it will accu-
-    // mulate vertices at the tallest peak of the wave, making it extra deta-
-    // iled. The incoming normal will also be overwritten with the re-calcua-
-    // ted normal after the Gerstner wave displacement. Time is in seconds...
-    te_out.position = gerstner_wave(te_out.position.xz, time, te_out.normal);
+    // Displace the tessellated geometry in the direction of the normal by us-
+    // ing a sum of Gerstner waves. A effect of this wave is that it will move
+    // vertices closer to the waves' crest (the tallest peak) depending on the
+    // steepness parameter. The height of the wave is done by the sum of sines
+    // method. The parameters can be changed in the shader or by the uniforms.
+    te_out.position = gerstner_wave(te_out.position.xz, time,  te_out.normal);
     vec4 world_position = vec4(te_out.position, 1.0);
 
     gl_Position = projection_view * world_position;
