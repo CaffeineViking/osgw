@@ -14,6 +14,8 @@
 #include <osgw/camera.hh>
 #include <osgw/light.hh>
 
+#include <osgw/gerstner.hh>
+
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtc/constants.hpp>
@@ -28,9 +30,13 @@
 #define PATH(X) SHARE_PATH X
 
 int main(int, char**) {
-    osgw::Window window { 1280, 720, "osgw", false, false };
+    osgw::Window window { 1280, 720, "osgw" };
     osgw::InputMapper input_mapper { window };
     osgw::Renderer renderer { window };
+
+    input_mapper.map("quit", osgw::Input::Key::Q);
+    input_mapper.map("wireframe", osgw::Input::Key::W);
+    input_mapper.map("fullscreen", osgw::Input::Key::F);
 
     // This shader program tessellates the target geometry proportional to the eye distance,
     // adds the fractal Gerstner wave function in the normal direction according to the x, z
@@ -78,12 +84,6 @@ int main(int, char**) {
         { { -1.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
     };
 
-    // Specify list of input --> action mappings.
-
-    input_mapper.map("quit", osgw::Input::Key::Q);
-    input_mapper.map("wireframe", osgw::Input::Key::W);
-    input_mapper.map("fullscreen", osgw::Input::Key::F);
-
     input_mapper.map("zoom", osgw::Input::MouseButton::Right);
     input_mapper.map("rotate", osgw::Input::MouseButton::Left);
     input_mapper.map("pan", osgw::Input::MouseButton::Middle);
@@ -100,6 +100,13 @@ int main(int, char**) {
     float relative_inclination { 0.0 },
           relative_azimuth { 0.0 };
     glm::vec3 relative_pan { 0.0 };
+
+    osgw::GerstnerWave gerstner_wave;
+    input_mapper.map("next", osgw::Input::Key::Down);
+    input_mapper.map("decrease", osgw::Input::Key::Left);
+    input_mapper.map("increase", osgw::Input::Key::Right);
+    input_mapper.map("previous", osgw::Input::Key::Up);
+    input_mapper.map("print", osgw::Input::Key::P);
 
     window.reset_time();
     while (window.is_open()) {
@@ -171,6 +178,13 @@ int main(int, char**) {
 
         camera.look_at(camera_eye_position, pan);
 
+        if (input_mapper.just_pressed("previous")) gerstner_wave.previous();
+        else if (input_mapper.just_pressed("next")) gerstner_wave.next();
+        else if (input_mapper.pressed("increase")) gerstner_wave.increase();
+        else if (input_mapper.pressed("decrease")) gerstner_wave.decrease();
+        gerstner_wave.select(input_mapper); // Selects the wave to modify...
+        gerstner_wave.upload_uniform(shader_program); // Upload wave params.
+
         float grid_size = 2; int ocean_radius = 12;
         int ocean_x = std::round(pan.x / grid_size),
             ocean_z = std::round(pan.z / grid_size);
@@ -183,6 +197,7 @@ int main(int, char**) {
         // we have instantiated, and wraps them around the viewer. This
         // creates the illusion of having an infinite ocean, while what
         // we actually do is hide the popin by using a fog-like effect.
+        // We ignore any of the grid points that are behind the viewer.
 
         glm::mat4 model_matrix { 1.0 };
         for (int z { ocean_z_min }; z <= ocean_z_max; ++z) {

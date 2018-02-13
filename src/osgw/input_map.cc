@@ -81,7 +81,8 @@ namespace osgw {
         auto key_iterator = key_state_map.find(key);
         if (key_iterator != key_state_map.end())
             return key_iterator->second == Input::State::Pressed ||
-                   key_iterator->second == Input::State::JustPressed;
+                   key_iterator->second == Input::State::JustPressed ||
+                   key_iterator->second == Input::State::Repeat;
         else return false;
     }
 
@@ -108,7 +109,8 @@ namespace osgw {
         auto mouse_button_iterator = mouse_button_state_map.find(mouse_button);
         if (mouse_button_iterator != mouse_button_state_map.end())
             return mouse_button_iterator->second == Input::State::Pressed ||
-                   mouse_button_iterator->second == Input::State::JustPressed;
+                   mouse_button_iterator->second == Input::State::JustPressed ||
+                   mouse_button_iterator->second == Input::State::Repeat;
         else return false;
     }
 

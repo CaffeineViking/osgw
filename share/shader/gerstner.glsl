@@ -27,13 +27,12 @@ uniform struct GerstnerWave {
     float steepness;
     float frequency;
     float speed;
-} gerstner_waves[] = GerstnerWave[](
-    GerstnerWave(vec2(1.0, 0.0), 0.5, 0.5, 1.0, 2.0)
-);
+} gerstner_waves[4];
+uniform uint gerstner_waves_size = 4;
 
 float gerstner_wave_height(vec2 position, float time) {
     float wave_height = 0.0;
-    for (int i = 0; i < gerstner_waves.length(); ++i) {
+    for (int i = 0; i < gerstner_waves_size; ++i) {
         wave_height += gerstner_waves[i].amplitude * sin(
             dot(position, gerstner_waves[i].direction)
             * gerstner_waves[i].frequency
@@ -44,7 +43,7 @@ float gerstner_wave_height(vec2 position, float time) {
 
 float gerstner_wave_crestx(vec2 position, float time) {
     float wave_crestx = 0.0;
-    for (int i = 0; i < gerstner_waves.length(); ++i) {
+    for (int i = 0; i < gerstner_waves_size; ++i) {
         wave_crestx += gerstner_waves[i].amplitude * cos(
             dot(position, gerstner_waves[i].direction)
             * gerstner_waves[i].frequency
@@ -57,7 +56,7 @@ float gerstner_wave_crestx(vec2 position, float time) {
 
 float gerstner_wave_cresty(vec2 position, float time) {
     float wave_cresty = 0.0;
-    for (int i = 0; i < gerstner_waves.length(); ++i) {
+    for (int i = 0; i < gerstner_waves_size; ++i) {
         wave_cresty += gerstner_waves[i].amplitude * cos(
             dot(position, gerstner_waves[i].direction)
             * gerstner_waves[i].frequency
@@ -70,7 +69,7 @@ float gerstner_wave_cresty(vec2 position, float time) {
 
 vec3 gerstner_wave_normal(vec2 nposition, float time) {
     vec3 wave_normal = vec3(0.0, 1.0, 0.0);
-    for (int i = 0; i < gerstner_waves.length(); ++i) {
+    for (int i = 0; i < gerstner_waves_size; ++i) {
         wave_normal.x -= gerstner_waves[i].amplitude * cos(
             dot(nposition, gerstner_waves[i].direction)
             * gerstner_waves[i].frequency

@@ -7,11 +7,11 @@ uniform struct DirectionalLight {
     vec3 direction;
     vec3 position;
 } directional_lights[8];
-uniform uint directional_lights_size;
+uniform uint directional_lights_size = 0;
 
 uniform struct PointLight {
     vec3 position;
     vec3 color;
     float falloff;
 } point_lights[8];
-uniform uint point_lights_size;
+uniform uint point_lights_size = 0;
