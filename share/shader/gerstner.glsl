@@ -19,6 +19,7 @@
 // Changing wave: there are two ways to change the appearance of the wave-function, by
 // manually changing/adding/removing parameters in the 'gerstner_wave_parameters' list
 // below, or by dynamically uploading the data via uniforms. Or a combination of both.
+// Note: this is nowhere even near optimal code, but structured for understandability.
 
 uniform struct GerstnerWave {
     vec2 direction;
@@ -67,8 +68,37 @@ float gerstner_wave_cresty(vec2 position, float time) {
     } return wave_cresty;
 }
 
-vec3 gerstner_wave(vec2 position, float time, inout vec3 normal) {
-    return vec3(position.x + gerstner_wave_crestx(position, time),
-                gerstner_wave_height(position, time),
-                position.y + gerstner_wave_cresty(position, time));
+vec3 gerstner_wave_normal(vec2 nposition, float time) {
+    vec3 wave_normal = vec3(0.0, 1.0, 0.0);
+    for (int i = 0; i < gerstner_waves.length(); ++i) {
+        wave_normal.x -= gerstner_waves[i].amplitude * cos(
+            dot(nposition, gerstner_waves[i].direction)
+            * gerstner_waves[i].frequency
+            + time
+            * gerstner_waves[i].speed)
+            * gerstner_waves[i].frequency
+            * gerstner_waves[i].direction.x;
+        wave_normal.y -= gerstner_waves[i].amplitude * sin(
+            dot(nposition, gerstner_waves[i].direction)
+            * gerstner_waves[i].frequency
+            + time
+            * gerstner_waves[i].speed)
+            * gerstner_waves[i].frequency
+            * gerstner_waves[i].steepness;
+        wave_normal.z -= gerstner_waves[i].amplitude * cos(
+            dot(nposition, gerstner_waves[i].direction)
+            * gerstner_waves[i].frequency
+            + time
+            * gerstner_waves[i].speed)
+            * gerstner_waves[i].frequency
+            * gerstner_waves[i].direction.y;
+    } return wave_normal;
+}
+
+vec3 gerstner_wave(vec2 position, float time, inout vec3 wave_normal) {
+    vec3 wave_position = vec3(position.x + gerstner_wave_crestx(position, time),
+                              gerstner_wave_height(position, time),
+                              position.y + gerstner_wave_cresty(position, time));
+    wave_normal = gerstner_wave_normal(wave_position.xz, time);
+    return wave_position;
 }

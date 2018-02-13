@@ -38,6 +38,7 @@ namespace osgw {
         glm::vec3 position;
         glm::vec3 direction;
         glm::vec3 up_direction;
+        glm::vec3 look_at_point;
 
         glm::mat4 view;
         glm::mat4 projection;

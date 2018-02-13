@@ -32,6 +32,7 @@ namespace osgw {
         view = glm::lookAt(eye, point, up);
         position = eye;
         up_direction = up;
+        look_at_point = point;
         direction = glm::normalize(point - eye);
     }
 

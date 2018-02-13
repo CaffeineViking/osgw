@@ -29,8 +29,8 @@
 \begin{equation} \label{eq:gerstner_wave}
     G_j(\mathbf{p},t) = \sum{
         d_{i,j} Q_iA_i \cos \, (
-        (\mathbf{p} \cdot \mathbf{d}_i) w_i
-        + t \varphi_i
+            (\mathbf{p} \cdot \mathbf{d}_i) w_i
+            + t \varphi_i
         )
     }
 \end{equation}
@@ -47,4 +47,12 @@
 \end{equation}
 
 \begin{equation} \label{eq:gerstner_wave_normal}
+    \begin{split}
+    \mathbf{\hat{G}}(x,z,t) &= \begin{bmatrix}
+        -\sum{d_{i,x} A_iw_i \cos \psi_i}\\
+        1 - \sum{Q_iA_iw_i \sin \psi_i}\\
+        -\sum{d_{i,z} A_iw_i \cos \psi_i}
+    \end{bmatrix}\;\;\;\,,\\
+        \psi_i &= (\mathbf{G}(x,z,t) \cdot \mathbf{D}_i)w_i + t \varphi_i
+    \end{split}
 \end{equation}

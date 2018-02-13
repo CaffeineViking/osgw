@@ -28,7 +28,7 @@
 #define PATH(X) SHARE_PATH X
 
 int main(int, char**) {
-    osgw::Window window { 1280, 720, "osgw" };
+    osgw::Window window { 1280, 720, "osgw", false, false };
     osgw::InputMapper input_mapper { window };
     osgw::Renderer renderer { window };
 
@@ -171,9 +171,9 @@ int main(int, char**) {
 
         camera.look_at(camera_eye_position, pan);
 
-        int ocean_radius { 12 }; float grid_size { 2.0 };
-        int ocean_x = std::round(camera_eye_position.x / grid_size),
-            ocean_z = std::round(camera_eye_position.z / grid_size);
+        float grid_size = 2; int ocean_radius = 12;
+        int ocean_x = std::round(pan.x / grid_size),
+            ocean_z = std::round(pan.z / grid_size);
         int ocean_z_min { ocean_z - ocean_radius },
             ocean_z_max { ocean_z + ocean_radius };
         int ocean_x_min { ocean_x - ocean_radius },
@@ -188,6 +188,8 @@ int main(int, char**) {
         for (int z { ocean_z_min }; z <= ocean_z_max; ++z) {
             for (int x { ocean_x_min }; x <= ocean_x_max; ++x) {
                 glm::vec3 grid { grid_size*x, 0, grid_size*z };
+                if (glm::dot(grid - camera_eye_position,
+                             pan - camera_eye_position) < 0.0) continue;
                 model_matrix = glm::translate(glm::mat4 { 1.0 }, grid);
                 renderer.draw(vertex_array, shader_program,
                               texture_samplers, camera,
