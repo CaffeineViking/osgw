@@ -25,6 +25,7 @@ Then, if you want to change the parameters of the Gerstner waves at run-time, yo
 * **Press 1, 2, 3, 4, 5, 6, 7 or 8 on the keyboard:** to select the current Gerstner wave we want to modify.
 * **Press the same number again:** to enable or disable the Gerstner wave from the final Gerstner sum.
 * **The up and down arrow keys:** are used to select the parameter of the wave that is being changed.
+* The parameter selection cycles between: *angle*, *amplitude*, *steepness*, *frequency* and *phase speed*.
 * **Finally, the left and right keys:** decrease or increases the current wave's selected wave parameter.
 
 You can get a glimpse of what you are currently changing by looking at the title bar of the `osgw` window.
