@@ -17,7 +17,7 @@ where `position` is the world-coordinate vertex position, `normal` is the normal
 ```C++
 glUniform2f(glUniformLocation(shader_program, "gerstner_waves[0].direction"), 1.0f, 0.0f);
 glUniform1f(glUniformLocation(shader_program, "gerstner_waves[0].amplitude"), 1.0);
-glUniform1f(glUniformLocation(shader_program, "gerstner_waves[0].steepness"), 1.0);
+glUniform1f(glUniformLocation(shader_program, "gerstner_waves[0].steepness"), 0.5);
 glUniform1f(glUniformLocation(shader_program, "gerstner_waves[0].frequency"), 1.0);
 glUniform1f(glUniformLocation(shader_program, "gerstner_waves[0].speed"), 1.0);
 glUniform1ui(glUniformLocation(shader_program, "gerstner_waves_length"), 1);
