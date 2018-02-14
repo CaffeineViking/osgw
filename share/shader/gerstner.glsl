@@ -3,9 +3,9 @@
 // Gerstner wave: also called a trochoidal wave, describes how an incompressible fluid
 // should evolve through time and space assuming the distance from the seafloor to the
 // ocean surface is infinite. This wave-function works on a 2-D plane, and outputs the
-// height of the wave at (x,z) at some time point t. An additional property of the Ge-
-// restner wave is that it accumulates vertices closer to the waves' crests, depending
-// on the steepness parameter that is used (0 is just a sine wave, and it peaks at 1).
+// height of the wave at (x, z) for some time point. An additional property of the Ge-
+// restner wave is that it accumulates vertices closer to the wave's crests, depending
+// on the steepness parameter that is used (0 is just a sine wave, but it peaks at 1).
 //
 // How to use it: you should only call the `gerstner_wave' function, the rest are help
 // functions. The 'position' argument should tell us where we are in the (x, z)-plane,
@@ -17,87 +17,68 @@
 // Example:       position = gerstner_wave(position.xz, elapsed_time, normal);
 //
 // Changing wave: there are two ways to change the appearance of the wave-function, by
-// manually changing/adding/removing parameters in the 'gerstner_wave_parameters' list
-// below, or by dynamically uploading the data via uniforms. Or a combination of both.
-// Note: this is nowhere even near optimal code, but structured for understandability.
+// manually changing/adding/removing parameter in the 'gerstner_waves' array below, or
+// by dynamically uploading the data via uniforms with size. Or a combination of both.
+// i.e. glUniform1f(glGetUniformLocation(handle, "gerstner_waves[0].steepness", 0.5));
+// or gerstner_waves[] = GerstnerWave[1](GerstnerWave(vec2(1,0), 1.0, 0.5, 1.0, 1.0));
+// You can probably figure out other ways to feed the wave function with data as well.
+//
+// Note: this is nowhere near optimal code, it is structured this way for readability,
+// and if you think you've found an better solution, then you are most likely correct.
 
+uniform uint gerstner_waves_length = 8;
 uniform struct GerstnerWave {
     vec2 direction;
     float amplitude;
     float steepness;
     float frequency;
     float speed;
-} gerstner_waves[4];
-uniform uint gerstner_waves_size = 4;
+} gerstner_waves[8];
 
-float gerstner_wave_height(vec2 position, float time) {
-    float wave_height = 0.0;
-    for (int i = 0; i < gerstner_waves_size; ++i) {
-        wave_height += gerstner_waves[i].amplitude * sin(
-            dot(position, gerstner_waves[i].direction)
-            * gerstner_waves[i].frequency
-            + time
-            * gerstner_waves[i].speed);
-    } return wave_height;
-}
-
-float gerstner_wave_crestx(vec2 position, float time) {
-    float wave_crestx = 0.0;
-    for (int i = 0; i < gerstner_waves_size; ++i) {
-        wave_crestx += gerstner_waves[i].amplitude * cos(
-            dot(position, gerstner_waves[i].direction)
-            * gerstner_waves[i].frequency
-            + time
-            * gerstner_waves[i].speed)
-            * gerstner_waves[i].steepness
-            * gerstner_waves[i].direction.x;
-    } return wave_crestx;
-}
-
-float gerstner_wave_cresty(vec2 position, float time) {
-    float wave_cresty = 0.0;
-    for (int i = 0; i < gerstner_waves_size; ++i) {
-        wave_cresty += gerstner_waves[i].amplitude * cos(
-            dot(position, gerstner_waves[i].direction)
-            * gerstner_waves[i].frequency
-            + time
-            * gerstner_waves[i].speed)
-            * gerstner_waves[i].steepness
-            * gerstner_waves[i].direction.y;
-    } return wave_cresty;
-}
-
-vec3 gerstner_wave_normal(vec2 nposition, float time) {
+vec3 gerstner_wave_normal(vec3 position, float time) {
     vec3 wave_normal = vec3(0.0, 1.0, 0.0);
-    for (int i = 0; i < gerstner_waves_size; ++i) {
-        wave_normal.x -= gerstner_waves[i].amplitude * cos(
-            dot(nposition, gerstner_waves[i].direction)
-            * gerstner_waves[i].frequency
-            + time
-            * gerstner_waves[i].speed)
-            * gerstner_waves[i].frequency
-            * gerstner_waves[i].direction.x;
-        wave_normal.y -= gerstner_waves[i].amplitude * sin(
-            dot(nposition, gerstner_waves[i].direction)
-            * gerstner_waves[i].frequency
-            + time
-            * gerstner_waves[i].speed)
-            * gerstner_waves[i].frequency
-            * gerstner_waves[i].steepness;
-        wave_normal.z -= gerstner_waves[i].amplitude * cos(
-            dot(nposition, gerstner_waves[i].direction)
-            * gerstner_waves[i].frequency
-            + time
-            * gerstner_waves[i].speed)
-            * gerstner_waves[i].frequency
-            * gerstner_waves[i].direction.y;
+    for (uint i = 0; i < gerstner_waves_length; ++i) {
+        float proj = dot(position.xz, gerstner_waves[i].direction),
+              phase = time * gerstner_waves[i].speed,
+              psi = proj * gerstner_waves[i].frequency + phase,
+              Af = gerstner_waves[i].amplitude *
+                   gerstner_waves[i].frequency,
+              alpha = Af * sin(psi);
+
+        wave_normal.y -= gerstner_waves[i].steepness * alpha;
+
+        float x = gerstner_waves[i].direction.x,
+              y = gerstner_waves[i].direction.y,
+              omega = Af * cos(psi);
+
+        wave_normal.x -= x * omega;
+        wave_normal.z -= y * omega;
     } return wave_normal;
 }
 
-vec3 gerstner_wave(vec2 position, float time, inout vec3 wave_normal) {
-    vec3 wave_position = vec3(position.x + gerstner_wave_crestx(position, time),
-                              gerstner_wave_height(position, time),
-                              position.y + gerstner_wave_cresty(position, time));
-    wave_normal = gerstner_wave_normal(wave_position.xz, time);
-    return wave_position;
+vec3 gerstner_wave_position(vec2 position, float time) {
+    vec3 wave_position = vec3(position.x, 0, position.y);
+    for (uint i = 0; i < gerstner_waves_length; ++i) {
+        float proj = dot(position, gerstner_waves[i].direction),
+              phase = time * gerstner_waves[i].speed,
+              theta = proj * gerstner_waves[i].frequency + phase,
+              height = gerstner_waves[i].amplitude * sin(theta);
+
+        wave_position.y += height;
+
+        float maximum_width = gerstner_waves[i].steepness *
+                              gerstner_waves[i].amplitude,
+              width = maximum_width * cos(theta);
+              x = gerstner_waves[i].direction.x,
+              y = gerstner_waves[i].direction.y;
+
+        wave_position.x += x * width;
+        wave_position.y += y * width;
+    } return wave_position;
+}
+
+vec3 gerstner_wave(vec2 position, float time, inout vec3 normal) {
+    vec3 wave_position = gerstner_wave_position(position, time);
+    normal = gerstner_wave_normal(wave_position, time);
+    return wave_position; // Accumulated Gerstner Wave.
 }
