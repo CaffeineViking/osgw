@@ -73,7 +73,7 @@ vec3 gerstner_wave_position(vec2 position, float time) {
               y = gerstner_waves[i].direction.y;
 
         wave_position.x += x * width;
-        wave_position.y += y * width;
+        wave_position.z += y * width;
     } return wave_position;
 }
 
