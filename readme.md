@@ -14,17 +14,21 @@ Compiling and Installation
 Usage and Documents
 -------------------
 
-See the `docs` directory for *maybe* the project documentation.
+A short paper has been written on the subject, if you want to compile it yourself, see the `docs` directory.
+
+Or search for [*Real-Time Ocean Simulation and Rendering Using Gerstner Waves*](https://eriksvjansson.net/share/papers/osgw.pdf) by Erik S. V. Jansson.
 
 System Requirements
 -------------------
 
-Should run on anything, even on toaster-like potato-ish hardware.
+Should run on almost anything, even on a toaster-like potato-ish hardware.
+
+Your toaster must support and have drivers for `OpenGL 4.1` or later though.
 
 Dependencies
 ------------
 
-Fortunately, there aren't any dependencies besides `glfw3` now.
+There aren't any dependencies besides: `glfw3` and `png` for now.
 
 Structure
 ---------
