@@ -1,6 +1,30 @@
 Real-Time Ocean Simulation with Gerstner Waves
 ==============================================
 
+The Gerstner Wave Shader
+------------------------
+
+If you are planning on using Gerstner waves in your projects, it can be a bit fiddly to roll your own shader implementation; a lot can go wrong, and it's easy to write non-performant GLSL shaders. Therefore, feel free to use anything you find useful in this repository! Of special interest is probably [gerstner.glsl](https://github.com/CaffeineViking/osgw/blob/master/share/shader/gerstner.glsl), the function `gerstner_wave` is fairly decoupled from most of the project, so you should be able to use it for anything. There are instructions on how to use it in the shader's header, after the license notice (its there so you can just copy-paste the shader without having to think about it). Briefly, here is how to use it:
+
+Setup a tessellated 2-D plane-like mesh, either by uploading the vertices manually, or by generating them with a geometry or tessellation shader (you can see examples on how to do this in [gerstner.tesc](https://github.com/CaffeineViking/osgw/blob/master/share/shader/gerstner.tesc) and [gerstner.tese](https://github.com/CaffeineViking/osgw/blob/master/share/shader/gerstner.tese)). Thereafter, you want to displace each vertex according to the wave. You do this by copy-pasting [gerstner.glsl](https://github.com/CaffeineViking/osgw/blob/master/share/shader/gerstner.glsl) and calling `gerstner_wave` like so:
+
+```glsl
+position = gerstner_wave(position.xz, elapsed_time, normal);
+```
+
+where `position` is the world-coordinate vertex position, `normal` is the normal of that vertex (presumably pointing up), and `elapsed_time` is the time since the simulation started (usually in seconds). The function will return where the new position of the vertex should be after the Gerstner wave displacement, and the `normal` you provided will have been overwritten with the correct normal after the Gerstner wave displacement (i.e you don't need to set it yourself). If you want to change the wave parameters, you can either feed the `gerstner_waves`-array directly, or upload the data to the array dynamically by uniforms:
+
+```C++
+glUniform2f(glUniformLocation(shader_program, "gerstner_waves[0].direction"), 1.0f, 0.0f);
+glUniform1f(glUniformLocation(shader_program, "gerstner_waves[0].amplitude"), 1.0);
+glUniform1f(glUniformLocation(shader_program, "gerstner_waves[0].steepness"), 0.5);
+glUniform1f(glUniformLocation(shader_program, "gerstner_waves[0].frequency"), 1.0);
+glUniform1f(glUniformLocation(shader_program, "gerstner_waves[0].speed"), 1.0);
+glUniform1ui(glUniformLocation(shader_program, "gerstner_waves_length"), 1);
+```
+
+Note that you need to provide how many waves the shader should consider in `gerstner_waves_length`, otherwise it won't evaluate all of the waves you have provided. Performance-wise, the `gerstner_wave` function can have around 8-12 waves as parameters before it starts to become too costly. But your mileage may vary. I don't claim to distribute the fastest Gerstner wave GLSL implementation, but seeing as there aren't that many around (publicly speaking), it seems to get the work done.
+
 Compiling and Installation
 --------------------------
 
@@ -19,6 +43,7 @@ Start the demo with `bin/osgw`, there are zero command-line arguments here, pink
 * **Hold down the left mouse button and move the mouse:** to rotate the camera around the scene.
 * **Hold down the middle mouse button and move the mouse:** pan the camera accross the scene.
 * **Hold down the right mouse button and move the mouse:** zoom the camera in/out of the scene.
+* **Pressing the F key:** toggles between fullscreen and windowed mode (only tested on X11 targets).
 * **Pressing the W key:** will toggle wireframe rendering, which is good for inspecting the tessellation.
 * **Pressing the Q key:** will exit the application. I thought about using Escape, but that's for normies.
 
