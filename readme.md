@@ -14,17 +14,37 @@ Compiling and Installation
 Usage and Documents
 -------------------
 
-See the `docs` directory for *maybe* the project documentation.
+Start the demo with `bin/osgw`, there are zero command-line arguments here, pinky promise. Then use:
+
+* **Hold down the left mouse button and move the mouse:** to rotate the camera around the scene.
+* **Hold down the middle mouse button and move the mouse:** pan the camera accross the scene.
+* **Hold down the right mouse button and move the mouse:** zoom the camera in/out of the scene.
+
+Then, if you want to change the parameters of the Gerstner waves at run-time, you can use the following:
+
+* **Press 1, 2, 3, 4, 5, 6, 7 or 8 on the keyboard:** to select the current Gerstner wave we want to modify.
+* **Press the same number again:** to enable or disable the Gerstner wave from the final Gerstner sum.
+* **The up and down arrow keys:** are used to select the parameter of the wave that is being changed.
+* The parameter selection cycles between: *angle*, *amplitude*, *steepness*, *frequency* and *phase speed*.
+* **Finally, the left and right keys:** decrease or increases the current wave's selected wave parameter.
+
+You can get a glimpse of what you are currently changing by looking at the title bar of the `osgw` window.
+
+A short paper has been written on the subject, if you want to compile it yourself, see the `docs` directory.
+
+Or search for [*Real-Time Ocean Simulation and Rendering Using Gerstner Waves*](https://eriksvjansson.net/share/papers/osgw.pdf) by Erik S. V. Jansson.
 
 System Requirements
 -------------------
 
-Should run on anything, even on toaster-like potato-ish hardware.
+Should run on almost anything, even on a toaster-like potato-ish hardware.
+
+Your toaster must support and have drivers for `OpenGL 4.1` or later though.
 
 Dependencies
 ------------
 
-Fortunately, there aren't any dependencies besides `glfw3` now.
+There aren't any dependencies besides: `glfw3` and `png` for now.
 
 Structure
 ---------
