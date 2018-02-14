@@ -19,6 +19,8 @@ Start the demo with `bin/osgw`, there are zero command-line arguments here, pink
 * **Hold down the left mouse button and move the mouse:** to rotate the camera around the scene.
 * **Hold down the middle mouse button and move the mouse:** pan the camera accross the scene.
 * **Hold down the right mouse button and move the mouse:** zoom the camera in/out of the scene.
+* **Pressing the W key:** will toggle wireframe rendering, which is good for inspecting the tessellation.
+* **Pressing the Q key:** will exit the application. I thought about using Escape, but that's for normies.
 
 Then, if you want to change the parameters of the Gerstner waves at run-time, you can use the following:
 
