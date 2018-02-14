@@ -43,5 +43,5 @@ package() {
 	install -Dm644 share/images/sorsele/negative_z.png "$pkgdir"/usr/share/osgw/images/sorsele/negative_z.png
 	install -Dm644 share/images/sorsele/positive_x.png "$pkgdir"/usr/share/osgw/images/sorsele/positive_x.png
 	install -Dm644 share/images/sorsele/positive_y.png "$pkgdir"/usr/share/osgw/images/sorsele/positive_y.png
-	install -Dm644 yhare/images/sorsele/positive_z.png "$pkgdir"/usr/share/osgw/images/sorsele/positive_z.png
+	install -Dm644 share/images/sorsele/positive_z.png "$pkgdir"/usr/share/osgw/images/sorsele/positive_z.png
 }
