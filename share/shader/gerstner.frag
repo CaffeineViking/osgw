@@ -18,5 +18,5 @@ void main() {
     vec4 diffuse_texel = texture(diffuse_map, fs_in.texture_coordinate);
     float distance_to_eye = distance(fs_in.position, eye_position);
     float fog_ratio = smoothstep(12.0, 24.0, distance_to_eye);
-    color =  mix(diffuse_texel, fog_diffuse, fog_ratio);
+    color =  mix(diffuse_texel * vec4(fs_in.normal,1), fog_diffuse, fog_ratio);
 }

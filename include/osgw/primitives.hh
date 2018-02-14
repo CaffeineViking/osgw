@@ -7,9 +7,6 @@
 #include <vector>
 
 namespace osgw {
-    struct Triangle final {
-    };
-
     struct Quad final {
         static std::vector<int> indices;
         static std::vector<float> positions;

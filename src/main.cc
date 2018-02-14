@@ -42,36 +42,38 @@ int main(int, char**) {
     // adds the fractal Gerstner wave function in the normal direction according to the x, z
     // position of the vertex in world coordinates. And then shades it by using Blinn-Phong.
 
-    osgw::Shader vertex_shader { PATH("shader/gerstner.vert"), osgw::Shader::Type::Vertex },
-                 tesselation_control_shader { PATH("shader/gerstner.tesc"), osgw::Shader::Type::TessControl },
-                 tesselation_evaluation_shader { PATH("shader/gerstner.tese"), osgw::Shader::Type::TessEvaluation },
-                 fragment_shader { PATH("shader/gerstner.frag"), osgw::Shader::Type::Fragment };
+    osgw::Shader ocean_vertex_shader { PATH("shader/gerstner.vert"), osgw::Shader::Type::Vertex },
+                 ocean_tesselation_control_shader { PATH("shader/gerstner.tesc"), osgw::Shader::Type::TessControl },
+                 ocean_tesselation_evaluation_shader { PATH("shader/gerstner.tese"), osgw::Shader::Type::TessEvaluation },
+                 ocean_fragment_shader { PATH("shader/gerstner.frag"), osgw::Shader::Type::Fragment };
 
-    osgw::ShaderProgram shader_program { vertex_shader,
-                                         tesselation_control_shader, tesselation_evaluation_shader,
-                                         fragment_shader };
+    osgw::ShaderProgram ocean_shader_program { ocean_vertex_shader,
+                                               ocean_tesselation_control_shader, ocean_tesselation_evaluation_shader,
+                                               ocean_fragment_shader };
 
     // Basically, we use an quad as the target primitive to tessellate our ocean with.
     // However the shader program above should work with basically any other geometry.
 
-    osgw::Buffer position_buffer { osgw::Quad::positions, osgw::Buffer::Type::Array },
-                 normal_buffer { osgw::Quad::normals, osgw::Buffer::Type::Array },
-                 texture_coordinate_buffer { osgw::Quad::texture_coordinates, osgw::Buffer::Type::Array },
-                 index_buffer { osgw::Quad::indices, osgw::Buffer::Type::ElementArray };
+    osgw::Buffer ocean_position_buffer { osgw::Quad::positions, osgw::Buffer::Type::Array },
+                 ocean_normal_buffer { osgw::Quad::normals, osgw::Buffer::Type::Array },
+                 ocean_texture_coordinate_buffer { osgw::Quad::texture_coordinates, osgw::Buffer::Type::Array },
+                 ocean_index_buffer { osgw::Quad::indices, osgw::Buffer::Type::ElementArray };
 
-    std::vector<osgw::VertexArray::Attribute> vertex_attributes {
-        { position_buffer, "position", 3, osgw::VertexArray::Attribute::Type::Float },
-        { normal_buffer, "normal", 3, osgw::VertexArray::Attribute::Type::Float },
-        { texture_coordinate_buffer, "texture_coordinate",  2, osgw::VertexArray::Attribute::Type::Float }
-    }; osgw::VertexArray vertex_array { shader_program, index_buffer, vertex_attributes };
+    std::vector<osgw::VertexArray::Attribute> ocean_vertex_attributes {
+        { ocean_position_buffer, "position", 3, osgw::VertexArray::Attribute::Type::Float },
+        { ocean_normal_buffer, "normal", 3, osgw::VertexArray::Attribute::Type::Float },
+        { ocean_texture_coordinate_buffer, "texture_coordinate",  2, osgw::VertexArray::Attribute::Type::Float }
+    };
+
+    osgw::VertexArray ocean_vertex_array { ocean_shader_program, ocean_index_buffer, ocean_vertex_attributes };
 
     // Below we setup other necessary things like textures and an
     // camera, plus any necessary lighting information for scene.
 
-    osgw::Image diffuse_map_image { PATH("images/checker.png") };
-    osgw::Texture diffuse_map { diffuse_map_image };
-    std::vector<osgw::Texture::Sampler> texture_samplers {
-        { diffuse_map, "diffuse_map" }
+    osgw::Image ocean_diffuse_map_image { PATH("images/checker.png") };
+    osgw::Texture ocean_diffuse_map { ocean_diffuse_map_image };
+    std::vector<osgw::Texture::Sampler> ocean_texture_samplers {
+        { ocean_diffuse_map, "diffuse_map" }
     };
 
     glViewport(0, 0, window.width(), window.height());
@@ -106,7 +108,6 @@ int main(int, char**) {
     input_mapper.map("decrease", osgw::Input::Key::Left);
     input_mapper.map("increase", osgw::Input::Key::Right);
     input_mapper.map("previous", osgw::Input::Key::Up);
-    input_mapper.map("print", osgw::Input::Key::P);
 
     window.reset_time();
     while (window.is_open()) {
@@ -188,12 +189,13 @@ int main(int, char**) {
         else if (input_mapper.just_pressed("previous")) gerstner_wave.previous();
         gerstner_wave.select(input_mapper); // Select the current wave to modify.
         if (gerstner_wave.check_and_unset_dirty_bit()) {
-            gerstner_wave.upload_uniform(shader_program);
+            gerstner_wave.upload_uniform(ocean_shader_program);
             std::string updated_title { "osgw (wave " };
             updated_title += std::to_string(gerstner_wave.get_current_wave());
             if (gerstner_wave.is_on()) {
                 updated_title += " " + gerstner_wave.get_current_mode() + " = ";
-                updated_title += std::to_string(gerstner_wave.get_current_value()).substr(0, 4);
+                updated_title += std::to_string(gerstner_wave.get_current_value())
+                                                .substr(0, 4);
             } else updated_title += " was disabled";
             window.change_title(updated_title + ")");
         }
@@ -219,8 +221,8 @@ int main(int, char**) {
                 if (glm::dot(grid - camera_eye_position,
                              pan - camera_eye_position) < 0.0) continue;
                 model_matrix = glm::translate(glm::mat4 { 1.0 }, grid);
-                renderer.draw(vertex_array, shader_program,
-                              texture_samplers, camera,
+                renderer.draw(ocean_vertex_array, ocean_shader_program,
+                              ocean_texture_samplers, camera,
                               model_matrix, lights,
                               ambient_light);
             }
