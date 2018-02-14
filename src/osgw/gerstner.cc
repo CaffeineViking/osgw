@@ -9,34 +9,40 @@
 namespace osgw {
     void GerstnerWave::next() {
         current_mode = Mode((current_mode + 1) % Last);
+        dirty = true;
     }
 
     void GerstnerWave::previous() {
         current_mode = Mode((current_mode - 1));
         if (current_mode < 0)
             current_mode = Mode(Last - 1);
+        dirty = true;
     }
 
-    void GerstnerWave::increase() {
+    void GerstnerWave::change(float value) {
         switch (current_mode) {
-        case Direction: wave_parameters[current_wave].angle += change_rate; break;
-        case Amplitude: wave_parameters[current_wave].amplitude += change_rate; break;
-        case Steepness: wave_parameters[current_wave].steepness += change_rate; break;
-        case Frequency: wave_parameters[current_wave].frequency += change_rate; break;
-        case Speed: wave_parameters[current_wave].speed += change_rate;
+        case Direction: wave_parameters[current_wave].angle += value; break;
+        case Amplitude: wave_parameters[current_wave].amplitude += value; break;
+        case Steepness: wave_parameters[current_wave].steepness += value; break;
+        case Frequency: wave_parameters[current_wave].frequency += value; break;
+        case Speed: wave_parameters[current_wave].speed += value;
         default: break;
         }
+
+        dirty = true;
     }
 
-    void GerstnerWave::decrease() {
-        switch (current_mode) {
-        case Direction: wave_parameters[current_wave].angle -= change_rate; break;
-        case Amplitude: wave_parameters[current_wave].amplitude -= change_rate; break;
-        case Steepness: wave_parameters[current_wave].steepness -= change_rate; break;
-        case Frequency: wave_parameters[current_wave].frequency -= change_rate; break;
-        case Speed: wave_parameters[current_wave].speed -= change_rate;
-        default: break;
-        }
+    std::size_t GerstnerWave::waves_on() const {
+        std::size_t on { 0 };
+        for (std::size_t i { 0 }; i < MAX_WAVES; ++i)
+            if (wave_parameters[i].on) ++on;
+        return on;
+    }
+
+    bool GerstnerWave::check_and_unset_dirty_bit() {
+        bool previous = dirty;
+        dirty = false;
+        return previous;
     }
 
     void GerstnerWave::select(osgw::InputMapper& input_mapper) {
@@ -45,10 +51,20 @@ namespace osgw {
         else if (input_mapper.just_pressed(osgw::Input::Key::Two)) selected_wave = 2;
         else if (input_mapper.just_pressed(osgw::Input::Key::Three)) selected_wave = 3;
         else if (input_mapper.just_pressed(osgw::Input::Key::Four)) selected_wave = 4;
+        else if (input_mapper.just_pressed(osgw::Input::Key::Five)) selected_wave = 5;
+        else if (input_mapper.just_pressed(osgw::Input::Key::Six)) selected_wave = 6;
+        else if (input_mapper.just_pressed(osgw::Input::Key::Seven)) selected_wave = 7;
+        else if (input_mapper.just_pressed(osgw::Input::Key::Eight)) selected_wave = 0;
 
-        if (selected_wave == current_wave)
+        if (selected_wave == current_wave) {
             wave_parameters[current_wave].on = !wave_parameters[current_wave].on;
-        if (selected_wave != -1) current_wave = selected_wave;
+            dirty = true;
+        }
+
+        if (selected_wave != -1) {
+            current_wave = selected_wave;
+            dirty = true;
+        }
     }
 
     void GerstnerWave::upload_uniform(osgw::ShaderProgram& shader_program) const {
@@ -67,11 +83,15 @@ namespace osgw {
             shader_program.uniform(target_struct + "frequency", wave_parameters[i].frequency);
             shader_program.uniform(target_struct + "speed", wave_parameters[i].speed);
             ++waves_on;
-        } shader_program.uniform("gerstner_waves_size", waves_on);
+        } shader_program.uniform("gerstner_waves_length", waves_on);
     }
 
     glm::vec3 GerstnerWave::value(const glm::vec2&, float, glm::vec3&) const {
         return glm::vec3 { 0.0 };
+    }
+
+    bool GerstnerWave::is_on() const {
+        return wave_parameters[current_wave].on;
     }
 
     float GerstnerWave::get_current_value() const {
@@ -86,6 +106,7 @@ namespace osgw {
     }
 
     std::size_t GerstnerWave::get_current_wave() const {
+        if (current_wave == 0) return MAX_WAVES;
         return current_wave;
     }
 

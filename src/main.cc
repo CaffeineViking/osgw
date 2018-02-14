@@ -101,7 +101,7 @@ int main(int, char**) {
           relative_azimuth { 0.0 };
     glm::vec3 relative_pan { 0.0 };
 
-    osgw::GerstnerWave gerstner_wave;
+    osgw::GerstnerWave gerstner_wave; // Parameters.
     input_mapper.map("next", osgw::Input::Key::Down);
     input_mapper.map("decrease", osgw::Input::Key::Left);
     input_mapper.map("increase", osgw::Input::Key::Right);
@@ -178,12 +178,25 @@ int main(int, char**) {
 
         camera.look_at(camera_eye_position, pan);
 
-        if (input_mapper.just_pressed("previous")) gerstner_wave.previous();
-        else if (input_mapper.just_pressed("next")) gerstner_wave.next();
-        else if (input_mapper.pressed("increase")) gerstner_wave.increase();
-        else if (input_mapper.pressed("decrease")) gerstner_wave.decrease();
-        gerstner_wave.select(input_mapper); // Selects the wave to modify...
-        gerstner_wave.upload_uniform(shader_program); // Upload wave params.
+        // Below we change the parameters of the Gerstner waves dynamically,
+        // we do this by uploading shader uniforms linked to the wave param-
+        // eters (things like amplitude, steepness, wave directions, speed).
+
+        if (input_mapper.just_pressed("next")) gerstner_wave.next();
+        else if (input_mapper.pressed("increase")) gerstner_wave.change(+0.01);
+        else if (input_mapper.pressed("decrease")) gerstner_wave.change(-0.01);
+        else if (input_mapper.just_pressed("previous")) gerstner_wave.previous();
+        gerstner_wave.select(input_mapper); // Select the current wave to modify.
+        if (gerstner_wave.check_and_unset_dirty_bit()) {
+            gerstner_wave.upload_uniform(shader_program);
+            std::string updated_title { "osgw (wave " };
+            updated_title += std::to_string(gerstner_wave.get_current_wave());
+            if (gerstner_wave.is_on()) {
+                updated_title += " " + gerstner_wave.get_current_mode() + " = ";
+                updated_title += std::to_string(gerstner_wave.get_current_value()).substr(0, 4);
+            } else updated_title += " was disabled";
+            window.change_title(updated_title + ")");
+        }
 
         float grid_size = 2; int ocean_radius = 12;
         int ocean_x = std::round(pan.x / grid_size),

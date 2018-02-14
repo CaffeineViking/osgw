@@ -44,6 +44,7 @@ namespace osgw {
         float vertical_dpi() const;
         float horizontal_dpi() const;
         float aspect_ratio() const;
+        void change_title(const std::string& title);
         void resize(std::size_t width, std::size_t height);
 
         bool is_fullscreen() const;

@@ -161,6 +161,10 @@ namespace osgw {
         return width() / static_cast<float>(height());
     }
 
+    void Window::change_title(const std::string& title) {
+        this->title = title;
+    }
+
     void Window::resize(std::size_t width, std::size_t height) {
         windowed_height = height;
         windowed_width = width;

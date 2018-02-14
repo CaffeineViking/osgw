@@ -21,23 +21,31 @@ namespace osgw {
     public:
         struct Parameter {
             float angle { 0.0 };
-            float amplitude { 1.0 };
+            float amplitude { 0.0 };
             float steepness { 0.0 };
             float frequency { 1.0 };
             float speed { 1.0 };
             bool on { false };
         };
 
+        GerstnerWave() {
+            // By-default, only one wave is on.
+            wave_parameters[1].amplitude = 1.0;
+            wave_parameters[1].on = true;
+        }
+
         void next();
         void previous();
-        void increase();
-        void decrease();
+        void change(float value);
+        std::size_t waves_on() const;
 
+        bool check_and_unset_dirty_bit();
         void select(osgw::InputMapper& input_mapper);
         void upload_uniform(osgw::ShaderProgram& shader_program) const;
         // This is the function call that actually evaluates the Gerstner wave at (x,z).
         glm::vec3 value(const glm::vec2& position, float time, glm::vec3& normal) const;
 
+        bool is_on() const;
         float get_current_value() const;
         std::size_t get_current_wave() const;
         std::string get_current_mode() const;
@@ -52,9 +60,9 @@ namespace osgw {
             Last
         } current_mode = Direction;
 
+        bool dirty { true };
         int current_wave { 1 };
-        float change_rate { 0.01 };
-        static constexpr std::size_t MAX_WAVES { 4 };
+        static constexpr std::size_t MAX_WAVES { 8 };
         Parameter wave_parameters[MAX_WAVES];
     };
 }

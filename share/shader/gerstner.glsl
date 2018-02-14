@@ -1,5 +1,26 @@
 #version 410
 
+// Copyright (c) 2018 Erik Sven Vasconcelos Jansson
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of the
+// software and associated documentation files (a "Software"), to deal in the Software
+// without restriction, including without limitations the rights to use, copy, modify,
+// merge, publish, distribute, sublicense, and/or sell copies of the Softwares, and to
+// permit persons to whom the Software is furnished to do so, subject to the following
+// conditions:
+//
+// The above copyright notice and this permission notice must be included in copies or
+// substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO WARRANTY OF MERCHANTABILITY, FITNESS FOR AN PARTICULAR
+// PURPOSES AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTIONS WITH THE SOFTWARES OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// ========================== Regarding the Shader Itself ============================
+//
 // Gerstner wave: also called a trochoidal wave, describes how an incompressible fluid
 // should evolve through time and space assuming the distance from the seafloor to the
 // ocean surface is infinite. This wave-function works on a 2-D plane, and outputs the
@@ -25,6 +46,8 @@
 //
 // Note: this is nowhere near optimal code, it is structured this way for readability,
 // and if you think you've found an better solution, then you are most likely correct.
+// Acknowledgments: the shader is based on Finch's article "Effective Water Simulation
+// from Physical Models", that can be found in the first volume of GPU Gems by NVIDIA.
 
 uniform uint gerstner_waves_length = 8;
 uniform struct GerstnerWave {
@@ -68,7 +91,7 @@ vec3 gerstner_wave_position(vec2 position, float time) {
 
         float maximum_width = gerstner_waves[i].steepness *
                               gerstner_waves[i].amplitude,
-              width = maximum_width * cos(theta);
+              width = maximum_width * cos(theta),
               x = gerstner_waves[i].direction.x,
               y = gerstner_waves[i].direction.y;
 

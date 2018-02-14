@@ -26,7 +26,7 @@ out PipelineData {
 
 void main() {
     float base_contribution = 4.0;
-    float distance_contribution = 20.0;
+    float distance_contribution = 12.0;
 
     tc_out[gl_InvocationID].normal = tc_in[gl_InvocationID].normal;
     tc_out[gl_InvocationID].position = tc_in[gl_InvocationID].position;
