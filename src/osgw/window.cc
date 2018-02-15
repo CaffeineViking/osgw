@@ -120,7 +120,8 @@ namespace osgw {
 
         if (elapsed_time - fps_timer >= 1.0) {
             std::string fps { std::to_string(frames) };
-            current_title = title + " @ " + fps + " FPS";
+            current_fps = " @ " + fps + " FPS";
+            current_title = title + current_fps;
             glfwSetWindowTitle(handle, current_title.c_str());
             fps_timer = elapsed_time;
             frames = 0;
@@ -163,6 +164,8 @@ namespace osgw {
 
     void Window::change_title(const std::string& title) {
         this->title = title;
+        this->current_title = this->title + current_fps;
+        glfwSetWindowTitle(handle, current_title.c_str());
     }
 
     void Window::resize(std::size_t width, std::size_t height) {

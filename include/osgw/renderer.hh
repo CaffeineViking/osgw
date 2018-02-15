@@ -64,7 +64,6 @@ namespace osgw {
 
         Window& window;
         Parameters parameters;
-        glm::vec4 fog { 1.0 };
     };
 }
 

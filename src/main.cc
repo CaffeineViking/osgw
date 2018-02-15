@@ -20,9 +20,8 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtc/constants.hpp>
 
-#include <cmath>
-#include <iostream>
 #include <vector>
+#include <cmath>
 
 #ifndef SHARE_PATH
 #define SHARE_PATH "share/"
@@ -81,9 +80,8 @@ int main(int, char**) {
 
     osgw::AmbientLight ambient_light { 0.3, 0.3, 0.3 };
     std::vector<osgw::Light> lights {
-        { { 0.0, 0.0, -1.0 }, { 0.0, 1.0, 0.0 }, osgw::Light::Type::Directional },
-        { { +1.0, 1.0, 0.0 }, { 1.0, 0.0, 0.0 }, osgw::Light::Type::Point, 1.00 },
-        { { -1.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, osgw::Light::Type::Point, 1.00 }
+        { { 0.0, 1.0, -1.0 }, { 1.0, 1.0, 1.0 },
+            osgw::Light::Type::Directional },
     };
 
     input_mapper.map("zoom", osgw::Input::MouseButton::Right);

@@ -6,7 +6,5 @@
 
 uniform float time;
 uniform mat4 model;
-uniform vec4 fog_diffuse;
 uniform vec3 eye_position;
-uniform vec3 look_at_point;
 uniform mat4 projection_view;

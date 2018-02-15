@@ -52,6 +52,7 @@ namespace osgw {
 
     private:
         std::string title,
+                    current_fps,
                     current_title;
 
         int refresh_rate;
