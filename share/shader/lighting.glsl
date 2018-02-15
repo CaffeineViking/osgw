@@ -1,6 +1,8 @@
 #version 410
 
-// Blinn-Phong lighting:
+// Blinn-Phong lighting: very simple lighting model, not actually suitable for
+// rendering oceans where a lot of reflections, refractions and surface trans-
+// missions between waves are more important. But it's just a demo so it's OK.
 
 uniform uint directional_lights_size = 0;
 uniform vec3 ambient_light_color;

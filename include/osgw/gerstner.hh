@@ -29,8 +29,11 @@ namespace osgw {
         };
 
         GerstnerWave() {
-            // By-default, only one wave is on.
-            wave_parameters[1].amplitude = 1.0;
+            wave_parameters[1].angle = 0.32;
+            wave_parameters[1].amplitude = 0.64;
+            wave_parameters[1].steepness = 0.64;
+            wave_parameters[1].frequency = 0.64;
+            wave_parameters[1].speed = 1.28;
             wave_parameters[1].on = true;
         }
 

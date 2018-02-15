@@ -80,7 +80,7 @@ int main(int, char**) {
 
     osgw::AmbientLight ambient_light { 0.0, 0.0, 0.0 };
     std::vector<osgw::Light> lights {
-        { { 0.0, 0.7, -0.7 }, { 0.3, 0.3, 0.3 },
+        { { 0.0, 0.7, -0.7 }, { 0.8, 0.8, 0.8 },
             osgw::Light::Type::Directional },
     };
 
@@ -110,7 +110,7 @@ int main(int, char**) {
     window.reset_time();
     while (window.is_open()) {
         float time = window.time();
-        renderer.clear(.0, .0242, .03);
+        renderer.clear(0, 0.188, 0.203);
 
         if (input_mapper.pressed("quit")) window.close();
         if (input_mapper.just_pressed("wireframe"))

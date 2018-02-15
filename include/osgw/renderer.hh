@@ -64,6 +64,7 @@ namespace osgw {
 
         Window& window;
         Parameters parameters;
+        glm::vec3 fog_color;
     };
 }
 
