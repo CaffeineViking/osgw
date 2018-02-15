@@ -25,13 +25,15 @@ out PipelineData {
 } tc_out[];
 
 void main() {
-    float base_contribution = 4.0;
-    float distance_contribution = 12.0;
-
+    // Just forward the vertex attributes through the GL pipeline.
     tc_out[gl_InvocationID].normal = tc_in[gl_InvocationID].normal;
     tc_out[gl_InvocationID].position = tc_in[gl_InvocationID].position;
     tc_out[gl_InvocationID].texture_coordinate = tc_in[gl_InvocationID].texture_coordinate;
 
+    float base_contribution = 4.0;
+    float distance_contribution = 12.0;
+    float max_contribution = base_contribution + distance_contribution;
+    float half_contribution = 0.5*max_contribution; // For outer edges.
     // We assume that the farthest we'll ever look is 24 units away, and closest is
     // 0 units away. We then apply a Hermite blending function to the distance, for
     // a smoother result, this gives the level of detail for the tessellation level.
@@ -41,6 +43,6 @@ void main() {
 
     gl_TessLevelInner[0] = tessellation_level;
     gl_TessLevelInner[1] = tessellation_level;
-    gl_TessLevelOuter[0] = tessellation_level; gl_TessLevelOuter[1] = tessellation_level;
-    gl_TessLevelOuter[2] = tessellation_level; gl_TessLevelOuter[3] = tessellation_level;
+    gl_TessLevelOuter[0] = half_contribution; gl_TessLevelOuter[1] = half_contribution;
+    gl_TessLevelOuter[2] = half_contribution; gl_TessLevelOuter[3] = half_contribution;
 }

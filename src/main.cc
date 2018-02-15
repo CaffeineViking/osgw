@@ -78,9 +78,9 @@ int main(int, char**) {
     glViewport(0, 0, window.width(), window.height());
     osgw::Camera camera { window.aspect_ratio(), 27.0 };
 
-    osgw::AmbientLight ambient_light { 0.3, 0.3, 0.3 };
+    osgw::AmbientLight ambient_light { 0.0, 0.0, 0.0 };
     std::vector<osgw::Light> lights {
-        { { 0.0, 1.0, -1.0 }, { 1.0, 1.0, 1.0 },
+        { { 0.0, 0.7, -0.7 }, { 0.3, 0.3, 0.3 },
             osgw::Light::Type::Directional },
     };
 
@@ -110,7 +110,7 @@ int main(int, char**) {
     window.reset_time();
     while (window.is_open()) {
         float time = window.time();
-        renderer.clear(1.0, 1.0, 1.0);
+        renderer.clear(.0, .0242, .03);
 
         if (input_mapper.pressed("quit")) window.close();
         if (input_mapper.just_pressed("wireframe"))
@@ -151,7 +151,7 @@ int main(int, char**) {
             camera_inclination += relative_inclination;
             camera_zoom = glm::clamp(camera_zoom, 1.0f, 24.0f);
             camera_inclination = glm::clamp(camera_inclination,
-                                 0.0f, glm::half_pi<float>());
+                                 0.3f, glm::half_pi<float>());
             camera_azimuth += relative_azimuth;
 
             relative_zoom = 0.0;
@@ -164,7 +164,7 @@ int main(int, char**) {
         float azimuth { camera_azimuth + relative_azimuth };
         float zoom { glm::clamp(camera_zoom + relative_zoom, 1.0f, 24.0f) };
         float inclination { glm::clamp(camera_inclination + relative_inclination,
-                                       0.0f, glm::half_pi<float>()) };
+                                       0.3f, glm::half_pi<float>()) };
         glm::vec3 pan { camera_panning_position + relative_pan };
         pan = glm::rotateY(pan, azimuth);
 

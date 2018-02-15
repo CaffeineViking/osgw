@@ -19,6 +19,7 @@ namespace osgw {
         const glm::vec3& get_position() const;
         const glm::vec3& get_direction() const;
         const glm::vec3& get_up_direction() const;
+        const glm::vec3& get_look_at() const;
 
         const glm::mat4& get_projection_matrix() const;
         const glm::mat4& get_view_matrix() const;

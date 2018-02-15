@@ -122,6 +122,7 @@ namespace osgw {
                                                  const glm::mat4& model_matrix) {
 
         shader_program.uniform("eye_position", camera.get_position());
+        shader_program.uniform("look_at_point", camera.get_look_at());
         shader_program.uniform4x4("projection_view", camera.get_matrix());
         shader_program.uniform4x4("model", model_matrix);
     }

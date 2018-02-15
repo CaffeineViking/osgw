@@ -39,6 +39,7 @@ void main() {
     vec3 x_up_position_mix = mix(te_in[0].position, te_in[3].position, gl_TessCoord.x);
     vec3 x_down_position_mix = mix(te_in[1].position, te_in[2].position, gl_TessCoord.x);
     te_out.position = mix(x_down_position_mix, x_up_position_mix, gl_TessCoord.y);
+    float distance_from_center = distance(look_at_point.xz,te_out.position.xz)/24;
 
     // Displace the tessellated geometry in the direction of the normal by us-
     // ing a sum of Gerstner waves. A effect of this wave is that it will move

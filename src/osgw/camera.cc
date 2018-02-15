@@ -58,6 +58,10 @@ namespace osgw {
         return up_direction;
     }
 
+    const glm::vec3& Camera::get_look_at() const {
+        return look_at_point;
+    }
+
     const glm::mat4& Camera::get_projection_matrix() const {
         return projection;
     }
