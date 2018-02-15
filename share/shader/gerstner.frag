@@ -1,6 +1,12 @@
 #version 410
 
-// Fragment shader:
+// Fragment shader: now that the ocean is being animated with Gerstner waves, the only
+// part that is left to do is shade it. Here we use a simple Blinn-Phong shading model
+// that takes two base colors (ones for shallow waves and another for deep waves), and
+// combines them relative to the height of the wave. After that, we apply some surface
+// ripples, to increase the details of the waves without having to add extra geometry.
+// This will modify the normal of the wave, so we need to re-calculate it (again yes).
+// Finally, we also apply the skybox reflection on the water. We mix these components.
 
 in PipelineData {
     vec3 position;
@@ -11,6 +17,7 @@ in PipelineData {
 #pragma include("lighting.glsl")
 #pragma include("textures.glsl")
 #pragma include("matrices.glsl")
+#pragma include("snoise3d.glsl")
 
 out vec4 color;
 
