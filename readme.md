@@ -1,6 +1,14 @@
 Real-Time Ocean Simulation with Gerstner Waves
 ==============================================
 
+<p align="center">
+    <img width=100% src="/docs/figures/screenshot.png" alt=""/>
+    <img width=25% src="/docs/figures/wave_1.png" alt=""/>
+    <img width=25% src="/docs/figures/wave_2.png" alt=""/>
+    <img width=25% src="/docs/figures/wave_3.png" alt=""/>
+    <img width=25% src="/docs/figures/wave_4.png" alt=""/>
+</p>
+
 The Gerstner Wave Shader
 ------------------------
 
