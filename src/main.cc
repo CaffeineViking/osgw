@@ -34,6 +34,7 @@ int main(int, char**) {
     osgw::Renderer renderer { window };
 
     input_mapper.map("quit", osgw::Input::Key::Q);
+    input_mapper.map("pause", osgw::Input::Key::P);
     input_mapper.map("wireframe", osgw::Input::Key::W);
     input_mapper.map("fullscreen", osgw::Input::Key::F);
 
@@ -113,6 +114,8 @@ int main(int, char**) {
         renderer.clear(0, 0.188, 0.203);
 
         if (input_mapper.pressed("quit")) window.close();
+        if (input_mapper.just_pressed("pause"))
+            window.toggle_pause();
         if (input_mapper.just_pressed("wireframe"))
             renderer.toggle_wireframe();
         if (input_mapper.just_pressed("fullscreen")) {

@@ -34,6 +34,7 @@ namespace osgw {
 
         void reset_time();
         float time() const;
+        void toggle_pause();
         double delta_time() const;
         bool is_open() const;
         void close();
@@ -63,6 +64,8 @@ namespace osgw {
 
         GLFWwindow* handle;
 
+        bool paused { false };
+        double paused_time { 0 };
         double last_time { 0.0 },
                frame_time { .0 },
                fps_timer { 0.0 };

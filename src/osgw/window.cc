@@ -93,12 +93,20 @@ namespace osgw {
         return handle == glfwGetCurrentContext();
     }
 
+    void Window::toggle_pause() {
+        if (!paused)
+            paused_time = glfwGetTime();
+        else glfwSetTime(paused_time);
+        paused = !paused;
+    }
+
     void Window::reset_time() {
         glfwSetTime(0.0);
     }
 
     float Window::time() const {
-        return glfwGetTime();
+        if (paused) return paused_time;
+        else return glfwGetTime();
     }
 
     double Window::delta_time() const {

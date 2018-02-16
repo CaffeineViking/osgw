@@ -108,7 +108,7 @@ namespace osgw {
     void Renderer::setup_shader_program(ShaderProgram& shader_program) {
         set_shader_program(shader_program);
         shader_program.uniform("time", window.time());
-        shader_program.uniform("fog_color",fog_color);
+        shader_program.uniform("fog_color", fog_color);
     }
 
     void Renderer::setup_texture_samplers(ShaderProgram& shader_program, std::vector<Texture::Sampler>& samplers) {
