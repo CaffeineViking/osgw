@@ -50,7 +50,7 @@ void main() {
     vec3 diffuse_albedo = mix(diffuse_wave_albedo, wave_ripple_color, 0.1);
 
     // Finally, we apply the shading and mix it with the fog in the scene.
-    float fog = clamp(distance(look_at_point, fs_in.position) / 24, 0, 1);
+    float fog = clamp(pow(distance(look_at_point, fs_in.position) / 24, 1), 0, 1);
     vec3 shading_color = blinn_phong(fs_in.position, fs_in.normal,
                                      diffuse_albedo, vec3(0.1f),
                                      0.0, eye_position);
