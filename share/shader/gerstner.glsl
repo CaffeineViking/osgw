@@ -49,7 +49,7 @@
 // Acknowledgments: the shader is based on Finch's article "Effective Water Simulation
 // from Physical Models", that can be found in the first volume of GPU Gems by NVIDIA.
 
-uniform uint gerstner_waves_length = 1;
+uniform uint gerstner_waves_length = 0;
 uniform struct GerstnerWave {
     vec2 direction;
     float amplitude;

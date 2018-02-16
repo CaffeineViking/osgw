@@ -36,5 +36,5 @@ package() {
 	install -Dm644 share/shader/lighting.glsl "$pkgdir"/usr/share/osgw/shader/lighting.glsl
 	install -Dm644 share/shader/matrices.glsl "$pkgdir"/usr/share/osgw/shader/matrices.glsl
 	install -Dm644 share/shader/textures.glsl "$pkgdir"/usr/share/osgw/shader/textures.glsl
-	install -Dm644 share/shader/textures.glsl "$pkgdir"/usr/share/osgw/shader/snoise3d.glsl
+	install -Dm644 share/shader/snoise3d.glsl "$pkgdir"/usr/share/osgw/shader/snoise3d.glsl
 }

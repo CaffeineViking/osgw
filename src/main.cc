@@ -69,7 +69,7 @@ int main(int, char**) {
     // Below we setup other necessary things like textures and an
     // camera, plus any necessary lighting information for scene.
 
-    osgw::Image ocean_diffuse_map_image { PATH("images/checker.png") };
+    osgw::Image ocean_diffuse_map_image { PATH("images/checkers.png") };
     osgw::Texture ocean_diffuse_map { ocean_diffuse_map_image };
     std::vector<osgw::Texture::Sampler> ocean_texture_samplers {
         { ocean_diffuse_map, "diffuse_map" }
@@ -80,7 +80,7 @@ int main(int, char**) {
 
     osgw::AmbientLight ambient_light { 0.0, 0.0, 0.0 };
     std::vector<osgw::Light> lights {
-        { { 0.0, 0.7, -0.7 }, { 0.8, 0.8, 0.8 },
+        { { 0.0, 0.7, -0.7 }, { 1.0, 1.0, 1.0 },
             osgw::Light::Type::Directional },
     };
 
@@ -151,7 +151,7 @@ int main(int, char**) {
             camera_inclination += relative_inclination;
             camera_zoom = glm::clamp(camera_zoom, 1.0f, 24.0f);
             camera_inclination = glm::clamp(camera_inclination,
-                                 0.3f, glm::half_pi<float>());
+                                 0.0f, glm::half_pi<float>());
             camera_azimuth += relative_azimuth;
 
             relative_zoom = 0.0;
@@ -164,7 +164,7 @@ int main(int, char**) {
         float azimuth { camera_azimuth + relative_azimuth };
         float zoom { glm::clamp(camera_zoom + relative_zoom, 1.0f, 24.0f) };
         float inclination { glm::clamp(camera_inclination + relative_inclination,
-                                       0.3f, glm::half_pi<float>()) };
+                                       0.0f, glm::half_pi<float>()) };
         glm::vec3 pan { camera_panning_position + relative_pan };
         pan = glm::rotateY(pan, azimuth);
 
