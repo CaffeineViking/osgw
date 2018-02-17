@@ -70,11 +70,11 @@ int main(int, char**) {
     // Below we setup other necessary things like textures and an
     // camera, plus any necessary lighting information for scene.
 
-    osgw::Image ocean_diffuse_map_image { PATH("images/checkers.png") };
-    osgw::Texture ocean_diffuse_map { ocean_diffuse_map_image };
-    std::vector<osgw::Texture::Sampler> ocean_texture_samplers {
-        { ocean_diffuse_map, "diffuse_map" }
-    };
+    // Load textures here by using osgw::Image and osgw::Texture.
+    // e.g. osgw::Image image { "image.png" };
+    // then osgw::Texture image_texture { image };
+    // then add a texture sampler bound to name...
+    std::vector<osgw::Texture::Sampler> ocean_texture_samplers;
 
     glViewport(0, 0, window.width(), window.height());
     osgw::Camera camera { window.aspect_ratio(), 27.0 };
