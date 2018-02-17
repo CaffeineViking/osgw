@@ -48,6 +48,7 @@ Start the demo with `bin/osgw`, there are zero command-line arguments here, pink
 * **Hold down the middle mouse button and move the mouse:** pan the camera accross the scene.
 * **Hold down the right mouse button and move the mouse:** zoom the camera in/out of the scene.
 * **Pressing the F key:** toggles between fullscreen and windowed mode (only tested on X11 targets).
+* **Pressing the P key:** pauses the simulation time so you can change wave parameters more easily.
 * **Pressing the W key:** will toggle wireframe rendering, which is good for inspecting the tessellation.
 * **Pressing the Q key:** will exit the application. I thought about using Escape, but that's for normies.
 
@@ -59,7 +60,7 @@ Then, if you want to change the parameters of the Gerstner waves at run-time, yo
 * The parameter selection cycles between: *angle*, *amplitude*, *steepness*, *frequency* and *phase speed*.
 * **Finally, the left and right keys:** decrease or increases the current wave's selected wave parameter.
 
-You can get a glimpse of what you are currently changing by looking at the title bar of the `osgw` window.
+You can get a glimpse of what you are currently changing by looking at the title bar of the `osgw` window. By default, you'll only get a single default-initialized Gerstner wave enabled. As you enable more waves, please note that the amplitude of them will be zero at first, so you need to manually increase it to see any difference in the final wave. Disabling all but one wave layer is a good strategy when composing complex wave motions, since you can concentrate on changing only one wave at a time, and once you are happy, you can combine it with the rest of the waves by enabling the other waves again.
 
 A short paper has been written on the subject, if you want to compile it yourself, see the `docs` directory.
 
