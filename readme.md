@@ -5,6 +5,12 @@ Real-Time Ocean Simulation with Gerstner Waves
     <img width=100% src="/docs/figures/gerstner.gif" alt=""/>
 </p>
 
+A *Gerstner wave* or *trochoidal wave* describes the progression of a wave on the surface of an incompressible fluid of infinite depth. It's good for describing the motion of deep-ocean waves. Its solution was discovered in 1802 by *František J Gerstner*, and has been the workhorse of ocean animation in computer graphics since the 1986 paper by *Fournier & Reeves* showed promising results. Based on the classic course notes by *Jerry Tessendorf* in 2001, *Mark Finch* implemented Gerstner waves as a vertex shader in 2004's *"Effective Water Simulation from Physical Models"*, making real-time Gerstner waves possible.
+
+In this project, we have implemented *Finch's Gerstner wave shader* in GLSL and provided it under an open-source license. Along with it, an example Gerstner wave visualization program, `osgw`, is bundled. It provides example usage of the shader, and can also be used to play around with its wave parameters. It can also work as a (not very energy-efficient) screensaver. Performance-wise, we're able to simulate and render a 12-wave Gerstner wave sum at 200 FPS (on ~6 year old hardware).
+
+In addition, the `osgw` renderer uses OpenGL's *tessellation shader* to seamlessly switch between geometry LoDs based on the amount of detail the user can see (this reduces the amount of times we need to evaluate the Gerstner wave function). It will hopefully be useful to other people as well, since I've found that there isn't that much documentation on how to setup a *tessellation control and evaluation shader* for OpenGL 4.1 (besides the [OpenGL Tessellation Wiki](https://www.khronos.org/opengl/wiki/Tessellation) and [Prideout's Tutorial](http://prideout.net/blog/?p=48)). For the small surface ripples, a two-octave *[Simplex noise](staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf)* is used, that is mixed with a lerp of deep & shallow ocean colors.
+
 The Gerstner Wave Shader
 ------------------------
 
