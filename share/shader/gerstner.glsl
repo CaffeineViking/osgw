@@ -1,6 +1,10 @@
 #version 410
 
-// Copyright (c) 2018 Erik Sven Vasconcelos Jansson
+// ===================================================================================
+//
+//                 Copyright (c) 2018 Erik Sven Vasconcelos Jansson
+//
+//                                 The MIT License
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of the
 // software and associated documentation files (a "Software"), to deal in the Software
@@ -19,35 +23,60 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTIONS WITH THE SOFTWARES OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-// ========================== Regarding the Shader Itself ============================
+// -----------------------------------------------------------------------------------
 //
-// Gerstner wave: also called a trochoidal wave, describes how an incompressible fluid
-// should evolve through time and space assuming the distance from the seafloor to the
-// ocean surface is infinite. This wave-function works on a 2-D plane, and outputs the
-// height of the wave at (x, z) for some time point. An additional property of the Ge-
-// restner wave is that it accumulates vertices closer to the wave's crests, depending
-// on the steepness parameter that is used (0 is just a sine wave, but it peaks at 1).
+// Introduction: the Gerstner/trochoidal wave describes how an incompresible fluid sh-
+// ould evolve through time and space, under the assumption that the distance from the
+// seafloor to the ocean surface is infinite. This wave-function is applied on to a 2D
+// plane, and gives the height of the wave at (x, z) for a timepoint. A distinguishing
+// feature of the Gerstner wave is that points passed to it tend to accumulate towards
+// the waves's crest depending on the steepness (0 is a sine wave, but it peaks at 1).
 //
-// How to use it: you should only call the `gerstner_wave' function, the rest are help
-// functions. The 'position' argument should tell us where we are in the (x, z)-plane,
-// and the 'time' argument is the current elapsed time of the simulation. The 'normal'
-// argument should be the normal of the surface we are going to displace, this will be
-// overwritten with the new normal after the displacement using the wave has happened.
-// Finally, the return value is the new position (x', y', z') after the Gerstner wave.
+// Shader usage: only the 'gerstner_wave' function should be called, the rest are just
+// helper functions. The 'position' argument should tell us where we are in the (x, z)
+// plane, and the 'time' argument is the current elapsed time of the simulation. Also,
+// the 'normal' should be given, this is the normal of the geometry we are displacing,
+// and will be overwritten after the call to 'gerstner_wave' with the normal after the
+// Gerstner wave displacement has been applied to the surface. The return value is the
+// position (x', y', z') of the point (x, z) after the Gerstner wave has been applied.
 //
-// Example:       position = gerstner_wave(position.xz, elapsed_time, normal);
+// Example:      position = gerstner_wave(position.xz, elapsed_time, normal);
 //
-// Changing wave: there are two ways to change the appearance of the wave-function, by
-// manually changing/adding/removing parameter in the 'gerstner_waves' array below, or
-// by dynamically uploading the data via uniforms with size. Or a combination of both.
-// i.e. glUniform1f(glGetUniformLocation(handle, "gerstner_waves[0].steepness", 0.5));
-// or gerstner_waves[] = GerstnerWave[1](GerstnerWave(vec2(1,0), 1.0, 0.5, 1.0, 1.0));
-// You can probably figure out other ways to feed the wave function with data as well.
+// Custom waves: there are two ways to change the look-and-feel of the above function:
+// by manually adding/removing/changing parameters in the 'gerstner_waves' array below
+// or by dynamically uploading the data via uniform. In both cases you'll also need to
+// give the number of waves that should be active, by setting 'gerstner_waves_length'.
 //
-// Note: this is nowhere near optimal code, it is structured this way for readability,
-// and if you think you've found an better solution, then you are most likely correct.
+// Example of wave customization by array:
+//
+// uniform uint gerstner_waves_length = 1;
+// uniform struct GerstnerWave {
+//     vec2 direction;
+//     float amplitude;
+//     float steepness;
+//     float frequency;
+//     float speed;
+// } gerstner_waves[1] = GerstnerWave[1](
+//     GerstnerWave(vec2(1.0, 0.0), 1.0, 0.5, 1.0, 1.0)
+// );
+//
+// Example of wave customization by uploading uniforms for each of the parameters:
+//
+// glUniform2f(glUniformLocation(sp,  "gerstner_waves[0].direction"), 1.0f, 0.0f);
+// glUniform1f(glUniformLocation(sp,  "gerstner_waves[0].amplitude"), 1.0);
+// glUniform1f(glUniformLocation(sp,  "gerstner_waves[0].steepness"), 0.5);
+// glUniform1f(glUniformLocation(sp,  "gerstner_waves[0].frequency"), 1.0);
+// glUniform1f(glUniformLocation(sp,  "gerstner_waves[0].speed"),     1.0);
+// glUniform1ui(glUniformLocation(sp, "gerstner_waves_length"),       1);
+//
 // Acknowledgments: the shader is based on Finch's article "Effective Water Simulation
 // from Physical Models", that can be found in the first volume of GPU Gems by NVIDIA.
+// It is somewhat better optimized than a straight translation of the equations in Fi-
+// nch's paper, but there are definitely still parts that can be improved further too.
+// I'd also like to thank Stefan Gustavson for the 'Procedural Methods for Images' co-
+// urse at LiU, which allowed me to spend time to research and construct this project.
+//
+// ===================================================================================
 
 uniform uint gerstner_waves_length = 0;
 uniform struct GerstnerWave {
