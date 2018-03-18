@@ -1,3 +1,20 @@
 \lstinputlisting[caption={Gerstner Wave Shader for OpenGL with GLSL 4.10.},
                  morekeywords={vec2, vec3, uniform, uint, version, dot, sin, cos, inout},
-                 label={lst:gerstner}]{listings/gerstner.glsl}
+                 label={lst:gerstner}]{listings/gerstner.glsl} \newpage
+\lstinputlisting[caption={Tessellation Control Shader in GLSL 4.10 for Deciding the Ocean Surface Level-of-Detail.},
+                 morekeywords={vec2, vec3, uniform, uint, version, dot, sin, cos, inout,
+                               layout, vertices, in, out, distance, smoothstep, gl_InvocationID, gl_TessLevelInner, gl_TessLevelOuter},
+                 label={lst:tesc}]{listings/gerstner.tesc} \newpage
+\lstinputlisting[caption={Tessellation Evaluation Shader in GLSL 4.10 for Displacing Tessellated Ocean Surface.},
+                 morekeywords={vec2, vec3, uniform, uint, version, dot, sin, cos, inout,
+                               layout, in, out, distance, smoothstep,
+                               quads, fractional_even_spacing, mix, vec4, gl_TessCoord, gl_Position},
+                 label={lst:tese}]{listings/gerstner.tese} \newpage
+\lstinputlisting[caption={Fragment Shader for Coloring the Ocean Surface (with a Fog Effect for Hiding Pop-in).},
+                 morekeywords={vec2, vec3, uniform, uint, version, dot, sin, cos, inout,
+                               in, out, smoothstep, mix, normalize, clamp, pow, distance, vec4, snoise3d},
+                 label={lst:frag}]{listings/gerstner.frag} \newpage
+\lstinputlisting[caption={Blinn--Phong Reflection Model Shader.},
+                 morekeywords={vec2, vec3, uniform, uint, version, dot, sin, cos, inout,
+                               in, out, smoothstep, mix, normalize, clamp, pow, distance, vec4, max, length},
+                 label={lst:blinn_phong}]{listings/lighting.glsl} \newpage

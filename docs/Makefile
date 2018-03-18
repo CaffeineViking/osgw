@@ -13,6 +13,10 @@ $(name).pdf: $(name).tex $(sections) $(name).bib
 	pdflatex -output-directory build/ $(name)
 	pdflatex -output-directory build/ $(name)
 	mv build/$(name).pdf .
+polyglot: polyglot/osgw.pdf
+polyglot/osgw.pdf: $(name).pdf polyglot/osgw.zip
+	cat $(name).pdf polyglot/osgw.zip > polyglot/osgw.pdf
+	zip -A polyglot/osgw.pdf
 clean:
 	rm -rf build
 distclean: clean
