@@ -26,7 +26,7 @@ project (name)
 
     filter {"system:windows"}
         links {"png"}
-        links {"glew32", "glfw3dll", "opengl32"}
+        links {"glew32", "glfw3", "opengl32"}
         buildoptions {"-static -static-libgcc -static-libstdc++",
                       "-mwindows", "-mconsole"}
     filter {"system:linux or bsd or macosx"}
