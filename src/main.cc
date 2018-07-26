@@ -16,6 +16,8 @@
 
 #include <osgw/gerstner.hh>
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtc/constants.hpp>
