@@ -3,30 +3,30 @@
 #include <iostream>
 
 namespace osgw {
-    ShaderProgram::ShaderProgram(std::initializer_list<std::reference_wrapper<Shader>> shaders) {
+    ShaderProgram::ShaderProgram(std::initializer_list<Shader*> shaders) {
         handle = glCreateProgram();
-        for (const Shader& shader : shaders) {
-            switch (shader.type) {
+        for (auto shader : shaders) {
+            switch (shader->type) {
             case Shader::Type::Vertex: shader_stages[0] = true; break;
             case Shader::Type::TessControl: shader_stages[1] = true; break;
             case Shader::Type::TessEvaluation: shader_stages[2] = true; break;
-            case Shader::Type::Geometry: shader_stages[4] = true; break;
-            case Shader::Type::Fragment: shader_stages[5] = true;
+            case Shader::Type::Geometry: shader_stages[3] = true; break;
+            case Shader::Type::Fragment: shader_stages[4] = true;
             }
 
-            glAttachShader(handle, shader.handle);
+            glAttachShader(handle, shader->handle);
         }
 
         glLinkProgram(handle);
 
         GLint link_success;
-        glGetShaderiv(handle, GL_LINK_STATUS, &link_success);
+        glGetProgramiv(handle, GL_LINK_STATUS, &link_success);
         if (!link_success) {
             GLint log_length;
-            glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &log_length);
+            glGetProgramiv(handle, GL_INFO_LOG_LENGTH, &log_length);
 
-            GLchar* log { new GLchar[log_length] }; // Will leak >:).
-            glGetShaderInfoLog(handle, log_length, &log_length, log);
+            GLchar* log { new GLchar[log_length] }; // Might leak >:).
+            glGetProgramInfoLog(handle, log_length, &log_length, log);
             throw std::runtime_error { log };
         }
     }

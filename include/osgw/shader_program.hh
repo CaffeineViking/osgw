@@ -15,7 +15,7 @@
 namespace osgw {
     class ShaderProgram final {
     public:
-        ShaderProgram(std::initializer_list<std::reference_wrapper<Shader>> shaders);
+        ShaderProgram(std::initializer_list<Shader*> shaders);
         ~ShaderProgram() noexcept;
 
         void use() const;

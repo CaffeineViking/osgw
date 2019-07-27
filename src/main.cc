@@ -49,9 +49,9 @@ int main(int, char**) {
                  ocean_tesselation_evaluation_shader { PATH("shader/gerstner.tese"), osgw::Shader::Type::TessEvaluation },
                  ocean_fragment_shader { PATH("shader/gerstner.frag"), osgw::Shader::Type::Fragment };
 
-    osgw::ShaderProgram ocean_shader_program { ocean_vertex_shader,
-                                               ocean_tesselation_control_shader, ocean_tesselation_evaluation_shader,
-                                               ocean_fragment_shader };
+    osgw::ShaderProgram ocean_shader_program { &ocean_vertex_shader,
+                                               &ocean_tesselation_control_shader, &ocean_tesselation_evaluation_shader,
+                                               &ocean_fragment_shader };
 
     // Basically, we use an quad as the target primitive to tessellate our ocean with.
     // However the shader program above should work with basically any other geometry.
