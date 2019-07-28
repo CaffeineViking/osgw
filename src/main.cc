@@ -35,6 +35,8 @@ int main(int, char**) {
     osgw::InputMapper input_mapper { window };
     osgw::Renderer renderer { window };
 
+    window.set_icon(PATH("icon.png"));
+
     input_mapper.map("quit", osgw::Input::Key::Q);
     input_mapper.map("pause", osgw::Input::Key::P);
     input_mapper.map("wireframe", osgw::Input::Key::W);
@@ -44,10 +46,10 @@ int main(int, char**) {
     // adds the fractal Gerstner wave function in the normal direction according to the x, z
     // position of the vertex in world coordinates. And then shades it by using Blinn-Phong.
 
-    osgw::Shader ocean_vertex_shader { PATH("shader/gerstner.vert"), osgw::Shader::Type::Vertex },
-                 ocean_tesselation_control_shader { PATH("shader/gerstner.tesc"), osgw::Shader::Type::TessControl },
-                 ocean_tesselation_evaluation_shader { PATH("shader/gerstner.tese"), osgw::Shader::Type::TessEvaluation },
-                 ocean_fragment_shader { PATH("shader/gerstner.frag"), osgw::Shader::Type::Fragment };
+    osgw::Shader ocean_vertex_shader { PATH("shaders/gerstner.vert"), osgw::Shader::Type::Vertex },
+                 ocean_tesselation_control_shader { PATH("shaders/gerstner.tesc"), osgw::Shader::Type::TessControl },
+                 ocean_tesselation_evaluation_shader { PATH("shaders/gerstner.tese"), osgw::Shader::Type::TessEvaluation },
+                 ocean_fragment_shader { PATH("shaders/gerstner.frag"), osgw::Shader::Type::Fragment };
 
     osgw::ShaderProgram ocean_shader_program { &ocean_vertex_shader,
                                                &ocean_tesselation_control_shader, &ocean_tesselation_evaluation_shader,

@@ -51,6 +51,8 @@ namespace osgw {
         bool is_fullscreen() const;
         void toggle_fullscreen();
 
+        void set_icon(const std::string& icon_path);
+
     private:
         std::string title,
                     current_fps,

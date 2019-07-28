@@ -1,6 +1,7 @@
 #include <osgw/window.hh>
 
 #include <iostream>
+#include <osgw/image.hh>
 #include <stdexcept>
 
 namespace osgw {
@@ -208,5 +209,15 @@ namespace osgw {
                              refresh_rate);
 
         fullscreen = !fullscreen;
+    }
+
+    void Window::set_icon(const std::string& icon_path) {
+        osgw::Image img { icon_path, false };
+        GLFWimage icon = {
+            static_cast<int>(img.get_width()),
+            static_cast<int>(img.get_height()),
+            img.get_data()
+        };
+        glfwSetWindowIcon(handle, 1, &icon);
     }
 }

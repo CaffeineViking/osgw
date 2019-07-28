@@ -9,7 +9,7 @@
 #include <stdexcept>
 
 namespace osgw {
-    Image::Image(const std::string& path) {
+    Image::Image(const std::string& path, bool flip_vertically = true) {
         png_size_t row_bytes;
         png_bytepp row_pointers;
         png_structp png_ptr;
@@ -48,10 +48,18 @@ namespace osgw {
         data = reinterpret_cast<unsigned char*>(std::malloc(row_bytes * height));
         row_pointers = png_get_rows(png_ptr, info_ptr);
 
-        // Flip image to the format OpenGL knows.
-        for (unsigned i { 0 }; i < height; ++i) {
-            std::memcpy(data + (row_bytes) * (height - 1 - i),
-                        row_pointers[i], row_bytes);
+        if (flip_vertically) {
+            // Flip image to the format OpenGL knows.
+            for (unsigned i { 0 }; i < height; ++i) {
+                std::memcpy(data + (row_bytes) * (height - 1 - i),
+                            row_pointers[i], row_bytes);
+            }
+        } else {
+            // For other cases, don't flip the image.
+            for (unsigned i { 0 }; i < height; ++i) {
+                std::memcpy(data + row_bytes * i,
+                            row_pointers[i], row_bytes);
+            }
         }
 
 destroy_png_info:

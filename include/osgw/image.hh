@@ -6,7 +6,7 @@
 namespace osgw {
     class Image final {
     public:
-        Image(const std::string& path);
+        Image(const std::string& path, bool flip_vertically);
 
         bool has_alpha() const;
         unsigned get_width() const;
