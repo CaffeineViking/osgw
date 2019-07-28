@@ -2,25 +2,14 @@ Real-Time Ocean Simulation with Gerstner Waves
 ==============================================
 
 <p align="center">
-    <img width=100% src="/docs/figures/gerstner.gif" alt="Animation of a 4-Wave Gerstner Wave Sum"/>
+    <img width=100% src="/docs/figures/gerstner.gif" alt="Animation of a single Gerstner wave using Simplex noise"/>
 </p>
 
 A *Gerstner wave* or *trochoidal wave* describes the progression of a wave on the surface of an incompressible fluid of infinite depth. It's suitable for describing the motion of deep-ocean waves. The solution was discovered in 1802 by *F. J. Gerstner*, and has been the workhorse of ocean animation in computer graphics since 1986, after the paper by *Fournier & Reeves* showed very promising results. Then, based on the classic course notes by *Jerry Tessendorf* in 2001, *Mark Finch* implemented the Gerstner wave as a vertex shader in the 2004 *"Effective Water Simulation from Physical Models"*, show that real-time Gerstner wave calculations are indeed possible. They are nowadays extensively in video games, e.g. in Naughty Dog's *Uncharted*.
 
 In this project, we have implemented *Finch's Gerstner wave shader* in GLSL and provided it under an open-source license. Along with it, an example Gerstner wave visualization program, `osgw`, is bundled. It provides example usage of the shader, and can also be used to play around with the wave parameters. It can also work as a (not very energy-efficient) screensaver. Performance-wise, we're able to simulate and render a 12-wave Gerstner wave sum at 200 FPS (on ~9 year old hardware).
 
-In addition, the `osgw` renderer uses OpenGL's *tessellation shader* to seamlessly switch between geometry LoD, based on the amount of detail the user can see (this reduces the amount of times we need to evaluate the Gerstner wave function). I hope it will be a useful reference for future users, since I've found that there isn't that much documentation on how to setup code for a *tessellation control and evaluation shader* for OpenGL 4.1 (besides the comprehensive [OpenGL Tessellation Wiki](https://www.khronos.org/opengl/wiki/Tessellation) and the awesome [Prideout Tutorial](http://prideout.net/blog/?p=48)). For the small surface ripples, a two-octave *[Simplex noise](staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf)* is used, that is then mixed with a combination of deep and shallow ocean colors. A fog-effect and an infinite-scrolling grid are also used.
-
-The Gerstner wave in the animation above was simulated and rendered with the following parameters:
-
-| Wave Number  | Angle | Amplitude | Steepness | Frequency | Speed |
-| ------------ | ----- | --------- | --------- | --------- | ----- |
-| 1            | 0.32  |  0.64     | 0.64      | 0.64      | 1.28  |
-| 2            | 1.28  |  0.08     | 1.28      | 0.64      | 2.56  |
-| 3            | 5.12  |  0.16     | 1.28      | 0.32      | 0.64  |
-| 4            | 2.56  |  0.32     | 2.56      | 0.16      | 0.32  |
-
-Note: these values were obtained by guesswork, you can probably create something more interesting!
+In addition, the `osgw` renderer uses OpenGL's *tessellation shader* to seamlessly switch between geometry LoD, based on the amount of detail the user can see (this reduces the amount of times we need to evaluate the Gerstner wave function). I hope it will be a useful reference for future users, since I've found that there isn't that much documentation on how to setup code for a *tessellation control and evaluation shader* for OpenGL 4.1 (besides the comprehensive [OpenGL Tessellation Wiki](https://www.khronos.org/opengl/wiki/Tessellation) and the awesome [Prideout Tutorial](http://prideout.net/blog/?p=48)). For small surface ripples, a two-octave *[Simplex noise](staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf)* is used, that's then mixed with a combination of deep and shallow ocean colors. A fog-effect and an infinite-scrolling grid are also used for the sake of demonstration.
 
 The Gerstner Wave Shader
 ------------------------
@@ -80,9 +69,9 @@ Then, if you want to change the parameters of the Gerstner waves at run-time, yo
 
 You can get a glimpse of what you are currently changing by looking at the title bar of the `osgw` window. By default, you'll only get a single default-initialized Gerstner wave enabled. As you enable more waves, please note that the amplitude of them will be zero at first, so you need to manually increase it to see any difference in the final wave. Disabling all but one wave layer is a good strategy when composing complex wave motions, since you can concentrate on changing only one wave at a time, and once you are happy, you can combine it with the rest of the waves by enabling the other waves again.
 
-A short paper has been written on the subject, if you want to compile it yourself, see the `docs` directory.
+A short technical report has been written on the subject and if you want to compile it yourself, see the `docs` directory.
 
-Or search for [*Real-Time Ocean Simulation and Rendering Using Gerstner Waves*](https://eriksvjansson.net/papers/osgw.pdf) by Erik S. V. Jansson.
+Alternatively, search for [*Real-Time Ocean Simulation and Rendering Using Gerstner Waves*](https://eriksvjansson.net/papers/osgw.pdf) written by Erik S. V. Jansson.
 
 System Requirements
 -------------------
@@ -94,7 +83,7 @@ Your toaster must support and have drivers for `OpenGL 4.1` or later though.
 Dependencies
 ------------
 
-There aren't any dependencies besides: `glfw3` and `png` for now.
+There aren't any "hard" dependencies besides: `glfw3` and `png` for now.
 
 Structure
 ---------
@@ -119,35 +108,7 @@ Structure
     * `main.cc`:
 * `utils`: any sort of helper scripts or similar should be over here.
 
-Contributing
-------------
-
-1. See if there any updates upstream: `git remote update`
-2. If you are already working on a feature branch, jump to step 4.
-3. Create a new branch for your feature: `git branch <feature>`
-4. Change to the feature branch by: `git checkout <feature>`
-5. Start/continue building the feature. Jump to 7 if done.
-6. Push your changes to your remote feature branch with:
-   * `git add -A` (everything) or `git add -u` (updates).
-   * `git commit -m "Message describing the additions."`
-   * Publish remotely: `git push origin <feature>`
-   * Go back to step 1 or 5 (if working quickly).
-7. Your feature is done (single/many commits).
-8. Fetch the changes from upstream first:
-   * Go to master: `git checkout -b master`
-   * Pull changes: `git pull origin master`
-8. Rebase your changes on top of `master`:
-   * Back to feature: `git checkout <feature>`
-   * Thereafter, issue: `git rebase master`
-   * Fix any conflicts that may happen...
-   * Changes now on top of the Git tree.
-9. Finally, go to GitHub and issue PR.
-   * Listen in on other's feedback!
-   * Make changes if necessary.
-10. Back to the master: `git checkout master`
-11. Pat yourself on the back, then goto 1 again.
-
 Reporting Bugs
 --------------
 
-There are definitely no known bugs in this software at this time.
+There are most definitely no known bugs in this software at this time.
