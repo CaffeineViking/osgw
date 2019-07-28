@@ -1,33 +1,30 @@
 \begin{equation} \label{eq:sum_of_sine_waves}
-    H(\mathbf{p},t) = \sum{
+    H(\mathbf{p},t) = \sum_i{
         A_i \sin \, (
             (\mathbf{p} \cdot \mathbf{d}_i) w_i
             + t \varphi_i
         )
-    }
+    } , \mathbf{p} = 
 \end{equation}
 
 \begin{equation} \label{eq:sum_of_sine_waves_position}
-    \mathbf{H}(x,z,t) = \begin{bmatrix}
-        x&
+    \mathbf{H}(\mathbf{p},t) = \begin{bmatrix}
+        p_x&
         H(\mathbf{p},t)&
-        z
-    \end{bmatrix}\;\,,\;\,
-    \mathbf{p} = \begin{bmatrix}
-        x&z
+        p_z
     \end{bmatrix}
 \end{equation}
 
 \begin{equation} \label{eq:sum_of_sine_waves_normal}
-    \mathbf{\hat{H}}(x,z,t) = \begin{bmatrix}
-        -\frac{\partial}{\partial x} H(\mathbf{p},t)&
+    \mathbf{\hat{H}}(\mathbf{p},t) = \begin{bmatrix}
+        -\frac{\partial}{\partial p_x} H(\mathbf{p},t)&
         1&
-        -\frac{\partial}{\partial z} H(\mathbf{p},t)
+        -\frac{\partial}{\partial p_z} H(\mathbf{p},t)
     \end{bmatrix}
 \end{equation}
 
 \begin{equation} \label{eq:gerstner_wave}
-    G_j(\mathbf{p},t) = \sum{
+    G_j(\mathbf{p},t) = \sum_i{
         d_{i,j} Q_iA_i \cos \, (
             (\mathbf{p} \cdot \mathbf{d}_i) w_i
             + t \varphi_i
@@ -36,23 +33,17 @@
 \end{equation}
 
 \begin{equation} \label{eq:gerstner_wave_position}
-    \mathbf{G}(x,z,t) = \begin{bmatrix}
-        x + G_x(\mathbf{p},t)\\
+    \mathbf{G}(\mathbf{p},t) = \begin{bmatrix}
+        p_x + G_x(\mathbf{p},t)\\
         H(\mathbf{p},t)\\
-        z + G_z(\mathbf{p},t)
-    \end{bmatrix}\;\;\,,\;\;\,
-    \mathbf{p} = \begin{bmatrix}
-        x&z
+        p_z + G_z(\mathbf{p},t)
     \end{bmatrix}
 \end{equation}
 
 \begin{equation} \label{eq:gerstner_wave_normal}
-    \begin{split}
-    \mathbf{\hat{G}}(x,z,t) &= \begin{bmatrix}
-        -\sum{d_{i,x} A_iw_i \cos \psi_i}\\
-        1 - \sum{Q_iA_iw_i \sin \psi_i}\\
-        -\sum{d_{i,z} A_iw_i \cos \psi_i}
-    \end{bmatrix}\;,\\
-        \psi_i &= (\mathbf{G}(x,z,t) \cdot \mathbf{d}_i)w_i + t \varphi_i
-    \end{split}
+    \mathbf{\hat{G}}(\mathbf{p},t) = \begin{bmatrix}
+        -\sum_i{d_{i,x} A_iw_i \cos \, (\mathbf{G}(\mathbf{p},t) \cdot \mathbf{d}_i)}\\
+        1 - \sum_i{Q_iA_iw_i \sin \, (\mathbf{G}(\mathbf{p},t) \cdot \mathbf{d}_i)}\\
+        -\sum_i{d_{i,z} A_iw_i \cos \, (\mathbf{G}(\mathbf{p},t) \cdot \mathbf{d}_i)}
+    \end{bmatrix}
 \end{equation}

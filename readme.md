@@ -25,9 +25,9 @@ Note: these values were obtained by guesswork, you can probably create something
 The Gerstner Wave Shader
 ------------------------
 
-If you are planning on using Gerstner waves in your projects, it can be a bit fiddly to roll your own shader implementation; a lot can go wrong, and it's easy to write non-performant GLSL shaders. Therefore, feel free to use anything you find useful in this repository! Of special interest is probably [gerstner.glsl](https://github.com/CaffeineViking/osgw/blob/master/share/shader/gerstner.glsl), the function `gerstner_wave` is fairly decoupled from most of the project, so you should be able to use it for anything. There are instructions on how to use it in the shader's header, after the license notice (its there so you can just copy-paste the shader without having to think about it). Briefly, here is how to use it:
+If you are planning on using Gerstner waves in your projects, it can be a bit fiddly to roll your own shader implementation; a lot can go wrong, and it's easy to write non-performant GLSL shaders. Therefore, feel free to use anything you find useful in this repository! Of special interest is probably [gerstner.glsl](https://github.com/CaffeineViking/osgw/blob/master/share/shaders/gerstner.glsl), the function `gerstner_wave` is fairly decoupled from most of the project, so you should be able to use it for anything. There are instructions on how to use it in the shader's header, after the license notice (its there so you can just copy-paste the shader without having to think about it). Briefly, here is how to use it:
 
-Setup a tessellated 2-D plane-like mesh, either by uploading the vertices manually, or by generating them with a geometry or tessellation shader (you can see examples on how to do this in [gerstner.tesc](https://github.com/CaffeineViking/osgw/blob/master/share/shader/gerstner.tesc) and [gerstner.tese](https://github.com/CaffeineViking/osgw/blob/master/share/shader/gerstner.tese)). Thereafter, you want to displace each vertex according to the wave. You do this by copy-pasting [gerstner.glsl](https://github.com/CaffeineViking/osgw/blob/master/share/shader/gerstner.glsl) and calling `gerstner_wave` like so:
+Setup a tessellated 2-D plane-like mesh, either by uploading the vertices manually, or by generating them with a geometry or tessellation shader (you can see examples on how to do this in [gerstner.tesc](https://github.com/CaffeineViking/osgw/blob/master/share/shaders/gerstner.tesc) and [gerstner.tese](https://github.com/CaffeineViking/osgw/blob/master/share/shaders/gerstner.tese)). Thereafter, you want to displace each vertex according to the wave. You do this by copy-pasting [gerstner.glsl](https://github.com/CaffeineViking/osgw/blob/master/share/shaders/gerstner.glsl) and calling `gerstner_wave` like so:
 
 ```glsl
 position = gerstner_wave(position.xz, elapsed_time, normal);
@@ -81,7 +81,7 @@ You can get a glimpse of what you are currently changing by looking at the title
 
 A short paper has been written on the subject, if you want to compile it yourself, see the `docs` directory.
 
-Or search for [*Real-Time Ocean Simulation and Rendering Using Gerstner Waves*](https://eriksvjansson.net/share/papers/osgw.pdf) by Erik S. V. Jansson.
+Or search for [*Real-Time Ocean Simulation and Rendering Using Gerstner Waves*](https://eriksvjansson.net/papers/osgw.pdf) by Erik S. V. Jansson.
 
 System Requirements
 -------------------
