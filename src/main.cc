@@ -35,7 +35,7 @@ int main(int, char**) {
     osgw::InputMapper input_mapper { window };
     osgw::Renderer renderer { window };
 
-    window.set_icon(PATH("icon.png"));
+    window.set_icon(PATH("images/wave_icon.png"));
 
     input_mapper.map("quit", osgw::Input::Key::Q);
     input_mapper.map("pause", osgw::Input::Key::P);
