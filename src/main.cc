@@ -195,13 +195,23 @@ int main(int, char**) {
         gerstner_wave.select(input_mapper); // Select the current wave to modify.
         if (gerstner_wave.check_and_unset_dirty_bit()) {
             gerstner_wave.upload_uniform(ocean_shader_program);
-            std::string updated_title { "osgw (wave " };
-            updated_title += std::to_string(gerstner_wave.get_current_wave());
-            if (gerstner_wave.is_on()) {
-                updated_title += " " + gerstner_wave.get_current_mode() + " = ";
+            std::string updated_title { "osgw" };
+
+            if (gerstner_wave.get_current_wave() == MAX_WAVES) {
+                updated_title += " (noise amount = ";
                 updated_title += std::to_string(gerstner_wave.get_current_value())
                                                 .substr(0, 4);
-            } else updated_title += " was disabled";
+            } else {
+                updated_title += " (wave ";
+                if (!gerstner_wave.get_current_wave()) updated_title += "9"; // special
+                else updated_title += std::to_string(gerstner_wave.get_current_wave());
+                if (gerstner_wave.is_on()) {
+                    updated_title += " " + gerstner_wave.get_current_mode() + " = ";
+                    updated_title += std::to_string(gerstner_wave.get_current_value())
+                                                    .substr(0, 4);
+                } else updated_title += " was disabled";
+            }
+
             window.change_title(updated_title + ")");
         }
 

@@ -16,6 +16,8 @@
 #include <string>
 #include <cmath>
 
+static constexpr std::size_t MAX_WAVES { 9 };
+
 namespace osgw {
     class GerstnerWave {
     public:
@@ -65,8 +67,9 @@ namespace osgw {
 
         bool dirty { true };
         int current_wave { 1 };
-        static constexpr std::size_t MAX_WAVES { 8 };
         Parameter wave_parameters[MAX_WAVES];
+        float previous_perturbation { 0.75 };
+        float perturb { 0.75 };
     };
 }
 

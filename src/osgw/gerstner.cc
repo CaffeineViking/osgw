@@ -20,6 +20,14 @@ namespace osgw {
     }
 
     void GerstnerWave::change(float value) {
+        if (current_wave == MAX_WAVES) {
+            perturb += value;
+            if (perturb < 0.0f)
+                perturb = 0.0f;
+            dirty = true;
+            return;
+        }
+
         switch (current_mode) {
         case Direction: wave_parameters[current_wave].angle += value; break;
         case Amplitude: wave_parameters[current_wave].amplitude += value; break;
@@ -54,10 +62,22 @@ namespace osgw {
         else if (input_mapper.just_pressed(osgw::Input::Key::Five)) selected_wave = 5;
         else if (input_mapper.just_pressed(osgw::Input::Key::Six)) selected_wave = 6;
         else if (input_mapper.just_pressed(osgw::Input::Key::Seven)) selected_wave = 7;
-        else if (input_mapper.just_pressed(osgw::Input::Key::Eight)) selected_wave = 0;
+        else if (input_mapper.just_pressed(osgw::Input::Key::Eight)) selected_wave = 8;
+        else if (input_mapper.just_pressed(osgw::Input::Key::Nine)) selected_wave = 0;
+        else if (input_mapper.just_pressed(osgw::Input::Key::Zero)) selected_wave = 9;
 
         if (selected_wave == current_wave) {
-            wave_parameters[current_wave].on = !wave_parameters[current_wave].on;
+            if (selected_wave != MAX_WAVES) {
+                wave_parameters[current_wave].on = !wave_parameters[current_wave].on;
+            } else {
+                if (perturb > 0.0f) {
+                    previous_perturbation = perturb;
+                    perturb = 0.0f;
+                } else {
+                    perturb = previous_perturbation;
+                }
+            }
+
             dirty = true;
         }
 
@@ -84,6 +104,7 @@ namespace osgw {
             shader_program.uniform(target_struct + "speed", wave_parameters[i].speed);
             ++waves_on;
         } shader_program.uniform("gerstner_waves_length", waves_on);
+        shader_program.uniform("perturb", perturb); // Noise amount.
     }
 
     glm::vec3 GerstnerWave::value(const glm::vec2&, float, glm::vec3&) const {
@@ -95,6 +116,10 @@ namespace osgw {
     }
 
     float GerstnerWave::get_current_value() const {
+        if (current_wave == MAX_WAVES) {
+            return perturb;
+        }
+
         switch (current_mode) {
         case Direction: return wave_parameters[current_wave].angle;
         case Amplitude: return wave_parameters[current_wave].amplitude;
@@ -106,7 +131,6 @@ namespace osgw {
     }
 
     std::size_t GerstnerWave::get_current_wave() const {
-        if (current_wave == 0) return MAX_WAVES;
         return current_wave;
     }
 

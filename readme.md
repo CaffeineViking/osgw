@@ -71,7 +71,8 @@ Start the demo with `bin/osgw`, there are zero command-line arguments here, pink
 
 Then, if you want to change the parameters of the Gerstner waves at run-time, you can use the following:
 
-* **Press 1, 2, 3, 4, 5, 6, 7 or 8 on the keyboard:** to select the current Gerstner wave we want to modify.
+* **Press 1, 2, 3, 4, 5, 6, 7, 8, 9 on the keyboard:** to select the current Gerstner wave we want to modify.
+* **Press 0 on the keyboard:** to modify the Simplex Noise Perturbation that's added on top of the wave.
 * **Press the same number again:** to enable or disable the Gerstner wave from the final Gerstner sum.
 * **The up and down arrow keys:** are used to select the parameter of the wave that is being changed.
 * The parameter selection cycles between: *angle*, *amplitude*, *steepness*, *frequency* and *phase speed*.

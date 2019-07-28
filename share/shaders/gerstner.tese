@@ -26,6 +26,8 @@ out PipelineData {
     vec2 texture_coordinate;
 } te_out;
 
+uniform float perturb = 0.0;
+
 void main() {
     // Below we just interpolate the position, normal, and texture coordinates by
     // using the weights of the new vertices produced from the tessellation unit.
@@ -50,11 +52,11 @@ void main() {
     te_out.position = gerstner_wave(te_out.position.xz, time,  te_out.normal);
 
     vec3 normal; // Below we add a bit more detail by adding 3D Simplex Noise.
-    te_out.position.y += 0.40*snoise3d(0.2*te_out.position+0.40*time, normal);
-    te_out.position.y += 0.20*snoise3d(0.4*te_out.position+0.20*time, normal);
-    te_out.position.y += 0.10*snoise3d(0.8*te_out.position+0.10*time, normal);
-    te_out.position.y += 0.05*snoise3d(1.6*te_out.position+0.05*time, normal);
-    te_out.position.y += 0.02*snoise3d(3.2*te_out.position+0.02*time, normal);
+    te_out.position.y += 0.40*snoise3d(0.2*te_out.position+0.40*time, normal) * perturb;
+    te_out.position.y += 0.20*snoise3d(0.4*te_out.position+0.20*time, normal) * perturb;
+    te_out.position.y += 0.10*snoise3d(0.8*te_out.position+0.10*time, normal) * perturb;
+    te_out.position.y += 0.05*snoise3d(1.6*te_out.position+0.05*time, normal) * perturb;
+    te_out.position.y += 0.02*snoise3d(3.2*te_out.position+0.02*time, normal) * perturb;
 
     vec4 world_position = vec4(te_out.position, 1);
     gl_Position = projection_view * world_position;

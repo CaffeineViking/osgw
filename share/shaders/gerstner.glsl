@@ -85,7 +85,7 @@ uniform struct GerstnerWave {
     float steepness;
     float frequency;
     float speed;
-} gerstner_waves[8];
+} gerstner_waves[9];
 
 vec3 gerstner_wave_normal(vec3 position, float time) {
     vec3 wave_normal = vec3(0.0, 1.0, 0.0);
