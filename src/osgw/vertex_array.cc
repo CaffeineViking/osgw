@@ -1,5 +1,7 @@
 #include <osgw/vertex_array.hh>
 
+#include <stdexcept>
+
 namespace osgw {
     VertexArray::VertexArray(const ShaderProgram& shader_program, const Buffer& element_buffer,
                              const std::vector<Attribute>& vertex_attributes)
